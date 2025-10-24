@@ -362,20 +362,43 @@ export const WithdrawQueueForm = ({
 
         // Check if approval is needed before simulating
         // Only check if we have a valid amount to avoid unnecessary API calls
-        if (
-          cellarContract &&
-          address &&
-          withdrawAmtInBaseDenom > 0n
-        ) {
+        if (!cellarContract || !address) {
+          console.error("Cannot check approval: missing contract or address", {
+            hasCellarContract: !!cellarContract,
+            hasAddress: !!address,
+          })
+          if (!cancelled) {
+            setIsRequestValid(false)
+            setPreflightMessage(
+              `Unable to validate withdrawal. Please refresh the page and try again.`
+            )
+            setDiscountBpsChosen(null)
+            setEffectiveDeadlineSec(null)
+            setIsValidating(false)
+            setLastValidationKey(validationKey)
+          }
+          return
+        }
+
+        if (withdrawAmtInBaseDenom > 0n) {
           try {
+            const spenderAddress = getAddress(
+              cellarConfig.boringQueue
+                ? cellarConfig.boringQueue.address
+                : cellarConfig.chain.withdrawQueueAddress
+            )
             const allowance = (await cellarContract.read.allowance([
               address,
-              getAddress(
-                cellarConfig.boringQueue
-                  ? cellarConfig.boringQueue.address
-                  : cellarConfig.chain.withdrawQueueAddress
-              ),
+              spenderAddress,
             ])) as bigint
+
+            console.log("Approval check:", {
+              userAddress: address,
+              spenderAddress,
+              allowance: allowance.toString(),
+              needed: withdrawAmtInBaseDenom.toString(),
+              needsApproval: allowance < withdrawAmtInBaseDenom,
+            })
 
             if (allowance < withdrawAmtInBaseDenom) {
               if (!cancelled) {
@@ -391,10 +414,21 @@ export const WithdrawQueueForm = ({
               return
             }
           } catch (approvalCheckError) {
-            console.warn(
-              "Could not check approval, continuing with simulation:",
+            console.error(
+              "Failed to check approval, cannot validate withdrawal:",
               approvalCheckError
             )
+            if (!cancelled) {
+              setIsRequestValid(false)
+              setPreflightMessage(
+                `Unable to check token approval status. Please refresh and try again.`
+              )
+              setDiscountBpsChosen(null)
+              setEffectiveDeadlineSec(null)
+              setIsValidating(false)
+              setLastValidationKey(validationKey)
+            }
+            return
           }
         }
 
@@ -776,23 +810,50 @@ export const WithdrawQueueForm = ({
       return
     }
 
-    const allowance = (await cellarContract?.read.allowance([
-      address!,
-      getAddress(
-        cellarConfig.boringQueue
-          ? cellarConfig.boringQueue.address
-          : cellarConfig.chain.withdrawQueueAddress
-      ),
-    ])) as bigint
-
-    let needsApproval
-    try {
-      needsApproval = (allowance as bigint) < withdrawAmtInBaseDenom
-    } catch (e) {
-      const error = e as Error
-      console.error("Invalid Input: ", error.message)
+    // Check approval status
+    if (!cellarContract) {
+      console.error("Cannot check approval: cellarContract is null")
+      addToast({
+        heading: "Withdraw Queue",
+        status: "error",
+        body: <Text>Unable to check approval status. Please refresh the page and try again.</Text>,
+        closeHandler: closeAll,
+      })
       return
     }
+
+    const spenderAddress = getAddress(
+      cellarConfig.boringQueue
+        ? cellarConfig.boringQueue.address
+        : cellarConfig.chain.withdrawQueueAddress
+    )
+
+    let allowance: bigint
+    try {
+      allowance = (await cellarContract.read.allowance([
+        address!,
+        spenderAddress,
+      ])) as bigint
+      console.log("Approval check in onSubmit:", {
+        userAddress: address,
+        spenderAddress,
+        allowance: allowance.toString(),
+        needed: withdrawAmtInBaseDenom.toString(),
+      })
+    } catch (e) {
+      const error = e as Error
+      console.error("Failed to check allowance:", error)
+      addToast({
+        heading: "Withdraw Queue",
+        status: "error",
+        body: <Text>Failed to check approval status. Please try again.</Text>,
+        closeHandler: closeAll,
+      })
+      return
+    }
+
+    const needsApproval = allowance < withdrawAmtInBaseDenom
+    console.log("Needs approval:", needsApproval)
 
     if (needsApproval) {
       try {
