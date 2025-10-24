@@ -961,7 +961,13 @@ export const WithdrawQueueForm = ({
             }
           } catch (verifyError) {
             console.error("Failed to verify allowance after approval:", verifyError)
-            // Continue anyway since approval tx succeeded
+            addToast({
+              heading: "Verification Issue",
+              body: <Text>Approval succeeded but unable to verify. Please refresh and try again.</Text>,
+              status: "error",
+              closeHandler: closeAll,
+            })
+            return
           }
         } else if (result?.error) {
           // analytics.track("deposit.approval-failed", {
