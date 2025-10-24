@@ -179,6 +179,8 @@ export const WithdrawQueueForm = ({
     useState<number | null>(null)
   const [contractMaxDiscountBps, setContractMaxDiscountBps] =
     useState<number | null>(null)
+  const [contractSecondsToMaturity, setContractSecondsToMaturity] =
+    useState<number | null>(null)
 
   // Pre-validation of request: simulate on-chain call before enabling Submit
   const [isRequestValid, setIsRequestValid] = useState<
@@ -204,6 +206,7 @@ export const WithdrawQueueForm = ({
       try {
         if (!boringQueue || !selectedToken?.address) {
           setIsWithdrawAllowed(null)
+          setContractSecondsToMaturity(null)
           setContractMinDiscountBps(null)
           setContractMaxDiscountBps(null)
           return
@@ -222,6 +225,8 @@ export const WithdrawQueueForm = ({
         const allow = Array.isArray(res)
           ? Boolean(res[0])
           : Boolean(res)
+        const secondsToMaturity =
+          Array.isArray(res) && res.length > 1 ? Number(res[1]) : null
         const minDiscount =
           Array.isArray(res) && res.length > 3 ? Number(res[3]) : null
         const maxDiscount =
@@ -229,12 +234,14 @@ export const WithdrawQueueForm = ({
 
         console.log("withdrawAssets parsed values:", {
           allow,
+          secondsToMaturity,
           minDiscount,
           maxDiscount,
         })
 
         if (!cancelled) {
           setIsWithdrawAllowed(allow)
+          setContractSecondsToMaturity(secondsToMaturity)
           setContractMinDiscountBps(minDiscount)
           setContractMaxDiscountBps(maxDiscount)
         }
@@ -242,6 +249,7 @@ export const WithdrawQueueForm = ({
         logTxDebug("withdraw.preflight", {
           assetOut: selectedToken.address,
           allow,
+          secondsToMaturity,
           minDiscount,
           maxDiscount,
           rawResponse: res,
@@ -249,6 +257,7 @@ export const WithdrawQueueForm = ({
       } catch (e) {
         if (!cancelled) {
           setIsWithdrawAllowed(null)
+          setContractSecondsToMaturity(null)
           setContractMinDiscountBps(null)
           setContractMaxDiscountBps(null)
         }
@@ -372,7 +381,7 @@ export const WithdrawQueueForm = ({
               if (!cancelled) {
                 setIsRequestValid(false)
                 setPreflightMessage(
-                  `Approval required. Click "Withdraw" to approve and proceed.`
+                  `Token approval needed. Click "Withdraw" to approve the contract and proceed with your withdrawal.`
                 )
                 setDiscountBpsChosen(null)
                 setEffectiveDeadlineSec(null)
@@ -596,6 +605,49 @@ export const WithdrawQueueForm = ({
                 setPreflightMessage(
                   `No active withdraw request found to replace.`
                 )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__NotMatured")
+              ) {
+                let maturityMsg = `Your deposit is still in the cooldown period. Please wait before withdrawing.`
+                if (
+                  contractSecondsToMaturity !== null &&
+                  contractSecondsToMaturity > 0
+                ) {
+                  const hours = Math.floor(
+                    contractSecondsToMaturity / 3600
+                  )
+                  const minutes = Math.floor(
+                    (contractSecondsToMaturity % 3600) / 60
+                  )
+                  if (hours > 24) {
+                    const days = Math.floor(hours / 24)
+                    const remainingHours = hours % 24
+                    maturityMsg = `Your deposit is in cooldown period. Wait ${days} day${
+                      days !== 1 ? "s" : ""
+                    }${
+                      remainingHours > 0
+                        ? ` and ${remainingHours} hour${
+                            remainingHours !== 1 ? "s" : ""
+                          }`
+                        : ""
+                    } before withdrawing.`
+                  } else if (hours > 0) {
+                    maturityMsg = `Your deposit is in cooldown period. Wait ${hours} hour${
+                      hours !== 1 ? "s" : ""
+                    }${
+                      minutes > 0
+                        ? ` and ${minutes} minute${
+                            minutes !== 1 ? "s" : ""
+                          }`
+                        : ""
+                    } before withdrawing.`
+                  } else if (minutes > 0) {
+                    maturityMsg = `Your deposit is in cooldown period. Wait ${minutes} minute${
+                      minutes !== 1 ? "s" : ""
+                    } before withdrawing.`
+                  }
+                }
+                setPreflightMessage(maturityMsg)
               } else if (errorMsg.includes("insufficient")) {
                 setPreflightMessage(
                   `Insufficient balance or shares to complete this withdrawal.`
@@ -605,7 +657,7 @@ export const WithdrawQueueForm = ({
                 errorMsg.includes("TransferFromFailed")
               ) {
                 setPreflightMessage(
-                  `Token transfer failed. You may need to approve the contract first. Click "Withdraw" to proceed with approval.`
+                  `Token approval needed. Click "Withdraw" to approve the contract and proceed with your withdrawal.`
                 )
               } else {
                 setPreflightMessage(
@@ -1361,7 +1413,7 @@ export const WithdrawQueueForm = ({
           (boringQueue ? isWithdrawAllowed === false : false) ||
           (boringQueue
             ? isRequestValid === false &&
-              !preflightMessage?.includes("Approval required")
+              !preflightMessage?.includes("approval needed")
             : false) ||
           isValidating
         }
@@ -1372,7 +1424,7 @@ export const WithdrawQueueForm = ({
       >
         {boringQueue &&
         isRequestValid === false &&
-        preflightMessage?.includes("Approval required")
+        preflightMessage?.includes("approval needed")
           ? "Approve & Withdraw"
           : isActiveWithdrawRequest && boringQueue
           ? "Replace Request"
@@ -1398,8 +1450,10 @@ export const WithdrawQueueForm = ({
         isRequestValid === false && (
           <Text
             color={
-              preflightMessage?.includes("Approval required")
+              preflightMessage?.includes("approval needed")
                 ? "blue.300"
+                : preflightMessage?.includes("cooldown period")
+                ? "orange.300"
                 : "yellow.300"
             }
             fontSize="sm"
