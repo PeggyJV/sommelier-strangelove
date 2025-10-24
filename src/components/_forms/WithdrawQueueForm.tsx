@@ -856,23 +856,34 @@ export const WithdrawQueueForm = ({
     console.log("Needs approval:", needsApproval)
 
     if (needsApproval) {
+      console.log("Approval needed, initiating approval transaction")
+      addToast({
+        heading: "ERC20 Approval",
+        status: "default",
+        body: <Text>Requesting approval in wallet...</Text>,
+        isLoading: true,
+        closeHandler: close,
+        duration: null,
+      })
+
       try {
+        console.log("Calling cellarContract.write.approve with:", {
+          spender: spenderAddress,
+          amount: "MaxUint256",
+        })
+
         // @ts-ignore
         const hash = await cellarContract?.write.approve(
-          [
-            getAddress(
-              cellarConfig.boringQueue
-                ? cellarConfig.boringQueue.address
-                : cellarConfig.chain.withdrawQueueAddress
-            ),
-            MaxUint256,
-          ],
+          [spenderAddress, MaxUint256],
           { account: address }
         )
-        addToast({
+
+        console.log("Approval transaction hash:", hash)
+
+        update({
           heading: "ERC20 Approval",
           status: "default",
-          body: <Text>Approving ERC20</Text>,
+          body: <Text>Approving ERC20...</Text>,
           isLoading: true,
           closeHandler: close,
           duration: null,
@@ -886,12 +897,41 @@ export const WithdrawQueueForm = ({
           //   value: depositAmount,
           // })
 
+          console.log("Approval successful, proceeding to withdrawal")
           update({
             heading: "ERC20 Approval",
-            body: <Text>ERC20 Approved</Text>,
+            body: <Text>ERC20 Approved. Proceeding to withdrawal...</Text>,
             status: "success",
-            closeHandler: closeAll,
+            closeHandler: close,
+            duration: 3000,
           })
+
+          // Re-verify allowance after approval
+          try {
+            const newAllowance = (await cellarContract.read.allowance([
+              address!,
+              spenderAddress,
+            ])) as bigint
+            console.log("Allowance after approval:", {
+              newAllowance: newAllowance.toString(),
+              needed: withdrawAmtInBaseDenom.toString(),
+              sufficient: newAllowance >= withdrawAmtInBaseDenom,
+            })
+
+            if (newAllowance < withdrawAmtInBaseDenom) {
+              console.error("Approval succeeded but allowance still insufficient")
+              addToast({
+                heading: "Approval Issue",
+                body: <Text>Approval transaction confirmed but allowance not updated. Please try again.</Text>,
+                status: "error",
+                closeHandler: closeAll,
+              })
+              return
+            }
+          } catch (verifyError) {
+            console.error("Failed to verify allowance after approval:", verifyError)
+            // Continue anyway since approval tx succeeded
+          }
         } else if (result?.error) {
           // analytics.track("deposit.approval-failed", {
           //   ...baseAnalytics,
@@ -959,10 +999,16 @@ export const WithdrawQueueForm = ({
         return
       }
 
+      console.log("Starting withdrawal transaction", {
+        hasApproval: !needsApproval || "approval completed",
+      })
+
       let hash = await doWithdrawTx(
         selectedToken,
         withdrawAmtInBaseDenom
       )
+
+      console.log("Withdrawal transaction hash:", hash)
 
       const onSuccess = () => {
         if (onSuccessfulWithdraw) {
