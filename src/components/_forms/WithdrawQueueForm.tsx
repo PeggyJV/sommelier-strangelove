@@ -1014,58 +1014,12 @@ export const WithdrawQueueForm = ({
         isActiveWithdrawRequest,
         boringQueue: !!boringQueue,
         cellarAddress: cellarConfig.cellar.address,
-        secondsToMaturity: contractSecondsToMaturity,
+        secondsToMaturityRequired: contractSecondsToMaturity,
       })
 
-      // Check if shares are still in maturity period (can't be transferred yet)
-      if (
-        boringQueue &&
-        contractSecondsToMaturity !== null &&
-        contractSecondsToMaturity > 0
-      ) {
-        const hours = Math.floor(contractSecondsToMaturity / 3600)
-        const minutes = Math.floor((contractSecondsToMaturity % 3600) / 60)
-        let maturityMsg = `Your deposit is still maturing. Please wait before withdrawing.`
-
-        if (hours > 24) {
-          const days = Math.floor(hours / 24)
-          const remainingHours = hours % 24
-          maturityMsg = `Your deposit is still maturing. Wait ${days} day${
-            days !== 1 ? "s" : ""
-          }${
-            remainingHours > 0
-              ? ` and ${remainingHours} hour${
-                  remainingHours !== 1 ? "s" : ""
-                }`
-              : ""
-          } before withdrawing.`
-        } else if (hours > 0) {
-          maturityMsg = `Your deposit is still maturing. Wait ${hours} hour${
-            hours !== 1 ? "s" : ""
-          }${
-            minutes > 0
-              ? ` and ${minutes} minute${minutes !== 1 ? "s" : ""}`
-              : ""
-          } before withdrawing.`
-        } else if (minutes > 0) {
-          maturityMsg = `Your deposit is still maturing. Wait ${minutes} minute${
-            minutes !== 1 ? "s" : ""
-          } before withdrawing.`
-        }
-
-        console.error("Withdrawal blocked: shares still maturing", {
-          secondsToMaturity: contractSecondsToMaturity,
-          message: maturityMsg,
-        })
-
-        addToast({
-          heading: "Deposit Maturing",
-          status: "info",
-          body: <Text>{maturityMsg}</Text>,
-          closeHandler: closeAll,
-        })
-        return
-      }
+      // Note: contractSecondsToMaturity is the REQUIRED maturity period, not the time remaining.
+      // If shares are actually not matured yet, the transaction will fail with
+      // BoringOnChainQueue__NotMatured error, which is caught below.
 
       // Guard: if boring queue and asset disabled, show UI and stop
       if (boringQueue && isWithdrawAllowed === false) {
@@ -1171,6 +1125,76 @@ export const WithdrawQueueForm = ({
             closeHandler: closeAll,
           })
           logTxDebug("withdraw.error_bad_discount", {
+            assetOut: selectedToken.address,
+          })
+          return
+        }
+        if (causeMsg.includes("BoringOnChainQueue__NotMatured")) {
+          let maturityMsg = `Your deposit is still in the maturity period. Please wait before withdrawing.`
+          if (
+            contractSecondsToMaturity !== null &&
+            contractSecondsToMaturity > 0
+          ) {
+            const hours = Math.floor(contractSecondsToMaturity / 3600)
+            const minutes = Math.floor(
+              (contractSecondsToMaturity % 3600) / 60
+            )
+            if (hours > 24) {
+              const days = Math.floor(hours / 24)
+              const remainingHours = hours % 24
+              maturityMsg = `Your shares are in the maturity period (${contractSecondsToMaturity} seconds required). Please wait at least ${days} day${
+                days !== 1 ? "s" : ""
+              }${
+                remainingHours > 0
+                  ? ` and ${remainingHours} hour${
+                      remainingHours !== 1 ? "s" : ""
+                    }`
+                  : ""
+              } after depositing before withdrawing.`
+            } else if (hours > 0) {
+              maturityMsg = `Your shares are in the maturity period (${contractSecondsToMaturity} seconds required). Please wait at least ${hours} hour${
+                hours !== 1 ? "s" : ""
+              }${
+                minutes > 0
+                  ? ` and ${minutes} minute${minutes !== 1 ? "s" : ""}`
+                  : ""
+              } after depositing before withdrawing.`
+            } else if (minutes > 0) {
+              maturityMsg = `Your shares are in the maturity period (${contractSecondsToMaturity} seconds required). Please wait at least ${minutes} minute${
+                minutes !== 1 ? "s" : ""
+              } after depositing before withdrawing.`
+            }
+          }
+          addToast({
+            heading: "Shares Still Maturing",
+            body: <Text>{maturityMsg}</Text>,
+            status: "info",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_not_matured", {
+            assetOut: selectedToken.address,
+            secondsToMaturity: contractSecondsToMaturity,
+          })
+          return
+        }
+        if (
+          causeMsg.includes("TRANSFER_FROM_FAILED") ||
+          causeMsg.includes("TransferFromFailed")
+        ) {
+          addToast({
+            heading: "Transfer Failed",
+            body: (
+              <Text>
+                Unable to transfer vault shares. This may be due to shares
+                still in the maturity period or insufficient approval.
+                Please wait and try again, or contact support if the
+                issue persists.
+              </Text>
+            ),
+            status: "error",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_transfer_from_failed", {
             assetOut: selectedToken.address,
           })
           return
