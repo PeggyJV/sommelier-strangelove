@@ -884,6 +884,7 @@ export const WithdrawQueueForm = ({
       allowance: allowance.toString(),
       needed: withdrawAmtInBaseDenom.toString(),
       allowanceIsLess: allowance < withdrawAmtInBaseDenom,
+      hasMaxApproval: allowance === MaxUint256,
     })
 
     if (needsApproval) {
@@ -1072,10 +1073,40 @@ export const WithdrawQueueForm = ({
       })
     } catch (e) {
       const error = e as Error
-      console.error(error)
+      console.error("Withdrawal transaction error:", error)
+      console.error("Error message:", error.message)
+      console.error("Error cause:", (error as any)?.cause)
+      console.error("Error cause message:", (error as any)?.cause?.message)
 
       if (error.message === "GAS_LIMIT_ERROR") {
         const causeMsg = (error as any)?.cause?.message || ""
+        console.log("GAS_LIMIT_ERROR detected, checking cause message:", causeMsg.substring(0, 200))
+
+        // Check for TRANSFER_FROM_FAILED first as it's the most common issue
+        if (
+          causeMsg.includes("TRANSFER_FROM_FAILED") ||
+          causeMsg.includes("TransferFromFailed")
+        ) {
+          console.error("TRANSFER_FROM_FAILED detected - shares cannot be transferred")
+          addToast({
+            heading: "Unable to Transfer Shares",
+            body: (
+              <Text>
+                Your vault shares cannot be transferred at this time. This is
+                likely because your deposit is still in the maturity period
+                (typically 1 hour). Please wait and try again later.
+              </Text>
+            ),
+            status: "error",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_transfer_from_failed", {
+            assetOut: selectedToken.address,
+            secondsToMaturity: contractSecondsToMaturity,
+          })
+          return
+        }
+
         if (
           causeMsg.includes(
             "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
@@ -1177,28 +1208,7 @@ export const WithdrawQueueForm = ({
           })
           return
         }
-        if (
-          causeMsg.includes("TRANSFER_FROM_FAILED") ||
-          causeMsg.includes("TransferFromFailed")
-        ) {
-          addToast({
-            heading: "Transfer Failed",
-            body: (
-              <Text>
-                Unable to transfer vault shares. This may be due to shares
-                still in the maturity period or insufficient approval.
-                Please wait and try again, or contact support if the
-                issue persists.
-              </Text>
-            ),
-            status: "error",
-            closeHandler: closeAll,
-          })
-          logTxDebug("withdraw.error_transfer_from_failed", {
-            assetOut: selectedToken.address,
-          })
-          return
-        }
+        // TRANSFER_FROM_FAILED is now checked first, above
         addToast({
           heading: "Transaction not submitted",
           body: (
