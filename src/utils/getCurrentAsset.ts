@@ -5,12 +5,8 @@ export const getCurrentAsset = (
   chain: string,
   activeAsset?: string,
 ): Token | undefined => {
-  const currentAsset = tokens.findIndex(
+  return tokens.find(
     (token) =>
       token.address.toUpperCase() === activeAsset?.toUpperCase() && token.chain === chain
   )
-
-  if (currentAsset === -1) return undefined
-
-  return tokens[currentAsset]
 }

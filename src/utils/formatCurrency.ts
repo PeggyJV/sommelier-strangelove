@@ -1,29 +1,21 @@
 import { formatUnits } from "viem"
 
 export const formatCurrency = (value?: string) => {
-  const v =
-    value &&
-    Intl.NumberFormat("en-US", {
-      notation: "compact",
-      maximumFractionDigits: 2,
-      minimumFractionDigits: 2,
-    }).format(parseFloat(value))
-
-  return v
+  return value ? new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  }).format(parseFloat(value)) : undefined
 }
 
 export const formatUSD = (value?: string, maximumDigit?: number) => {
-  const v =
-    value &&
-    Intl.NumberFormat("en-US", {
-      notation: "compact",
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: maximumDigit || 2,
-      minimumFractionDigits: 2,
-    }).format(parseFloat(value))
-
-  return v
+  return value ? new Intl.NumberFormat("en-US", {
+    notation: "compact",
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: maximumDigit || 2,
+    minimumFractionDigits: 2,
+  }).format(parseFloat(value)) : undefined
 }
 
 export const toEther = (
@@ -34,19 +26,19 @@ export const toEther = (
 ) => {
   if (val != 0n && (!val || val === "--")) return "--"
   try {
-    if (typeof val === 'bigint') val = formatUnits(val, decimals)
-    const result = parseFloat(val)
+    const formattedVal = typeof val === 'bigint' ? formatUnits(val, decimals) : val
+    const result = parseFloat(formattedVal)
     if (format) {
-      format = typeof format === "boolean" ? 2 : format
-      return result.toLocaleString("en-US", { minimumFractionDigits: format, maximumFractionDigits: format });
+      const digits = typeof format === "boolean" ? 2 : format
+      return result.toLocaleString("en-US", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits
+      })
     }
-    return floorToPrecision(result, precision).toString()
+    const factor = Math.pow(10, precision)
+    return (Math.floor(result * factor) / factor).toString()
   } catch (e) {
     console.log(e)
     return "--"
   }
 }
-const floorToPrecision = (num: number, precision: number) => {
-  const factor = Math.pow(10, precision);
-  return Math.floor(num * factor) / factor;
-};
