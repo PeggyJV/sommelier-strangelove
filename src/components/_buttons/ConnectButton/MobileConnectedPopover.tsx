@@ -92,7 +92,7 @@ export const MobileConnectedPopover = () => {
           minW="max-content"
           isLoading={isLoading}
           // loading state fetching ENS
-          fontFamily="Haffer"
+          fontFamily="body"
           fontSize={12}
           _hover={{
             bg: "purple.dark",

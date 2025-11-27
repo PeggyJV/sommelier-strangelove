@@ -5,7 +5,7 @@ import { Badge as CBadge, BadgeProps, Text } from "@chakra-ui/react"
 export enum BadgeStatus {
   Active = "active",
   ComingSoon = "comingSoon",
-  New = "new", // Add new status
+  New = "new",
 }
 
 interface Props extends BadgeProps {
@@ -13,15 +13,15 @@ interface Props extends BadgeProps {
 }
 
 const color = {
-  [BadgeStatus.Active]: "lime.base",
-  [BadgeStatus.ComingSoon]: "orange.base",
-  [BadgeStatus.New]: "white", // Color for text of the New badge
+  [BadgeStatus.Active]: "text.primary",
+  [BadgeStatus.ComingSoon]: "text.primary",
+  [BadgeStatus.New]: "text.primary",
 }
 
 const bg = {
-  [BadgeStatus.Active]: "lime.dark",
-  [BadgeStatus.ComingSoon]: "orange.dark",
-  [BadgeStatus.New]: "violet.base", // Background color for the New badge
+  [BadgeStatus.Active]: "state.success",
+  [BadgeStatus.ComingSoon]: "state.warning",
+  [BadgeStatus.New]: "brand.primary",
 }
 
 export const Badge: React.FC<Props> = ({ status, ...rest }) => {
@@ -29,11 +29,18 @@ export const Badge: React.FC<Props> = ({ status, ...rest }) => {
   const finalResult =
     statusString.charAt(0).toUpperCase() + statusString.slice(1)
   return (
-    <CBadge borderRadius={4} backgroundColor={bg[status]} {...rest}>
+    <CBadge
+      borderRadius="sm"
+      backgroundColor={bg[status]}
+      px={2}
+      py={0.5}
+      {...rest}
+    >
       <Text
-        fontWeight="bold"
+        fontWeight="semibold"
         textTransform="none"
         color={color[status]}
+        fontSize="xs"
       >
         {finalResult}
       </Text>

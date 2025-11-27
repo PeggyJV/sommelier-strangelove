@@ -11,7 +11,8 @@ export const TertiaryButton: FC<ButtonProps> = forwardRef<
       variant="unstyled"
       display="flex"
       p={4}
-      color="purple.base"
+      color="brand.primary"
+      _hover={{ color: "brand.secondary" }}
       {...props}
     />
   )

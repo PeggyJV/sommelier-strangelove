@@ -11,57 +11,60 @@ export interface BaseButtonProps extends Omit<ButtonProps, "icon"> {
   iconProps?: IconProps
 }
 
-export const BaseButton = forwardRef<
-  BaseButtonProps,
-  "button"
->(({ icon, variant, iconProps, ...rest }, ref) => {
-  return (
-    <Button
-      ref={ref}
-      role="group"
-      py={2}
-      px={4}
-      color="white"
-      bg="gradient.primary"
-      borderWidth={2}
-      borderColor="purple.base"
-      overflow="hidden"
-      rightIcon={
-        icon && (
-          <Icon
-            as={icon}
-            color="surface.bg"
-            bgColor="white"
-            borderRadius="50%"
-            boxSize={5}
-            p={1}
-            _groupHover={{
-              color: "purple.dark",
-              bgColor: "white",
-            }}
-            {...iconProps}
-          />
-        )
-      }
-      isDisabled={rest.disabled}
-      _hover={{
-        color: "white",
-        bg: "purple.dark",
-      }}
-      _disabled={{
-        color: "neutral.400",
-        bg: "purple.dark",
-        borderColor: "purple.dark",
-        cursor: "auto",
-        _hover: {
-          color: "neutral.400",
-        },
-        _active: {
-          bg: "purple.dark",
-          borderColor: "purple.dark",
-        },
-      }}
-      {...rest}
-    />
-  )
-})
+export const BaseButton = forwardRef<BaseButtonProps, "button">(
+  ({ icon, variant, iconProps, ...rest }, ref) => {
+    return (
+      <Button
+        ref={ref}
+        role="group"
+        py={2}
+        px={4}
+        color="text.primary"
+        bg="brand.primary"
+        borderWidth={2}
+        borderColor="brand.primary"
+        borderRadius="md"
+        fontWeight="semibold"
+        overflow="hidden"
+        rightIcon={
+          icon && (
+            <Icon
+              as={icon}
+              color="brand.background"
+              bgColor="text.primary"
+              borderRadius="full"
+              boxSize={5}
+              p={1}
+              _groupHover={{
+                color: "brand.primary",
+                bgColor: "text.primary",
+              }}
+              {...iconProps}
+            />
+          )
+        }
+        isDisabled={rest.disabled}
+        _hover={{
+          color: "text.primary",
+          bg: "brand.secondary",
+          borderColor: "brand.secondary",
+        }}
+        _disabled={{
+          color: "text.secondary",
+          bg: "brand.surface",
+          borderColor: "border.subtle",
+          cursor: "auto",
+          _hover: {
+            color: "text.secondary",
+            bg: "brand.surface",
+          },
+          _active: {
+            bg: "brand.surface",
+            borderColor: "border.subtle",
+          },
+        }}
+        {...rest}
+      />
+    )
+  }
+)

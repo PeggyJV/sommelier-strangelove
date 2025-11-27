@@ -85,7 +85,7 @@ export const MiscFilter = (props: MiscFilterProps) => {
           borderColor="purple.base"
           borderRadius="1em"
           w="auto"
-          fontFamily="Haffer"
+          fontFamily="body"
           fontSize={12}
           padding="1.75em 2em"
           _hover={{

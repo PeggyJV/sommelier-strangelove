@@ -5,16 +5,16 @@ import {
 
 export const TransparentSkeleton = (props: SkeletonProps) => (
   <ChakraSkeleton
-    startColor="surface.primary"
-    endColor="surface.secondary"
+    startColor="brand.surface"
+    endColor="border.subtle"
     {...props}
   />
 )
 
 export const LighterSkeleton = (props: SkeletonProps) => (
   <ChakraSkeleton
-    startColor="#413083"
-    endColor="purple.dark"
+    startColor="brand.surface"
+    endColor="brand.secondary"
     {...props}
   />
 )
@@ -28,9 +28,9 @@ export const LightSkeleton = ({
     role="status"
     aria-label="Loading"
     style={{
-      border: "1px solid var(--chakra-colors-surface-secondary)",
-      borderRadius: 12,
-      background: "var(--chakra-colors-surface-primary)",
+      border: "1px solid #292D36",
+      borderRadius: 16,
+      background: "#1A1D25",
       width: "100%",
       minHeight: typeof height === "number" ? `${height}px` : height,
     }}

@@ -1,41 +1,36 @@
-import {
-  Heading,
-  HStack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
-import { ExternalLinkIcon, InformationIcon } from "components/_icons";
-import React from "react";
-import { TransparentCard } from "../TransparentCard";
-import { Link } from "components/Link";
-import { BridgeForm } from "components/_forms/BridgeForm";
-import { useAccount, useSwitchChain } from "wagmi";
-import { FormProvider, useForm } from "react-hook-form";
-import { useIsMounted } from "hooks/utils/useIsMounted";
-import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery";
-import { SecondaryButton } from "components/_buttons/SecondaryButton";
-import { chainSlugMap } from "data/chainConfig";
-import { useBrandedToast } from "hooks/chakra";
+import { Heading, HStack, Text, VStack } from "@chakra-ui/react"
+import { ExternalLinkIcon, InformationIcon } from "components/_icons"
+import React from "react"
+import { TransparentCard } from "../TransparentCard"
+import { Link } from "components/Link"
+import { BridgeForm } from "components/_forms/BridgeForm"
+import { useAccount, useSwitchChain } from "wagmi"
+import { FormProvider, useForm } from "react-hook-form"
+import { useIsMounted } from "hooks/utils/useIsMounted"
+import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
+import { SecondaryButton } from "components/_buttons/SecondaryButton"
+import { chainSlugMap } from "data/chainConfig"
+import { useBrandedToast } from "hooks/chakra"
 
 export interface BridgeFormValues {
-  amount: number;
-  address: string;
-  type: "TO_SOMMELIER" | "TO_ETHEREUM";
+  amount: number
+  address: string
+  type: "TO_SOMMELIER" | "TO_ETHEREUM"
 }
 
 export const BridgeCard: React.FC = () => {
-  const isMounted = useIsMounted();
-  const isLarger768 = useBetterMediaQuery("(min-width: 768px)");
-  const { isConnected, chain: wagmiChain } = useAccount();
+  const isMounted = useIsMounted()
+  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
+  const { isConnected, chain: wagmiChain } = useAccount()
   const methods = useForm<BridgeFormValues>({
     defaultValues: {
       type: "TO_SOMMELIER",
     },
-  });
-  const { switchChainAsync } = useSwitchChain();
-  const { addToast, close } = useBrandedToast();
+  })
+  const { switchChainAsync } = useSwitchChain()
+  const { addToast, close } = useBrandedToast()
 
-  const ethChain = chainSlugMap.ETHEREUM;
+  const ethChain = chainSlugMap.ETHEREUM
 
   const WrongNetwork = (
     <HStack
@@ -60,33 +55,35 @@ export const BridgeCard: React.FC = () => {
               <Text>Wrong Network</Text>
             </HStack>
           </Heading>
-          <Text fontFamily="Haffer" align="center">
-            Your connected wallet is on the {wagmiChain?.name} network. For
-            the time being, the bridge is only available between
-            Ethereum and Somm. Please switch to{" "}
+          <Text fontFamily="body" align="center">
+            Your connected wallet is on the {wagmiChain?.name}{" "}
+            network. For the time being, the bridge is only available
+            between Ethereum and Somm. Please switch to{" "}
             {ethChain.displayName} to use the bridge.
           </Text>
           <HStack align="center" width="100%" justifyContent="center">
             <SecondaryButton
               variant="solid"
               color="white"
-              bg="gradient.primary"
+              bg="brand.primary"
               borderWidth={2}
-              borderColor="purple.base"
+              borderColor="brand.primary"
               onClick={async () => {
                 try {
-                  await switchChainAsync?.({ chainId: ethChain.wagmiId });
+                  await switchChainAsync?.({
+                    chainId: ethChain.wagmiId,
+                  })
                   // Reload the page to ensure everything is in sync
-                  window.location.reload();
+                  window.location.reload()
                 } catch (e) {
-                  const error = e as Error;
+                  const error = e as Error
                   addToast({
                     heading: "Change network error",
                     status: "error",
                     body: <Text>{error?.message}</Text>,
                     closeHandler: close,
                     duration: null,
-                  });
+                  })
                 }
               }}
             >
@@ -96,7 +93,7 @@ export const BridgeCard: React.FC = () => {
         </VStack>
       </HStack>
     </HStack>
-  );
+  )
 
   return (
     <VStack spacing={4}>
@@ -136,10 +133,14 @@ export const BridgeCard: React.FC = () => {
         </Text>
         {isMounted && (
           <FormProvider {...methods}>
-            <BridgeForm wrongNetwork={wagmiChain && wagmiChain.id !== ethChain.wagmiId}/>
+            <BridgeForm
+              wrongNetwork={
+                wagmiChain && wagmiChain.id !== ethChain.wagmiId
+              }
+            />
           </FormProvider>
         )}
       </TransparentCard>
     </VStack>
-  );
-};
+  )
+}

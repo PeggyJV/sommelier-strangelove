@@ -1,14 +1,16 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react"
 import { styles } from "./styles"
-import { fonts } from "./fonts"
+import { fonts, fontWeights, fontSizes } from "./fonts"
 import { colors } from "./colors"
 import { components } from "./components"
 import { sizes } from "./sizes"
 import { shadows } from "./shadows"
+import sommTheme from "./somm-theme.json"
 
 // https://chakra-ui.com/docs/theming/theme#config
 export const config: ThemeConfig = {
-  initialColorMode: "light",
+  initialColorMode: "dark",
+  useSystemColorMode: false,
 }
 
 // https://chakra-ui.com/docs/theming/customize-theme
@@ -16,24 +18,46 @@ const theme = extendTheme({
   config,
   styles,
   fonts,
+  fontWeights,
+  fontSizes,
   colors,
   components,
   sizes,
   shadows,
-  // Semantic tokens and text styles for consistent UI theming
+  // Border radii from design tokens
+  radii: {
+    none: "0",
+    sm: sommTheme.radii.sm,
+    md: sommTheme.radii.md,
+    lg: sommTheme.radii.lg,
+    full: sommTheme.radii.full,
+  },
+  // Semantic tokens for consistent UI theming
   semanticTokens: {
     colors: {
-      "text.primary": { default: "white" },
-      "text.secondary": { default: "neutral.300" },
-      "border.subtle": { default: "whiteAlpha.200" },
+      // Core brand tokens
+      "brand.primary": { default: sommTheme.colors.primary },
+      "brand.secondary": { default: sommTheme.colors.secondary },
+      "brand.background": { default: sommTheme.colors.background },
+      "brand.surface": { default: sommTheme.colors.surface },
+      // Text tokens
+      "text.primary": { default: sommTheme.colors.textPrimary },
+      "text.secondary": { default: sommTheme.colors.textSecondary },
+      // Border tokens
+      "border.subtle": { default: sommTheme.colors.borderSubtle },
+      // State tokens
+      "state.success": { default: sommTheme.colors.success },
+      "state.warning": { default: sommTheme.colors.warning },
+      "state.error": { default: sommTheme.colors.error },
       // Banner-specific tokens (UI-only)
-      // Preferred aliases mapped to brand gradient (Somm → Lido)
-      "banner.bg.start": { default: "purple.dark" },
-      "banner.bg.mid": { default: "purple.base" },
+      "banner.bg.start": { default: sommTheme.colors.secondary },
+      "banner.bg.mid": { default: sommTheme.colors.primary },
       "banner.bg.end": { default: "#00A3FF" },
       "banner.border": { default: "border.subtle" },
       // Back-compat
-      "banner.gradient.start": { default: "#0B0F17" },
+      "banner.gradient.start": {
+        default: sommTheme.colors.background,
+      },
       "banner.gradient.end": { default: "#0B2438" },
       "banner.bloom.cyanA": { default: "rgba(0,163,255,0.12)" },
       "banner.bloom.cyanB": { default: "rgba(41,227,254,0.10)" },
@@ -43,29 +67,43 @@ const theme = extendTheme({
       "banner.text.h1": { default: "text.primary" },
       "banner.text.body": { default: "text.secondary" },
       // CTA (generic + banner)
-      "cta.filled.bg": { default: "purple.base" },
-      "cta.filled.fg": { default: "white" },
+      "cta.filled.bg": { default: sommTheme.colors.primary },
+      "cta.filled.fg": { default: sommTheme.colors.textPrimary },
       "cta.outline.fg": { default: "whiteAlpha.900" },
-      "cta.outline.br": { default: "white" },
-      "banner.cta.filled.bg": { default: "white" },
-      "banner.cta.filled.fg": { default: "black" },
+      "cta.outline.br": { default: sommTheme.colors.textPrimary },
+      "banner.cta.filled.bg": {
+        default: sommTheme.colors.textPrimary,
+      },
+      "banner.cta.filled.fg": {
+        default: sommTheme.colors.background,
+      },
       "banner.cta.outline.fg": { default: "whiteAlpha.900" },
-      "banner.cta.outline.br": { default: "white" },
+      "banner.cta.outline.br": {
+        default: sommTheme.colors.textPrimary,
+      },
       // Chips & pill
       "chip.bg": { default: "whiteAlpha.100" },
       "chip.fg": { default: "whiteAlpha.900" },
-      "banner.pill.bg": { default: "rgba(0,163,255,0.16)" },
+      "banner.pill.bg": { default: "rgba(36, 52, 255, 0.16)" },
       "banner.pill.fg": { default: "text.primary" },
       // Countdown boxes
       "count.box.bg": { default: "whiteAlpha.100" },
-      "count.box.border": { default: "rgba(108,78,217,0.45)" },
-      "count.box.fg": { default: "white" },
+      "count.box.border": {
+        default: `${sommTheme.colors.secondary}73`,
+      },
+      "count.box.fg": { default: sommTheme.colors.textPrimary },
       "count.box.sub": { default: "text.secondary" },
     },
   },
   textStyles: {
-    heroTitle: { fontWeight: 800, lineHeight: 1.05 },
-    bodyMd: { fontSize: ["sm", "md"], color: "text.secondary" },
+    heroTitle: {
+      fontWeight: sommTheme.typography.weights.semibold,
+      lineHeight: 1.05,
+    },
+    bodyMd: {
+      fontSize: ["sm", "md"],
+      color: "text.secondary",
+    },
   },
 })
 

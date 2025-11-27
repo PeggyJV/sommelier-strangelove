@@ -57,7 +57,7 @@ export const WrongNetworkBanner: FC<WrongNetworkBannerProps> = ({
               <Text>{chain.displayName} Vault</Text>
             </HStack>
           </Heading>
-          <Text fontFamily="Haffer">
+          <Text fontFamily="body">
             Your connected wallet is on the {wagmiChain.name} network.
             This vault is on {chain.displayName}; to use it please
             switch networks.
@@ -66,12 +66,12 @@ export const WrongNetworkBanner: FC<WrongNetworkBannerProps> = ({
             <SecondaryButton
               variant="solid"
               color="white"
-              bg="gradient.primary"
+              bg="brand.primary"
               borderWidth={2}
-              borderColor="purple.base"
+              borderColor="brand.primary"
               onClick={async () => {
                 try {
-                  await switchChainAsync?.({chainId: chain.wagmiId})
+                  await switchChainAsync?.({ chainId: chain.wagmiId })
                   // Reload the page to ensure everything is in sync
                   window.location.reload()
                 } catch (e) {

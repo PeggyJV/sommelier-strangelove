@@ -8,9 +8,9 @@ export const CardBase: React.FC<Props> = ({ children, ...rest }) => {
   return (
     <Flex
       border="1px solid"
-      borderColor="surface.tertiary"
-      backgroundColor="surface.secondary"
-      borderRadius="16px"
+      borderColor="border.subtle"
+      backgroundColor="brand.surface"
+      borderRadius="lg"
       alignItems="center"
       backdropFilter="blur(5px)"
       px={6}

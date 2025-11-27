@@ -11,12 +11,16 @@ interface LayoutProps extends FlexProps {
   chainObj?: Chain
 }
 
-export const Layout: FC<LayoutProps> = ({ chainObj, children, ...rest }) => {
+export const Layout: FC<LayoutProps> = ({
+  chainObj,
+  children,
+  ...rest
+}) => {
   const { isConnected } = useAccount()
   const isMounted = useIsMounted()
 
   return (
-    <Box bg="#1A1A23">
+    <Box bg="brand.background">
       <Box display="block">
         <Flex minH="100vh" flexDir="column" {...rest}>
           <Nav />

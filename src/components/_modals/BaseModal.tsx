@@ -27,11 +27,11 @@ export const BaseModal: FC<BaseModalProps> = ({
       <ModalContent
         px={8}
         py={10}
-        bg="surface.bg"
-        color="neutral.100"
+        bg="brand.background"
+        color="text.primary"
         border="1px solid"
-        borderColor="purple.base"
-        borderRadius={24}
+        borderColor="border.subtle"
+        borderRadius="lg"
       >
         <HStack pb={10} justify="space-between">
           {heading && (

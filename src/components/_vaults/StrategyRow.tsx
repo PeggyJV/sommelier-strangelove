@@ -1,15 +1,11 @@
 import {
-  Badge,
   Box,
   Grid,
   HStack,
   Text,
   VStack,
   Image,
-  Button,
   Avatar,
-  Stack,
-  Tooltip,
 } from "@chakra-ui/react"
 import { useEffect, useMemo, useState } from "react"
 import ConnectGate from "components/wallet/ConnectGate"
@@ -20,8 +16,6 @@ import KPIBox from "components/_vaults/KPIBox"
 import ActionButton from "components/ui/ActionButton"
 import { config as utilConfig } from "utils/config"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
-import { InformationIcon } from "components/_icons"
-import { alphaStethI18n } from "i18n/alphaSteth"
 import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 
 type Vault = {
@@ -49,7 +43,6 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   const built = Array.isArray(vault?.builtWith)
     ? vault?.builtWith
     : []
-  // Prefer list TVL; fallback to individual strategy data if missing
   const netVal =
     typeof vault?.baseApySumRewards?.value === "string"
       ? parseFloat(vault?.baseApySumRewards?.value)
@@ -71,7 +64,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     return !!launchDate && Date.now() < launchDate.getTime()
   }, [launchDate?.getTime?.()])
 
-  // User net value (reuse manage page logic via hook)
+  // User net value
   const strategyAddress = vault?.config?.cellar?.address
   const strategyChainId = vault?.config?.chain?.id
   const { data: stratData } =
@@ -81,12 +74,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   const tvl = stratData?.tvm?.formatted ?? vault?.tvm?.formatted
   const { data: userStratData } =
     strategyAddress && strategyChainId
-      ? useUserStrategyData(
-          strategyAddress,
-          strategyChainId,
-          // Gate by connection status implicitly via hook (enabled flag)
-          true
-        )
+      ? useUserStrategyData(strategyAddress, strategyChainId, true)
       : ({} as any)
   const netValueFmt: string | undefined = (userStratData as any)
     ?.userStrategyData?.userData?.netValue?.formatted
@@ -94,7 +82,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   const safeValue = (v?: string | number | null) =>
     v === undefined || v === null || v === "" ? "–" : v
 
-  // Helper text countdown (compact). Updates every second, rendered once below button
+  // Countdown
   const [remaining, setRemaining] = useState<string>("")
   useEffect(() => {
     if (!launchDate) return
@@ -126,11 +114,20 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
 
   return (
     <Box
-      // Ensure mobile rows have enough vertical space for the CTA
-      // and that content never overflows the card boundary
+      borderWidth="1px"
+      borderColor="border.subtle"
+      bg="brand.surface"
+      rounded="lg"
+      p={{ base: 4, md: 6 }}
+      w="full"
+      _hover={{
+        borderColor: "brand.primary",
+        bg: "rgba(26, 29, 37, 0.8)",
+      }}
+      transition="border-color .15s ease, background .15s ease"
       sx={{
         "@media (max-width: 768px)": {
-          paddingBottom: "8px",
+          paddingBottom: "16px",
         },
       }}
     >
@@ -142,7 +139,6 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
         templateColumns={{ base: "1fr", lg: "1.2fr 1.1fr 1fr" }}
         gap={{ base: 3, md: 6 }}
         alignItems="center"
-        // Prevent button clipping due to hidden overflow on grid/td parents
         overflow="visible"
       >
         {/* Left column: Identity */}
@@ -159,15 +155,16 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                 : (vault as any)?.logo
             }
             alt={vault?.name || "Vault"}
-            boxSize={{ base: "32px", md: "40px" }}
-            rounded="full"
+            boxSize={{ base: "40px", md: "48px" }}
+            rounded="lg"
             flexShrink={0}
           />
           <VStack spacing={1} align="flex-start" minW={0} flex={1}>
             <HStack spacing={2} flexWrap="wrap" minW={0}>
               <Text
                 fontSize={{ base: "md", md: "xl" }}
-                fontWeight={800}
+                fontWeight="semibold"
+                color="text.primary"
                 noOfLines={1}
               >
                 {vault?.name}
@@ -175,12 +172,17 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             </HStack>
             <HStack spacing={2} flexWrap="wrap">
               {vault?.isSommNative && (
-                <Badge
-                  colorScheme="blue"
-                  fontSize={{ base: "xs", md: "sm" }}
+                <Box
+                  px={2}
+                  py={0.5}
+                  bg="brand.primary"
+                  rounded="sm"
+                  fontSize={{ base: "xs", md: "xs" }}
+                  fontWeight="semibold"
+                  color="text.primary"
                 >
                   Somm-native
-                </Badge>
+                </Box>
               )}
               {chainLogo && (
                 <HStack
@@ -188,7 +190,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                   px={2}
                   py={0.5}
                   rounded="full"
-                  bg="whiteAlpha.100"
+                  bg="rgba(36, 52, 255, 0.1)"
                 >
                   <Avatar
                     name={chainLabel}
@@ -197,7 +199,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                     border="none"
                     sx={{ width: "16px", height: "16px" }}
                   />
-                  <Text fontSize="xs" color="whiteAlpha.800">
+                  <Text fontSize="xs" color="text.secondary">
                     {chainLabel}
                   </Text>
                 </HStack>
@@ -206,7 +208,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             {providerText && (
               <Text
                 fontSize={{ base: "xs", md: "sm" }}
-                color="whiteAlpha.800"
+                color="text.secondary"
                 noOfLines={1}
               >
                 {providerText}
@@ -215,7 +217,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
           </VStack>
         </HStack>
 
-        {/* Center column: KPIs in equal widths */}
+        {/* Center column: KPIs */}
         <Grid
           gridArea="kpi"
           templateColumns={{
@@ -236,14 +238,21 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             <VStack spacing={2} align="end" minW={0}>
               <Text
                 fontSize={{ base: "xl", md: "2xl" }}
-                fontWeight={800}
+                fontWeight="semibold"
                 lineHeight={1}
+                color="text.primary"
                 isTruncated
               >
                 {safeValue(approxNetFmt ?? netFmt)}
               </Text>
               <HStack spacing={1} align="center" overflow="visible">
-                <Text fontSize="xs" color="neutral.400" isTruncated>
+                <Text
+                  fontSize="xs"
+                  color="text.secondary"
+                  textTransform="uppercase"
+                  letterSpacing="0.05em"
+                  isTruncated
+                >
                   Net APY
                 </Text>
                 <AlphaApyPopover />
@@ -258,12 +267,11 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
           )}
         </Grid>
 
-        {/* Right column: chain + primary action with single helper */}
+        {/* Right column: Action */}
         <VStack
           gridArea="action"
           spacing={2}
           align={{ base: "stretch", md: "end" }}
-          // Reserve vertical space on mobile so the button never gets clipped
           sx={{
             "@media (max-width: 768px)": {
               minHeight: "56px",
@@ -280,7 +288,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             >
               {isPreLaunch ? (
                 <ActionButton
-                  variantStyle="primary"
+                  variantStyle="secondary"
                   size={{ base: "md", md: "md" }}
                   fullWidth
                   isDisabled
@@ -293,7 +301,6 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                   variantStyle="primary"
                   size={{ base: "md", md: "md" }}
                   fullWidth
-                  // Allow button to consume full width even if row has click handler
                   onMouseDown={(e) => e.stopPropagation()}
                   onClick={(e) => {
                     e.stopPropagation()
@@ -307,7 +314,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             </ConnectGate>
           </Box>
           {isPreLaunch && remaining && (
-            <Text fontSize="xs" color="neutral.400">
+            <Text fontSize="xs" color="text.secondary">
               Available in: {remaining}
             </Text>
           )}
@@ -317,13 +324,17 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
       {/* One-line description */}
       {oneLineDesc && (
         <Text
-          mt={{ base: 2, md: 3 }}
-          fontSize={{ base: "xs", md: "sm" }}
-          color="neutral.300"
-          noOfLines={{ base: 3, md: 1 }}
+          mt={{ base: 3, md: 4 }}
+          pt={{ base: 3, md: 4 }}
+          borderTop="1px solid"
+          borderColor="border.subtle"
+          fontSize={{ base: "sm", md: "sm" }}
+          color="text.secondary"
+          noOfLines={{ base: 3, md: 2 }}
           whiteSpace="normal"
           wordBreak="break-word"
           overflowWrap="anywhere"
+          lineHeight={1.5}
         >
           {oneLineDesc}
         </Text>

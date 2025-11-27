@@ -1,11 +1,13 @@
+import sommTheme from "./somm-theme.json"
+
 export const styles = {
   global: {
-    MozSelection: { background: "purple.base" },
-    WebKitSelection: { background: "purple.base" },
-    "::selection": { background: "purple.base" },
+    MozSelection: { background: "brand.primary" },
+    WebKitSelection: { background: "brand.primary" },
+    "::selection": { background: "brand.primary" },
     "html, body": {
-      bgColor: "surface.bg",
-      color: "neutral.100",
+      bgColor: "brand.background",
+      color: "text.primary",
       overflowX: "hidden",
     },
     ":root": {
@@ -25,7 +27,7 @@ export const styles = {
         boxShadow: "unset",
       },
     ".blinker": {
-      color: "#ED4A7D",
+      color: sommTheme.colors.error,
       fontWeight: 100,
     },
     ".slick-prev:before, .slick-next:before": {
@@ -35,11 +37,11 @@ export const styles = {
       padding: "0 1rem",
     },
     ".slick-dots li button:before": {
-      color: "#EDE8FC",
+      color: sommTheme.colors.textSecondary,
       marginTop: "10px !important",
     },
     ".slick-dots li.slick-active button:before": {
-      color: "#6C4ED9 !important",
+      color: `${sommTheme.colors.primary} !important`,
     },
     ".blink_me": {
       animation: "blinker 1s linear infinite",
@@ -82,27 +84,27 @@ export const styles = {
       transitionDuration: "500ms",
     },
     ".walletconnect-modal__base": {
-      background: "#121214 !important",
-      border: "1px solid #6C4ED9 !important",
+      background: `${sommTheme.colors.background} !important`,
+      border: `1px solid ${sommTheme.colors.primary} !important`,
       borderRadius: "24px !important",
     },
     ".walletconnect-modal__mobile__toggle": {
-      background: "#1C182A !important",
+      background: `${sommTheme.colors.surface} !important`,
       borderRadius: "20px !important",
     },
     ".walletconnect-modal__mobile__toggle_selector": {
-      background: "#282045 !important",
-      border: "1px solid #6C4ED9 !important",
+      background: `${sommTheme.colors.surface} !important`,
+      border: `1px solid ${sommTheme.colors.primary} !important`,
       borderRadius: "16px !important",
     },
     ".walletconnect-qrcode__text": {
-      color: "#fff !important",
+      color: `${sommTheme.colors.textPrimary} !important`,
     },
     ".walletconnect-connect__button__text": {
-      color: "#fff !important",
+      color: `${sommTheme.colors.textPrimary} !important`,
     },
     ".walletconnect-search__input": {
-      background: "#1C182A !important",
+      background: `${sommTheme.colors.surface} !important`,
     },
     ".walletconnect-modal__footer": {
       overflowX: "scroll !important",

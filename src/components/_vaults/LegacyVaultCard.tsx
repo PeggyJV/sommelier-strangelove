@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   HStack,
@@ -84,7 +83,7 @@ export default function LegacyVaultCard({
       ? useUserStrategyData(stratAddress, stratChainId, enabled)
       : ({} as any)
 
-  // Use user's actual net value for withdrawal logic, not the display net value
+  // Use user's actual net value for withdrawal logic
   const userNetValue =
     userStratData?.userStrategyData?.userData?.netValue?.formatted
   const nv = coerceNetValue(userNetValue)
@@ -126,9 +125,9 @@ export default function LegacyVaultCard({
   const rewardsColor =
     typeof netValueNum === "number"
       ? netValueNum >= 0
-        ? "green.300"
-        : "red.300"
-      : "neutral.300"
+        ? "state.success"
+        : "state.error"
+      : "text.secondary"
 
   const href = vault?.slug
     ? `/strategies/${vault.slug}/manage`
@@ -144,23 +143,26 @@ export default function LegacyVaultCard({
   return (
     <Box
       borderWidth="1px"
-      borderColor="surface.secondary"
-      bg="surface.primary"
-      rounded="xl"
-      p={{ base: 4, md: 5 }}
+      borderColor="border.subtle"
+      bg="brand.surface"
+      rounded="lg"
+      p={{ base: 4, md: 6 }}
       w="full"
       overflow="hidden"
       cursor={href ? "pointer" : "default"}
       role={href ? "link" : undefined}
       tabIndex={href ? 0 : undefined}
       aria-label={href ? `Open ${vault?.name ?? "vault"}` : undefined}
-      _hover={{ bg: "surface.secondary", borderColor: "purple.base" }}
+      _hover={{
+        bg: "rgba(26, 29, 37, 0.8)",
+        borderColor: "brand.primary",
+      }}
       _focusVisible={{
         outline: "2px solid",
-        outlineColor: "purple.base",
+        outlineColor: "brand.primary",
         outlineOffset: "2px",
       }}
-      transition="background-color .2s ease, border-color .2s ease, box-shadow .2s ease"
+      transition="background-color .15s ease, border-color .15s ease"
       onClick={() => {
         if (href) router.push(href)
       }}
@@ -185,14 +187,15 @@ export default function LegacyVaultCard({
             <Image
               src={vault.logo}
               alt={vault.name || "Vault"}
-              boxSize="44px"
-              rounded="full"
+              boxSize="48px"
+              rounded="lg"
             />
           )}
           <VStack spacing={1} align="flex-start" minW={0}>
             <Text
-              fontWeight={800}
+              fontWeight="semibold"
               fontSize={{ base: "lg", md: "xl" }}
+              color="text.primary"
               noOfLines={1}
             >
               {vault?.name}
@@ -200,7 +203,7 @@ export default function LegacyVaultCard({
             <HStack spacing={2} flexWrap="wrap">
               <Text
                 fontSize="sm"
-                color="whiteAlpha.800"
+                color="text.secondary"
                 noOfLines={1}
               >
                 {providerText}
@@ -211,16 +214,16 @@ export default function LegacyVaultCard({
                   px={2}
                   py={0.5}
                   rounded="full"
-                  bg="whiteAlpha.100"
+                  bg="rgba(36, 52, 255, 0.1)"
                 >
                   <Avatar
                     name={chainName}
                     src={chainLogo}
                     background="transparent"
                     border="none"
-                    sx={{ width: "18px", height: "18px" }}
+                    sx={{ width: "16px", height: "16px" }}
                   />
-                  <Text fontSize="xs" color="whiteAlpha.800">
+                  <Text fontSize="xs" color="text.secondary">
                     {chainName}
                   </Text>
                 </HStack>
@@ -241,24 +244,36 @@ export default function LegacyVaultCard({
           <VStack spacing={1} align="flex-start" minW={0}>
             <Text
               fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight={800}
+              fontWeight="semibold"
               lineHeight={1}
+              color="text.primary"
             >
               {safeVal(tvl)}
             </Text>
-            <Text fontSize="xs" color="neutral.400">
+            <Text
+              fontSize="xs"
+              color="text.secondary"
+              textTransform="uppercase"
+              letterSpacing="0.05em"
+            >
               TVL
             </Text>
           </VStack>
           <VStack spacing={1} align="center" minW={0}>
             <Text
               fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight={800}
+              fontWeight="semibold"
               lineHeight={1}
+              color="text.primary"
             >
               {safeVal(combinedNetValueFmt)}
             </Text>
-            <Text fontSize="xs" color="neutral.400">
+            <Text
+              fontSize="xs"
+              color="text.secondary"
+              textTransform="uppercase"
+              letterSpacing="0.05em"
+            >
               Net Value
             </Text>
           </VStack>
@@ -266,7 +281,7 @@ export default function LegacyVaultCard({
             <HStack spacing={1}>
               <Text
                 fontSize={{ base: "xl", md: "2xl" }}
-                fontWeight={800}
+                fontWeight="semibold"
                 lineHeight={1}
                 color={rewardsColor}
               >
@@ -276,7 +291,12 @@ export default function LegacyVaultCard({
                 {rewardsArrow}
               </Text>
             </HStack>
-            <Text fontSize="xs" color="neutral.400">
+            <Text
+              fontSize="xs"
+              color="text.secondary"
+              textTransform="uppercase"
+              letterSpacing="0.05em"
+            >
               Net Rewards
             </Text>
           </VStack>
@@ -326,9 +346,9 @@ export default function LegacyVaultCard({
                   <PopoverContent
                     p={2}
                     borderWidth={1}
-                    borderColor="purple.dark"
-                    borderRadius={12}
-                    bg="surface.bg"
+                    borderColor="border.subtle"
+                    borderRadius="lg"
+                    bg="brand.background"
                     _focus={{ outline: "unset", boxShadow: "unset" }}
                     onMouseDown={(e) => e.stopPropagation()}
                     onClick={(e) => e.stopPropagation()}
@@ -338,7 +358,6 @@ export default function LegacyVaultCard({
                         requiredChainId={desiredChainId}
                         fullWidth
                         onSwitched={async () => {
-                          // after successful switch, open withdraw flow
                           try {
                             await switchChainAsync?.({
                               chainId: desiredChainId!,
@@ -359,8 +378,8 @@ export default function LegacyVaultCard({
                 <Tooltip
                   label={tooltipLabel}
                   isDisabled={!tooltipLabel}
-                  bg="surface.bg"
-                  color="neutral.300"
+                  bg="brand.background"
+                  color="text.secondary"
                   placement="top"
                 >
                   <ActionButton

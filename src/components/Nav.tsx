@@ -45,10 +45,10 @@ export const Nav = memo((props: FlexProps) => {
   }, [])
 
   const styles: FlexProps | false = scrolled && {
-    bg: "rgba(26, 26, 26, 0.5)",
+    bg: "rgba(13, 15, 20, 0.8)",
     backdropFilter: "blur(8px)",
     borderBottom: "1px solid",
-    borderColor: "purple.dark",
+    borderColor: "border.subtle",
   }
   const mobileScrollHide =
     (!isLarger992 && `nav ${scrollDirection === "down" && "down"}`) ||
@@ -127,10 +127,11 @@ export const Nav = memo((props: FlexProps) => {
                       href={item.link}
                       color={
                         isActive && !isExternalLink
-                          ? "white"
-                          : "neutral.400"
+                          ? "text.primary"
+                          : "text.secondary"
                       }
                       fontWeight="semibold"
+                      _hover={{ color: "text.primary" }}
                     >
                       {item.title}
                     </Link>
@@ -183,8 +184,8 @@ export const Nav = memo((props: FlexProps) => {
           isOpen={isOpen && !isLarger992}
         >
           <DrawerOverlay />
-          <DrawerContent backgroundColor="#1E163D">
-            <DrawerCloseButton size="lg" />
+          <DrawerContent backgroundColor="brand.surface">
+            <DrawerCloseButton size="lg" color="text.primary" />
             <DrawerBody p={0}>
               <Stack alignItems="flex-end" py="160px" px="24px">
                 {NAV_LINKS.map((item) => {
@@ -201,10 +202,11 @@ export const Nav = memo((props: FlexProps) => {
                         href={item.link}
                         color={
                           isActive && !isExternalLink
-                            ? "white"
-                            : "neutral.400"
+                            ? "text.primary"
+                            : "text.secondary"
                         }
                         fontWeight="semibold"
+                        _hover={{ color: "text.primary" }}
                       >
                         {item.title}
                       </Link>

@@ -34,12 +34,7 @@ export const YourPortofolio = () => {
 
   return (
     <VStack spacing="32px" w="full" mt={16}>
-      <TransparentCard
-        fontFamily="Haffer"
-        w="100%"
-        paddingX={0}
-        pt={3}
-      >
+      <TransparentCard fontFamily="body" w="100%" paddingX={0} pt={3}>
         <VStack alignItems="flex-start" w="100%" spacing={0}>
           <Text
             marginX="auto"
@@ -93,12 +88,12 @@ export const YourPortofolio = () => {
                     strategy.userStrategyData.strategyData?.slug && (
                       <PortofolioItem
                         symbol={
-                          strategy.userStrategyData.strategyData?.symbol ||
-                          ""
+                          strategy.userStrategyData.strategyData
+                            ?.symbol || ""
                         }
                         bondedToken={Number(
-                          (strategy?.userStakes as any)?.totalBondedAmount
-                            ?.value ?? 0
+                          (strategy?.userStakes as any)
+                            ?.totalBondedAmount?.value ?? 0
                         )}
                         key={
                           strategy.userStrategyData.strategyData?.name
@@ -112,8 +107,8 @@ export const YourPortofolio = () => {
                             ?.name ?? ""
                         }
                         netValueUsd={
-                          strategy.userStrategyData.userData
-                            ?.netValue?.formatted ?? ""
+                          strategy.userStrategyData.userData?.netValue
+                            ?.formatted ?? ""
                         }
                         tokenPrice={valueAndFormatted({
                           value:

@@ -3,6 +3,10 @@ import { Global } from "@emotion/react"
 export const GlobalFonts = () => (
   <Global
     styles={`
+      /* Inter from Google Fonts */
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+      /* Legacy Haffer fonts for backward compatibility */
       @font-face {
         font-family: 'Haffer';
         font-style: normal;
