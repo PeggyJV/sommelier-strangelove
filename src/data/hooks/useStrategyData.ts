@@ -87,7 +87,6 @@ export const useStrategyData = (
       enabled &&
       !!allContracts &&
       !!allContracts[key] &&
-      !!sommPrice &&
       (isNoDataSource || !!stratData) &&
       !!baseAssetPrice,
   })

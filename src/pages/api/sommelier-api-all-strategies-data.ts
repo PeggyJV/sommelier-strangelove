@@ -5,12 +5,25 @@ import { chainSlugMap } from "data/chainConfig"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
+const DEBUG_FETCH = process.env.NEXT_PUBLIC_DEBUG_FETCH === "1"
+
 interface CellarType {
   id: string
   dayDatas: any
   shareValue: any
   tvlTotal: number
   chain: string
+}
+
+type DailyDataResponse = {
+  Response: Record<
+    string,
+    Array<{
+      unix_seconds?: number
+      share_price: number
+      tvl?: number | string
+    }>
+  >
 }
 
 async function fetchData(url: string) {
@@ -21,6 +34,23 @@ async function fetchData(url: string) {
     },
   })
   return response
+}
+
+const latestTvlFromDaily = (
+  data: DailyDataResponse,
+  addr: string
+) => {
+  const entries = data?.Response?.[addr]
+  if (!Array.isArray(entries) || entries.length === 0) return 0
+  const latest = entries.reduce(
+    (acc, cur) =>
+      (cur?.unix_seconds ?? 0) > (acc?.unix_seconds ?? 0)
+        ? cur
+        : acc,
+    entries[0]
+  )
+  const tvl = Number(latest?.tvl ?? 0)
+  return Number.isFinite(tvl) ? tvl : 0
 }
 
 const sommelierAPIAllStrategiesData = async (
@@ -41,40 +71,31 @@ const sommelierAPIAllStrategiesData = async (
     let allEthereumStrategyData = `https://api.sommelier.finance/dailyData/ethereum/allCellars/${monthAgoEpoch}/latest`
     let allArbitrumStrategyData = `https://api.sommelier.finance/dailyData/arbitrum/allCellars/${monthAgoEpoch}/latest`
     let allOptimismStrategyData = `https://api.sommelier.finance/dailyData/optimism/allCellars/${monthAgoEpoch}/latest`
-    // Scroll disabled
-    // let allScrollStrategyData = `https://api.sommelier.finance/dailyData/scroll/allCellars/${monthAgoEpoch}/latest`
-    let tvlData = `https://api.sommelier.finance/tvl`
 
     const [
       allEthereumStrategyDataResponse,
       allArbitrumStrategyDataResponse,
       allOptimismStrategyDataResponse,
-      // allScrollStrategyDataResponse,
-      tvlDataResponse,
     ] = await Promise.all([
       fetchData(allEthereumStrategyData),
       fetchData(allArbitrumStrategyData),
       fetchData(allOptimismStrategyData),
-      // fetchData(allScrollStrategyData),
-      fetchData(tvlData),
     ])
 
     // Proceed even if one chain fails; use empty responses for non-200
     const okEth = allEthereumStrategyDataResponse.status === 200
     const okArb = allArbitrumStrategyDataResponse.status === 200
     const okOp = allOptimismStrategyDataResponse.status === 200
-    const okTvl = tvlDataResponse.status === 200
 
-    const fetchedEthData = okEth
+    const fetchedEthData: DailyDataResponse = okEth
       ? await allEthereumStrategyDataResponse.json()
       : { Response: {} }
-    const fetchedArbitrumData = okArb
+    const fetchedArbitrumData: DailyDataResponse = okArb
       ? await allArbitrumStrategyDataResponse.json()
       : { Response: {} }
-    const fetchedOptimismData = okOp
+    const fetchedOptimismData: DailyDataResponse = okOp
       ? await allOptimismStrategyDataResponse.json()
       : { Response: {} }
-    const fetchedScrollData = { Response: {} as any }
 
     let returnObj = {
       result: {
@@ -84,12 +105,18 @@ const sommelierAPIAllStrategiesData = async (
       },
     }
 
-    const fetchedTVL = okTvl
-      ? await tvlDataResponse.json()
-      : { Response: {} }
-
-    // Do this loop per chain
-    // For each key perform transformation
+    if (DEBUG_FETCH) {
+      console.log("[all-strategies] fetch status", {
+        eth: allEthereumStrategyDataResponse.status,
+        arb: allArbitrumStrategyDataResponse.status,
+        opt: allOptimismStrategyDataResponse.status,
+        ethCount: Object.keys(fetchedEthData.Response || {}).length,
+        arbCount: Object.keys(fetchedArbitrumData.Response || {})
+          .length,
+        optCount: Object.keys(fetchedOptimismData.Response || {})
+          .length,
+      })
+    }
 
     // ! Eth transform
     Object.keys(fetchedEthData.Response).forEach((cellarAddress) => {
@@ -120,15 +147,8 @@ const sommelierAPIAllStrategiesData = async (
       // Order by descending date
       transformedData.sort((a: any, b: any) => b.date - a.date)
 
-      // Get tvl
-      let tvl =
-        fetchedTVL?.Response?.[cellarAddress] ??
-        fetchedTVL?.Response?.[cellarAddress?.toLowerCase?.()] ??
-        0
-
-      if (tvl === undefined) {
-        tvl = 0
-      }
+      // Get tvl from the freshest daily snapshot
+      let tvl = latestTvlFromDaily(fetchedEthData, cellarAddress)
 
       let shareValue = 0
       if (transformedData.length === 0) {
@@ -181,16 +201,10 @@ const sommelierAPIAllStrategiesData = async (
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl =
-          fetchedTVL?.Response?.[cellarAddress + "-arbitrum"] ??
-          fetchedTVL?.Response?.[
-            cellarAddress?.toLowerCase?.() + "-arbitrum"
-          ] ??
-          0
-
-        if (tvl === undefined) {
-          tvl = 0
-        }
+        let tvl = latestTvlFromDaily(
+          fetchedArbitrumData,
+          cellarAddress
+        )
 
         let shareValue = 0
         if (transformedData.length === 0) {
@@ -246,16 +260,10 @@ const sommelierAPIAllStrategiesData = async (
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl =
-          fetchedTVL?.Response?.[cellarAddress + "-optimism"] ??
-          fetchedTVL?.Response?.[
-            cellarAddress?.toLowerCase?.() + "-optimism"
-          ] ??
-          0
-
-        if (tvl === undefined) {
-          tvl = 0
-        }
+        let tvl = latestTvlFromDaily(
+          fetchedOptimismData,
+          cellarAddress
+        )
 
         let shareValue = 0
         if (transformedData.length === 0) {
