@@ -48,10 +48,24 @@ export const getAllStrategiesData = async ({
           const config: ConfigProps = strategy.config!
 
           const baseAsset = config.baseAsset
-          const baseAssetPrice = await fetchCoingeckoPrice(
-            baseAsset,
-            "usd"
-          )
+          const baseAssetPrice = await (async () => {
+            try {
+              const p = await fetchCoingeckoPrice(baseAsset, "usd")
+              return p ?? "0"
+            } catch (e) {
+              if (process.env.NEXT_PUBLIC_DEBUG_FETCH === "1") {
+                console.warn(
+                  "[strategies] baseAsset price fallback",
+                  {
+                    slug: strategy.slug,
+                    base: baseAsset.symbol,
+                    error: (e as Error)?.message,
+                  }
+                )
+              }
+              return "0"
+            }
+          })()
 
           try {
             return await getStrategyData({
