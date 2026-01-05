@@ -251,3 +251,17 @@ export interface CellarDataMap {
 export interface CellarAddressDataMap {
   [key: string]: CellarData
 }
+
+/**
+ * Response shape from the Sommelier API dailyData endpoints
+ */
+export type DailyDataResponse = {
+  Response: Record<
+    string,
+    Array<{
+      unix_seconds?: number
+      share_price?: number
+      tvl?: number | string
+    }>
+  >
+}

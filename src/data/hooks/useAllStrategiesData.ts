@@ -75,15 +75,17 @@ export const useAllStrategiesData = () => {
     staleTime: 120_000,
   })
 
-  if (DEBUG_FETCH) {
-    console.log("[strategies] query flags", {
-      contracts: !!allContracts,
-      sommPrice: !!sommPrice,
-      cellarData: !!cellarData,
-      enabled: !!allContracts && !!cellarData,
-      error: Boolean(error),
-    })
-  }
+  useEffect(() => {
+    if (DEBUG_FETCH) {
+      console.log("[strategies] query flags", {
+        contracts: !!allContracts,
+        sommPrice: !!sommPrice,
+        cellarData: !!cellarData,
+        enabled: !!allContracts && !!cellarData,
+        error: Boolean(error),
+      })
+    }
+  }, [allContracts, sommPrice, cellarData, error])
 
   return {
     ...query,

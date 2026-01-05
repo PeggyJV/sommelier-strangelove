@@ -1,43 +1,20 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { CellaAddressDataMap } from "data/cellarDataMap"
+import { DailyDataResponse } from "data/types"
+import { getLatestTvlFromDaily } from "utils/dailyData"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
 const DEBUG_FETCH = process.env.NEXT_PUBLIC_DEBUG_FETCH === "1"
 
-type DailyDataResponse = {
-  Response: Record<
-    string,
-    Array<{
-      unix_seconds?: number
-      tvl?: number | string
-    }>
-  >
-}
-
 const fetchJson = async (url: string) => {
   const res = await fetch(url, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
   })
-  const body = await res.json()
+  const body = await res.json().catch(() => ({ Response: {} }))
   return { ok: res.ok, status: res.status, body }
-}
-
-const getLatestTvl = (
-  data: DailyDataResponse | undefined,
-  addr: string
-) => {
-  const entries = data?.Response?.[addr]
-  if (!Array.isArray(entries) || entries.length === 0) return 0
-  const latest = entries.reduce(
-    (acc, cur) =>
-      (cur?.unix_seconds ?? 0) > (acc?.unix_seconds ?? 0) ? cur : acc,
-    entries[0]
-  )
-  const tvl = Number(latest?.tvl ?? 0)
-  return Number.isFinite(tvl) ? tvl : 0
 }
 
 const buildDailyUrl = (chain: string, fromEpoch: number) =>
@@ -76,7 +53,7 @@ const sommelierAPITVL = async (
       Object.keys(chainData.body.Response).forEach((address) => {
         const key = (address + suffix).toLowerCase()
         if (!CellaAddressDataMap[key]) return
-        tvlMap[key] = getLatestTvl(
+        tvlMap[key] = getLatestTvlFromDaily(
           chainData.body as DailyDataResponse,
           address
         )

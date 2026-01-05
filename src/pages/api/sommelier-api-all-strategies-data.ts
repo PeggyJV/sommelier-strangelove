@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { CellaAddressDataMap } from "data/cellarDataMap"
 import { chainSlugMap } from "data/chainConfig"
+import { DailyDataResponse } from "data/types"
+import { getLatestTvlFromDaily } from "utils/dailyData"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
@@ -15,17 +17,6 @@ interface CellarType {
   chain: string
 }
 
-type DailyDataResponse = {
-  Response: Record<
-    string,
-    Array<{
-      unix_seconds?: number
-      share_price: number
-      tvl?: number | string
-    }>
-  >
-}
-
 async function fetchData(url: string) {
   const response = await fetch(url, {
     method: "GET",
@@ -34,21 +25,6 @@ async function fetchData(url: string) {
     },
   })
   return response
-}
-
-const latestTvlFromDaily = (
-  data: DailyDataResponse,
-  addr: string
-) => {
-  const entries = data?.Response?.[addr]
-  if (!Array.isArray(entries) || entries.length === 0) return 0
-  const latest = entries.reduce(
-    (acc, cur) =>
-      (cur?.unix_seconds ?? 0) > (acc?.unix_seconds ?? 0) ? cur : acc,
-    entries[0]
-  )
-  const tvl = Number(latest?.tvl ?? 0)
-  return Number.isFinite(tvl) ? tvl : 0
 }
 
 const sommelierAPIAllStrategiesData = async (
@@ -150,7 +126,7 @@ const sommelierAPIAllStrategiesData = async (
       transformedData.sort((a: any, b: any) => b.date - a.date)
 
       // Get tvl from the freshest daily snapshot
-      let tvl = latestTvlFromDaily(fetchedEthData, cellarAddress)
+      let tvl = getLatestTvlFromDaily(fetchedEthData, cellarAddress)
 
       let shareValue = 0
       if (transformedData.length === 0) {
@@ -203,7 +179,7 @@ const sommelierAPIAllStrategiesData = async (
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl = latestTvlFromDaily(
+        let tvl = getLatestTvlFromDaily(
           fetchedArbitrumData,
           cellarAddress
         )
@@ -262,7 +238,7 @@ const sommelierAPIAllStrategiesData = async (
         transformedData.sort((a: any, b: any) => b.date - a.date)
 
         // Get tvl
-        let tvl = latestTvlFromDaily(
+        let tvl = getLatestTvlFromDaily(
           fetchedOptimismData,
           cellarAddress
         )
