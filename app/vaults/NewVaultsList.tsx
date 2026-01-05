@@ -85,7 +85,9 @@ function VaultCard({ vault }: { vault: VaultItem }) {
   return (
     <li
       style={{
-        border: `1px solid ${isHovered ? "rgba(36, 52, 255, 0.5)" : "#292D36"}`,
+        border: `1px solid ${
+          isHovered ? "rgba(36, 52, 255, 0.5)" : "#292D36"
+        }`,
         borderRadius: "16px",
         padding: "24px",
         background: isHovered ? "#1E2129" : "#1A1D25",
