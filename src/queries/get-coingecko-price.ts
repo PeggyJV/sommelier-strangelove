@@ -9,16 +9,48 @@ const getUrl = (baseId: string, quoteId: string) =>
 // Emergency fallback prices when both CoinGecko and Price Router fail
 // These are approximate and used only to allow UI to load
 const EMERGENCY_FALLBACK_PRICES: Record<string, string> = {
-  weth: "3000",
-  ethereum: "3000",
-  "wrapped-steth": "3000",
-  "lido-staked-ether": "3000",
+  // ETH and variants
+  weth: "3300",
+  ethereum: "3300",
+  "staked-ether": "3300",
+  "wrapped-steth": "3300",
+  "lido-staked-ether": "3300",
+  "rocket-pool-eth": "3500",
+  "coinbase-wrapped-staked-eth": "3400",
+  "renzo-restaked-eth": "3300",
+  "kelp-dao-restaked-eth": "3300",
+  "ether-fi-staked-eth": "3300",
+  "wrapped-eeth": "3400",
+  sweth: "3300",
+  "stader-ethx": "3300",
+  // Stablecoins
   "usd-coin": "1",
+  "usd-coin-ethereum-bridged": "1",
   usdc: "1",
   tether: "1",
   dai: "1",
+  frax: "1",
+  gho: "1",
+  "liquity-usd": "1",
+  // BTC
   "wrapped-bitcoin": "100000",
+  // DeFi tokens
   sommelier: "0.0005",
+  uniswap: "12",
+  chainlink: "20",
+  "1inch": "0.4",
+  "ethereum-name-service": "30",
+  havven: "2", // SNX
+  "matic-network": "0.4",
+  aave: "250",
+  "compound-governance-token": "60",
+  "curve-dao-token": "0.8",
+  "lido-dao": "2",
+  maker: "1500",
+  // LP tokens - use approximate underlying value
+  "b-reth-stable": "3400",
+  "y-eth": "3300",
+  "y-usd": "1",
 }
 
 export const fetchCoingeckoPrice = async (
