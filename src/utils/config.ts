@@ -12,6 +12,7 @@ import { BoringVault } from "src/abi/types/BoringVault/BoringVault"
 import { AccountantWithRateProviders } from "src/abi/types/BoringVault/AccountantWithRateProviders"
 import { TellerWithLayerZero } from "src/abi/types/BoringVault/TellerWithLayerZero"
 import { BoringOnChainQueue } from "src/abi/types/BoringVault/BoringOnChainQueue"
+import { NeutronBTCVault } from "src/abi/types/NeutronBTCVault"
 
 // Adress should be saved as lowercase
 /** Ensure Checksum Address  */
@@ -369,6 +370,12 @@ export const config = {
     ALPHA_STETH_LENS: {
       ADDRESS: "0xA2c83e64990C6C53b76390678436d63d006534fB",
       ABI: ArcticArchitectureLens,
+    },
+    // Neutron BTC Vault MVP - Cross-chain vault bridging to Neutron
+    NEUTRON_BTC_VAULT: {
+      ADDRESS: "0x62099b060D18DFE221E426644d48d58ac5c68405",
+      ABI: NeutronBTCVault,
+      SLUG: "Neutron-BTC-Vault",
     },
   },
   cleargate: {
