@@ -426,7 +426,9 @@ export const getStrategyData = async ({
       const s = norm(slug || name)
       const providerName = norm(provider?.title)
       const isSommNative =
-        providerName.includes("somm") || s.includes("alpha-steth")
+        providerName.includes("somm") ||
+        s.includes("alpha-steth") ||
+        s.includes("neutron-btc-vault")
 
       if (
         process.env.NODE_ENV !== "production" &&
