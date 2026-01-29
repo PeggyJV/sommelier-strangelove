@@ -807,9 +807,15 @@ export const SommelierTab = ({
         : String(allowance),
     })
 
+    // Use token decimals from selectedToken config, fallback to selectedTokenBalance, then baseAsset
+    const tokenDecimals =
+      selectedToken?.decimals ??
+      selectedTokenBalance?.decimals ??
+      cellarConfig.baseAsset.decimals ??
+      18
     const amtInWei = parseUnits(
-      depositAmount.toFixed(selectedTokenBalance?.decimals ?? 18),
-      selectedTokenBalance?.decimals ?? 0
+      depositAmount.toFixed(tokenDecimals),
+      tokenDecimals
     )
     logTxDebug("deposit.amountParsed", {
       depositAmount,
