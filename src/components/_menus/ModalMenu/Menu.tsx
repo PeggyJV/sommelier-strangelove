@@ -403,6 +403,10 @@ export const Menu = ({
               positive: (v) =>
                 v > 0 || "You must submit a positive amount.",
               lessThanBalance: (v) => {
+                // Skip balance check for Neutron BTC Vault (pilot testing)
+                if (cellarConfig.cellarNameKey === "NEUTRON_BTC_VAULT") {
+                  return true
+                }
                 return (
                   v <= parseFloat(availableBalance) ||
                   "Insufficient balance"

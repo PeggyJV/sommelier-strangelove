@@ -221,7 +221,10 @@ export const SommelierTab = ({
   )
 
   const availableAmount = Number(selectedTokenBalance?.formatted ?? 0)
+  // Skip balance check for Neutron BTC Vault (pilot testing)
+  const isNeutronVault = id === config.CONTRACT.NEUTRON_BTC_VAULT?.SLUG
   const insufficientBalance =
+    !isNeutronVault &&
     Number.isFinite(availableAmount) &&
     Number(watchDepositAmount) > availableAmount
   const isDisabled =
