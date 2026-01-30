@@ -48,6 +48,11 @@ import {
   type TransactionErrorContext,
 } from "utils/handleTransactionError"
 import { config } from "utils/config"
+import {
+  fetchNeutronVaultLiquidity,
+  calculateMaxWithdrawableShares,
+  canFulfillWithdrawal,
+} from "queries/get-neutron-vault-liquidity"
 
 interface FormValues {
   withdrawAmount: number
@@ -96,14 +101,88 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
   // Check if this is a Neutron cross-chain vault (requires async withdrawal)
   const isNeutronVault = cellarConfig.cellar.key === CellarKey.NEUTRON_CROSS_CHAIN
 
+  // Pilot guardrail: Track ETH-side liquidity for Neutron vault
+  const [neutronLiquidity, setNeutronLiquidity] = useState<{
+    localBalance: bigint
+    totalSupply: bigint
+    totalNAV: bigint
+    maxWithdrawableShares: bigint
+    isLoading: boolean
+    error: string | null
+  }>({
+    localBalance: 0n,
+    totalSupply: 0n,
+    totalNAV: 0n,
+    maxWithdrawableShares: 0n,
+    isLoading: true,
+    error: null,
+  })
+
+  // Pilot guardrail: Fetch liquidity on mount for Neutron vault
+  useEffect(() => {
+    if (!isNeutronVault) return
+
+    const fetchLiquidity = async () => {
+      try {
+        const data = await fetchNeutronVaultLiquidity()
+        const maxShares = calculateMaxWithdrawableShares(
+          data.localBalance,
+          data.totalSupply,
+          data.totalNAV
+        )
+        setNeutronLiquidity({
+          ...data,
+          maxWithdrawableShares: maxShares,
+          isLoading: false,
+          error: null,
+        })
+      } catch (err) {
+        setNeutronLiquidity((prev) => ({
+          ...prev,
+          isLoading: false,
+          error: "Failed to fetch liquidity",
+        }))
+      }
+    }
+
+    fetchLiquidity()
+    // Refresh every 30 seconds
+    const interval = setInterval(fetchLiquidity, 30000)
+    return () => clearInterval(interval)
+  }, [isNeutronVault])
+
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
 
   const { doHandleTransaction } = useHandleTransaction()
 
   const watchWithdrawAmount = watch("withdrawAmount")
+
+  // Pilot guardrail: Check if withdrawal exceeds available liquidity (Neutron vault only)
+  const withdrawAmountInWei = !isNaN(watchWithdrawAmount) && watchWithdrawAmount > 0
+    ? parseUnits(`${watchWithdrawAmount}`, cellarConfig.cellar.decimals)
+    : 0n
+
+  const liquidityCheck = isNeutronVault && !neutronLiquidity.isLoading
+    ? canFulfillWithdrawal(
+        withdrawAmountInWei,
+        neutronLiquidity.localBalance,
+        neutronLiquidity.totalSupply,
+        neutronLiquidity.totalNAV
+      )
+    : { canFulfill: true, requiredAssets: 0n, availableAssets: 0n }
+
+  // Pilot guardrail: HARD BLOCK withdrawal if insufficient liquidity
+  const isInsufficientLiquidity = isNeutronVault &&
+    !neutronLiquidity.isLoading &&
+    watchWithdrawAmount > 0 &&
+    !liquidityCheck.canFulfill
+
   const isDisabled =
-    isNaN(watchWithdrawAmount) || watchWithdrawAmount <= 0
+    isNaN(watchWithdrawAmount) ||
+    watchWithdrawAmount <= 0 ||
+    isInsufficientLiquidity || // Pilot guardrail: Block if insufficient liquidity
+    (isNeutronVault && neutronLiquidity.isLoading)
   const isError = errors.withdrawAmount
 
   const setMax = () => {
@@ -570,8 +649,50 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
               title="Vault"
               value={<Text>{cellarDataMap[id].name}</Text>}
             />
+            {/* Pilot guardrail: Show available liquidity for Neutron vault */}
+            {isNeutronVault && (
+              <TransactionDetailItem
+                title="Available Liquidity"
+                value={
+                  neutronLiquidity.isLoading ? (
+                    <Spinner size="xs" />
+                  ) : (
+                    <Text color={isInsufficientLiquidity ? "red.400" : "inherit"}>
+                      {(Number(neutronLiquidity.localBalance) / 1e8).toFixed(8)} WBTC
+                    </Text>
+                  )
+                }
+              />
+            )}
           </Stack>
         </Stack>
+
+        {/* Pilot guardrail: Show error if insufficient liquidity */}
+        {isInsufficientLiquidity && (
+          <VStack
+            spacing={2}
+            bg="red.900"
+            border="1px solid"
+            borderColor="red.500"
+            p={3}
+            borderRadius={8}
+          >
+            <HStack>
+              <Icon as={AiOutlineInfo} color="red.400" />
+              <Text color="red.400" fontWeight="bold" fontSize="sm">
+                Insufficient liquidity to fulfill withdrawal
+              </Text>
+            </HStack>
+            <Text textAlign="center" fontSize="xs" color="red.300">
+              Requested: {(Number(liquidityCheck.requiredAssets) / 1e8).toFixed(8)} WBTC
+              {" | "}
+              Available: {(Number(liquidityCheck.availableAssets) / 1e8).toFixed(8)} WBTC
+            </Text>
+            <Text textAlign="center" fontSize="xs" color="neutral.400">
+              Try a smaller amount or wait for bridge operator to add liquidity.
+            </Text>
+          </VStack>
+        )}
 
         <BaseButton
           type="submit"
