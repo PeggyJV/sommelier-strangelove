@@ -196,6 +196,7 @@ export const NeutronBTCVault = [
   {
     inputs: [
       { name: "shares", type: "uint256" },
+      { name: "preferredAsset", type: "address" },
       { name: "minAssetsOut", type: "uint256" },
     ],
     name: "requestWithdraw",

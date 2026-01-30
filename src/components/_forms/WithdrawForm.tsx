@@ -29,6 +29,7 @@ import { useHandleTransaction } from "hooks/web3"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
+import { CellarKey } from "data/types"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { estimateGasLimitWithRetry } from "utils/estimateGasLimit"
@@ -89,6 +90,11 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
   const [isWithdrawQueueModalOpen, setIsWithdrawQueueModalOpen] =
     useState(false)
+  const [isAsyncWithdrawModalOpen, setIsAsyncWithdrawModalOpen] =
+    useState(false)
+
+  // Check if this is a Neutron cross-chain vault (requires async withdrawal)
+  const isNeutronVault = cellarConfig.cellar.key === CellarKey.NEUTRON_CROSS_CHAIN
 
   const { lpToken } = useUserBalance(cellarConfig)
   const { data: lpTokenData, isLoading: isBalanceLoading } = lpToken
@@ -165,26 +171,58 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
           return
         }
       }
-      const gasLimitEstimated = await estimateGasLimitWithRetry(
-        cellarSigner?.estimateGas.redeem,
-        cellarSigner?.simulate.redeem,
-        [amtInWei, address, address],
-        330000,
-        address
-      )
 
-      // @ts-ignore
-      const hash = await cellarSigner?.write.redeem(
-        [amtInWei, address, address],
-        {
-          gas: gasLimitEstimated,
-          account: address,
-        }
-      )
+      let hash: `0x${string}` | undefined
+
+      // Neutron cross-chain vault uses async withdrawal (requestWithdraw)
+      if (isNeutronVault) {
+        const preferredAsset = cellarConfig.baseAsset.address as `0x${string}`
+        const minAssetsOut = BigInt(0) // Allow any amount (slippage handled by NAV)
+
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          cellarSigner?.estimateGas.requestWithdraw,
+          cellarSigner?.simulate.requestWithdraw,
+          [amtInWei, preferredAsset, minAssetsOut],
+          400000,
+          address
+        )
+
+        // @ts-ignore
+        hash = await cellarSigner?.write.requestWithdraw(
+          [amtInWei, preferredAsset, minAssetsOut],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
+      } else {
+        // Standard ERC-4626 redeem
+        const gasLimitEstimated = await estimateGasLimitWithRetry(
+          cellarSigner?.estimateGas.redeem,
+          cellarSigner?.simulate.redeem,
+          [amtInWei, address, address],
+          330000,
+          address
+        )
+
+        // @ts-ignore
+        hash = await cellarSigner?.write.redeem(
+          [amtInWei, address, address],
+          {
+            gas: gasLimitEstimated,
+            account: address,
+          }
+        )
+      }
 
       const onSuccess = () => {
         analytics.track("withdraw.succeeded", analyticsData)
-        onClose() // Close modal after successful withdraw.
+        if (isNeutronVault) {
+          // Show async withdrawal info modal
+          setIsAsyncWithdrawModalOpen(true)
+        } else {
+          onClose() // Close modal after successful withdraw.
+        }
       }
 
       const onError = (error: Error) => {
@@ -289,6 +327,70 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
   return (
     <>
+      {/* Async Withdrawal Success Modal (Neutron cross-chain) */}
+      <Modal
+        isOpen={isAsyncWithdrawModalOpen}
+        onClose={() => {
+          setIsAsyncWithdrawModalOpen(false)
+          onClose()
+        }}
+      >
+        <ModalOverlay />
+        <ModalContent
+          p={2}
+          w="auto"
+          zIndex={401}
+          borderWidth={1}
+          borderColor="purple.dark"
+          borderRadius={12}
+          bg="surface.bg"
+          fontWeight="semibold"
+          _focus={{
+            outline: "unset",
+            outlineOffset: "unset",
+            boxShadow: "unset",
+          }}
+        >
+          <ModalHeader>Withdrawal Request Submitted</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <VStack spacing={4} pb={4}>
+              <Text textAlign="center" fontWeight="normal">
+                Your withdrawal request has been submitted successfully.
+              </Text>
+              <VStack spacing={2} bg="surface.tertiary" p={4} borderRadius={8} w="100%">
+                <Text fontWeight="bold" color="neutral.300" fontSize="sm">
+                  What happens next?
+                </Text>
+                <Text textAlign="center" fontWeight="normal" fontSize="sm">
+                  1. Bridge operator bridges funds from Neutron (~16 min)
+                </Text>
+                <Text textAlign="center" fontWeight="normal" fontSize="sm">
+                  2. Operator fulfills your withdrawal request
+                </Text>
+                <Text textAlign="center" fontWeight="normal" fontSize="sm">
+                  3. WBTC is transferred to your wallet
+                </Text>
+              </VStack>
+              <Text textAlign="center" fontWeight="normal" fontSize="xs" color="neutral.400">
+                Cross-chain withdrawals typically complete within 30 minutes.
+                Requests expire after 7 days if not fulfilled.
+              </Text>
+              <Button
+                colorScheme="purple"
+                onClick={() => {
+                  setIsAsyncWithdrawModalOpen(false)
+                  onClose()
+                }}
+              >
+                Close
+              </Button>
+            </VStack>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
+      {/* Withdraw Queue Modal (insufficient liquidity) */}
       <Modal
         isOpen={isWithdrawQueueModalOpen}
         onClose={closeWithdrawQueueModal}
@@ -479,8 +581,16 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
           py={6}
           px={12}
         >
-          Submit
+          {isNeutronVault ? "Request Withdrawal" : "Submit"}
         </BaseButton>
+        {isNeutronVault && (
+          <VStack spacing={2} bg="surface.tertiary" p={3} borderRadius={8}>
+            <Text textAlign="center" fontSize="xs" color="neutral.300">
+              Cross-chain vault: Withdrawals are async and require bridge operator action.
+              Typically completes within ~30 minutes.
+            </Text>
+          </VStack>
+        )}
         {waitTime(cellarConfig) !== null && (
           <Text textAlign="center">
             Please wait {waitTime(cellarConfig)} after the deposit to
