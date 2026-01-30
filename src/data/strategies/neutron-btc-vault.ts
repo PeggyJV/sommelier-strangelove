@@ -75,6 +75,7 @@ export const neutronBTCVault: CellarData = {
 
     <h4>Documentation</h4>
     <ul>
+      <li><a href="https://github.com/PeggyJV/neutron-btc-vault/blob/main/docs/operations/PILOT_OPERATING_MODEL.md" target="_blank" style="text-decoration: underline;">Pilot Operating Model</a> - constraints, rules, non-goals</li>
       <li><a href="https://github.com/PeggyJV/neutron-btc-vault/blob/main/docs/operations/GO_LIVE_AUTHORIZATION.md" target="_blank" style="text-decoration: underline;">Go-Live Authorization</a></li>
       <li><a href="https://github.com/PeggyJV/neutron-btc-vault/blob/main/docs/operations/PILOT_DEPOSIT_RUNBOOK.md" target="_blank" style="text-decoration: underline;">Pilot Deposit Runbook</a></li>
       <li><a href="https://github.com/PeggyJV/neutron-btc-vault/blob/main/docs/testing/PILOT_E2E_UI_TO_SUMMER_POOL_TEST_PLAN.md" target="_blank" style="text-decoration: underline;">E2E Test Plan</a></li>
