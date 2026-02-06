@@ -5,7 +5,7 @@ import React from "react"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
 
-export const ExchangeTab = ({ title }: { title: string }) => {
+export const ExchangeTab = ({ title: _title }: { title: string }) => {
   const id = useRouter().query.id as string
   const exchanges = cellarDataMap[id].exchanges
 

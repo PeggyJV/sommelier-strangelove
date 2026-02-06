@@ -33,7 +33,7 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
 import { useState } from "react"
-import { useUserBalance } from "data/hooks/useUserBalance"
+
 import { config as utilConfig } from "utils/config"
 import { Box, Image, Text, Button } from "@chakra-ui/react"
 
@@ -57,7 +57,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
     id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
   const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
   const { isOpen, onClose, type, setIsOpen } = useDepositModalStore()
-  const { isConnected } = useAccount()
+  const { isConnected: _isConnected } = useAccount()
   const router = useRouter()
   const DynamicMigrationModal = useMemo(
     () =>

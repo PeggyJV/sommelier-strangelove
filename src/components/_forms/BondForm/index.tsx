@@ -190,7 +190,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
     }
   }
 
-  const onError = (errors: any, e: any) => {
+  const onError = (_errors: any, _e: any) => {
     addToast({
       heading: "Bonding LP Token",
       body: <Text>Bonding Failed</Text>,

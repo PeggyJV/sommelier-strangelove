@@ -23,15 +23,13 @@ import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
 import { ChevronDownIcon, LogoutCircleIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
-import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
-import { useRouter } from "next/router"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 
 export const MobileConnectedPopover = () => {
   const isLarger480 = useBetterMediaQuery("(min-width: 480px)")
 
-  const { addToast, close } = useBrandedToast()
+  const { addToast, close: _close } = useBrandedToast()
   const { disconnect } = useDisconnect()
   const { address, isConnecting, chain } = useAccount()
   const { data: ensName, isLoading: ensNameLoading } = useEnsName({
@@ -41,9 +39,6 @@ export const MobileConnectedPopover = () => {
     useEnsAvatar({
       name: address,
     })
-
-  const id = useRouter().query.id as string | undefined
-  const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
 
   function onDisconnect() {
     analytics.track("wallet.disconnected", {

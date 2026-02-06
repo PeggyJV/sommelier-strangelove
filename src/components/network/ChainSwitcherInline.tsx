@@ -1,4 +1,4 @@
-import { Stack, Text } from "@chakra-ui/react"
+import { Stack } from "@chakra-ui/react"
 import NetworkSelector from "components/wallet/NetworkSelector"
 
 export default function ChainSwitcherInline({

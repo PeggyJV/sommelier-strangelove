@@ -13,8 +13,8 @@ interface CustomBCProps extends BreadcrumbProps {
 }
 
 export const BreadCrumb: FC<CustomBCProps> = ({
-  id,
-  cellarName,
+  id: _id,
+  cellarName: _cellarName,
   ...rest
 }) => {
   // const router = useRouter()

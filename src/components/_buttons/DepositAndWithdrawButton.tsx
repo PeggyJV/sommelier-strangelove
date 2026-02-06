@@ -7,7 +7,6 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
-  Button,
 } from "@chakra-ui/react"
 import { cellarDataMap } from "data/cellarDataMap"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
@@ -45,11 +44,6 @@ const checkHasValueInVault = (
   // For main page: Only enable withdrawal if Net Value > 0
   const nv = coerceNetValue(netValue)
   const hasNetValue = Number.isFinite(nv) && nv > 0
-
-  // For other pages: Check both LP tokens and net value
-  const hasLPTokens =
-    lpTokenData &&
-    Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) > 0
 
   // On main page, we only care about net value for withdrawal buttons
   return hasNetValue
@@ -162,7 +156,6 @@ export function DepositAndWithdrawButton({
     row?.original?.launchDate
   )
   const [isOracleModalOpen, setOracleModalOpen] = useState(false)
-  const openOracleModal = () => setOracleModalOpen(true)
   const closeOracleModal = () => setOracleModalOpen(false)
 
   const buttonText = getButtonText(

@@ -4,8 +4,8 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
 const supabasePubKey = process.env.NEXT_PUBLIC_SUPABASE_PUB_KEY ?? ""
 
 class SupabaseNoop {
-  async from(tableName: string) {
-    return { insert: function (options: any) {} }
+  async from(_tableName: string) {
+    return { insert: function (_options: any) {} }
   }
 }
 

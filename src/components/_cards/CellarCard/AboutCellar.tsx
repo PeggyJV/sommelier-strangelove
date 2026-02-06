@@ -36,7 +36,7 @@ export const AboutCellar: React.FC<Props> = ({ data }) => {
   const stakingEnd = strategyData?.stakingEnd
   const countdown = isComingSoon(launchDate)
 
-  const isStakingStillRunning =
+  const _isStakingStillRunning =
     stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
   const apyTooltip = apyLabel(cellarConfig)
 

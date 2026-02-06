@@ -14,10 +14,8 @@ import { cellarDataMap } from "data/cellarDataMap"
 import { tokenConfig } from "data/tokenConfig"
 import { isComingSoon } from "utils/isComingSoon"
 import { CountDown } from "./count-down"
-import { addDays } from "date-fns"
 import { Link } from "components/Link"
 import { useRouter } from "next/router"
-import { CellarType } from "data/types"
 import { strategyPageContentData } from "data/strategyPageContentData"
 import { useStrategyData } from "data/hooks/useStrategyData"
 
@@ -30,35 +28,17 @@ export const HeroStrategyRight = ({
 }: HeroStrategyRightProps) => {
   const content = strategyPageContentData[id]
   const buyOrSellModal = useDisclosure()
-  const notifyModal = useDisclosure()
+  const _notifyModal = useDisclosure()
   const cellarData = cellarDataMap[id]
   const launchDate = cellarDataMap[id].launchDate
-  const twoDaysAfterLaunch = addDays(
-    launchDate ?? new Date(Date.now()),
-    2
-  )
   const cellarConfig = cellarData.config
   const { data, isLoading } = useStrategyData(
     cellarData.config.cellar.address,
     cellarData.config.chain.id
   )
-  const {
-    tokenPrice,
-    changes,
-    stakingEnd,
-    tvm,
-    rewardsApy,
-    baseApy,
-    baseApySumRewards,
-  } = data || {}
-  const dailyChange = changes?.daily
   const router = useRouter()
 
   const countdown = isComingSoon(launchDate)
-
-  const potentialStakingApy = isLoading
-    ? "-"
-    : rewardsApy?.formatted || "-"
 
   const handleBuyOrSell = () => {
     if (Number(content.exchange?.length) > 1) {
@@ -77,11 +57,6 @@ export const HeroStrategyRight = ({
       })
     }
   }
-
-  const isYieldStrategies =
-    cellarData.cellarType === CellarType.yieldStrategies
-  const isAutomatedPortfolio =
-    cellarData.cellarType === CellarType.automatedPortfolio
 
   return (
     <Stack minW={{ base: "100%", md: "380px" }} spacing={4}>

@@ -1,6 +1,6 @@
 import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useBrandedToast } from "hooks/chakra"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { config } from "utils/config"
 import { useAccount, usePublicClient, useWalletClient } from "wagmi"
 import {
@@ -31,7 +31,7 @@ export const useBridgeEthToSommTx = () => {
   const { chain } = useAccount()
   const { data: walletClient } = useWalletClient()
   const publicClient = usePublicClient()
-  const [_, wait] = useWaitForTransaction({
+  const [, wait] = useWaitForTransaction({
     skip: true,
   })
   const { address } = useAccount()

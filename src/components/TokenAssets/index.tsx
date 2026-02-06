@@ -12,7 +12,7 @@ export interface TokenAssetsProps extends StackProps {
 
 export const TokenAssets: FC<TokenAssetsProps> = ({
   tokens,
-  activeAsset,
+  activeAsset: _activeAsset,
   displaySymbol,
   ...rest
 }) => {

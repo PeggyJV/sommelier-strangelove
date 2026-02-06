@@ -11,7 +11,6 @@ import {
   Image,
   Stack,
   Text,
-  Link,
   Modal,
   ModalOverlay,
   ModalContent,

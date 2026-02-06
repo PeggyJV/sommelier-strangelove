@@ -9,15 +9,15 @@ interface BondingPeriod {
 
 type BondingValueOptions = 0 | 1 | 2
 
-export const isBondingEnabled = (config: ConfigProps) => {
+export const isBondingEnabled = (_config: ConfigProps) => {
   return true
 }
 
-export const isBondButtonEnabled = (config: ConfigProps) => {
+export const isBondButtonEnabled = (_config: ConfigProps) => {
   return true
 }
 
-export const isRewardsEnabled = (config: ConfigProps) => {
+export const isRewardsEnabled = (_config: ConfigProps) => {
   return true
 }
 

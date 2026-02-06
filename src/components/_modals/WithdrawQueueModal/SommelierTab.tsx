@@ -7,7 +7,6 @@ type WithdrawModalProps = Pick<ModalProps, "isOpen" | "onClose"> & {
 }
 
 export const SommelierTab: FC<WithdrawModalProps> = ({
-  isOpen,
   onClose,
   onSuccessfulWithdraw,
 }) => {

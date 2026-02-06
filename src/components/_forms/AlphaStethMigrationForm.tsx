@@ -11,7 +11,6 @@ import {
   Image,
   Stack,
   Text,
-  Link,
   Alert,
   AlertIcon,
   Box,
@@ -24,13 +23,13 @@ import { AiOutlineInfo } from "react-icons/ai"
 import { useBrandedToast } from "hooks/chakra"
 import { useAccount, usePublicClient, useWriteContract } from "wagmi"
 import { toEther } from "utils/formatCurrency"
-import { analytics } from "utils/analytics"
+
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { useGeo } from "context/geoContext"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { erc20Abi, getAddress, getContract, parseUnits } from "viem"
-import { ExternalLinkIcon } from "components/_icons"
+
 import { fetchCellarRedeemableReserves } from "queries/get-cellar-redeemable-asssets"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
 import { config as utilConfig } from "utils/config"
@@ -118,7 +117,7 @@ export const AlphaStethMigrationForm = ({
     Boolean(turboStethEntry)
   )
 
-  const { cellarSigner: alphaStethSigner, boringVaultLens } =
+  const { boringVaultLens } =
     useCreateContracts(alphaStethConfig)
 
   const watchWithdrawAmount = watch("withdrawAmount")

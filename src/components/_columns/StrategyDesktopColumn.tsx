@@ -1,25 +1,21 @@
 import {
   Avatar,
   AvatarGroup,
-  Badge,
   Box,
   Flex,
   HStack,
   Text,
   Tooltip,
 } from "@chakra-ui/react"
-import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 import { VaultActionButton } from "components/_buttons/VaultActionButton"
 import StrategyRow from "components/_vaults/StrategyRow"
 import { InformationIcon } from "components/_icons"
-import { StrategySection } from "components/_tables/StrategySection"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { Chain } from "data/chainConfig"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { memo, useState } from "react"
 import { CellValue } from "react-table"
-import { analytics } from "utils/analytics"
 
 type StrategyDesktopColumnProps = {
   onDepositModalOpen: ({
@@ -47,13 +43,7 @@ type RowData = {
   }
 }
 
-function trackVaultInteraction(vaultName: string) {
-  analytics.track("vault.interacted", {
-    vault: vaultName,
-  })
-}
-
-const AssetAvatarGroup = memo(({ assets }: { assets: Token[] }) => {
+const _AssetAvatarGroup = memo(({ assets }: { assets: Token[] }) => {
   return (
     <AvatarGroup size="sm">
       {assets?.map((asset: Token) => (
@@ -84,7 +74,7 @@ const ChainAvatar = memo(({ chain }: { chain: Chain }) => (
 ))
 
 export const StrategyDesktopColumn = ({
-  onDepositModalOpen,
+  onDepositModalOpen: _onDepositModalOpen,
 }: StrategyDesktopColumnProps) => {
   return [
     {
@@ -234,8 +224,8 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
-        if ((row as any)?.original?.isSommNative) return null
         const [isHover, setIsHover] = useState(false)
+        if ((row as any)?.original?.isSommNative) return null
         const handleMouseOver = () => {
           setIsHover(true)
         }

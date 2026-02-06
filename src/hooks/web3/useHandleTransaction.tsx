@@ -34,7 +34,7 @@ export const useHandleTransaction = (): {
 } => {
   const { addToast, update, close, closeAll } = useBrandedToast()
 
-  const [_, wait] = useWaitForTransaction({
+  const [, wait] = useWaitForTransaction({
     skip: true,
   })
 

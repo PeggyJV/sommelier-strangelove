@@ -31,7 +31,7 @@ export interface TransactionErrorContext {
  */
 export const handleTransactionError = (
   error: Error,
-  context: TransactionErrorContext
+  _context: TransactionErrorContext
 ): TransactionError => {
   // Check for user rejection patterns
   const anyErr: any = error as any

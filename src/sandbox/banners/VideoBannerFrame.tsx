@@ -1,4 +1,4 @@
-import { Box, HStack } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 import NextImage from "next/image"
 import { PropsWithChildren } from "react"
 

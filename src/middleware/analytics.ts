@@ -4,7 +4,6 @@
 */
 
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
 
 // Cookie configuration
 const ATTRIBUTION_COOKIE = 'somm_attrib'

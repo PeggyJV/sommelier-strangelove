@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 import { cellarDataMap } from "data/cellarDataMap"
 import { queryContract } from "context/rpc_context"
-import { parseUnits } from "viem"
 
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"

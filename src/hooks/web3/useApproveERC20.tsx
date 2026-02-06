@@ -57,7 +57,7 @@ export const useApproveERC20 = ({
       },
     })!
 
-  const [_, wait] = useWaitForTransaction({
+  const [, wait] = useWaitForTransaction({
     skip: true,
   })
 

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query"
-import { getUserDataWithContracts } from "data/actions/common/getUserData"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useAccount } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
@@ -18,7 +17,7 @@ export const useUserStrategyData = (
   enabled: boolean = true
 ) => {
   const { address: userAddress } = useAccount()
-  const { data: allContracts } = useAllContracts()
+  const { data: _allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)
   const sommToken = tokenConfig.find(
     (token) =>
@@ -48,10 +47,6 @@ export const useUserStrategyData = (
   // Contracts for optional legacy staking reads
   const { stakerContract } = useCreateContracts(config)
 
-  // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
-  const key =
-    strategyAddress +
-    (config.chain.id !== "ethereum" ? "-" + chain : "")
   const query = useQuery({
     queryKey: [
       "USE_USER_DATA",

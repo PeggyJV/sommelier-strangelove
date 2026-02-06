@@ -4,7 +4,6 @@ import { Highlight } from "components/Highlight"
 import { ArrowLeftIcon } from "components/_icons"
 import { Layout } from "components/_layout/Layout"
 import { NextPage } from "next"
-import { useRouter } from "next/router"
 import { CustomFaqSection, HomeWithImages } from "types/sanity"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 
@@ -17,11 +16,10 @@ export interface StrategyLandingPageProps {
 
 export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
   id,
-  faqData,
-  sectionCellars,
-  sectionStrategies,
+  faqData: _faqData,
+  sectionCellars: _sectionCellars,
+  sectionStrategies: _sectionStrategies,
 }) => {
-  const router = useRouter()
   return (
     <Layout>
       <WalletHealthBanner />

@@ -42,7 +42,7 @@ export const TokenPricePerfomanceCard = (props: BoxProps) => {
   const MobileTooltip = () => {
     if (!!pointActive && !isLarger768) {
       const { id: pointId } = pointActive
-      const [_, i] = pointId.split(".")
+      const [, i] = pointId.split(".")
       return (
         <Stack
           p={4}

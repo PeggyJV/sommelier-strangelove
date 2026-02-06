@@ -5,7 +5,6 @@ import { FC } from "react"
 type WithdrawModalProps = Pick<ModalProps, "isOpen" | "onClose">
 
 export const SommelierTab: FC<WithdrawModalProps> = ({
-  isOpen,
   onClose,
 }) => {
   return <WithdrawForm onClose={onClose} />
