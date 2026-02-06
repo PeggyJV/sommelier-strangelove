@@ -144,15 +144,7 @@
   },
   "private": true,
   "volta": {
-    "node": "22.4.0",
-    "yarn": "1.22.17"
-  },
-  "prettier": {
-    "semi": false,
-    "printWidth": 70,
-    "tabWidth": 2,
-    "useTabs": false,
-    "bracketSpacing": true
+    "node": "22.4.0"
   },
   "pnpm": {
     "overrides": {
