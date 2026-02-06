@@ -7,9 +7,9 @@ export const INFURA_API_KEY = process.env.NEXT_PUBLIC_INFURA_API_KEY
 export const QUICKNODE_API_KEY = process.env.NEXT_PUBLIC_QUICKNODE_KEY
 
 export const ALCHEMY_API_URL = {
-  ethereum: "https://eth-mainnet.alchemyapi.io/v2",
-  arbitrum: "https://arb-mainnet.alchemyapi.io/v2",
-  optimism: "https://opt-mainnet.alchemyapi.io/v2"
+  ethereum: "https://eth-mainnet.g.alchemy.com/v2",
+  arbitrum: "https://arb-mainnet.g.alchemy.com/v2",
+  optimism: "https://opt-mainnet.g.alchemy.com/v2"
 }
 export const INFURA_API_URL = {
   ethereum: "https://mainnet.infura.io/v3",

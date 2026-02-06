@@ -17,7 +17,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/test-key"
+          "https://eth-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -89,7 +89,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/test-key"
+          "https://eth-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -111,7 +111,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          `https://eth-mainnet.alchemyapi.io/v2/${alchemyKey}`
+          `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`
         ),
       })
 
@@ -154,7 +154,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/test-key"
+          "https://eth-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -182,7 +182,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/test-key"
+          "https://eth-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -207,7 +207,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/invalid-key"
+          "https://eth-mainnet.g.alchemy.com/v2/invalid-key"
         ),
       })
 
@@ -230,7 +230,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/test-key"
+          "https://eth-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -254,7 +254,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet, // Using mainnet for test, but simulating Arbitrum error
         transport: http(
-          "https://arb-mainnet.alchemyapi.io/v2/test-key"
+          "https://arb-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -278,7 +278,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet, // Using mainnet for test, but simulating Optimism error
         transport: http(
-          "https://opt-mainnet.alchemyapi.io/v2/test-key"
+          "https://opt-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -304,7 +304,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/test-key"
+          "https://eth-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -349,7 +349,7 @@ describe("RPC Connection Tests", () => {
       const client = createPublicClient({
         chain: mainnet,
         transport: http(
-          "https://eth-mainnet.alchemyapi.io/v2/test-key"
+          "https://eth-mainnet.g.alchemy.com/v2/test-key"
         ),
       })
 
@@ -401,7 +401,7 @@ describe("RPC Connection Tests", () => {
         createPublicClient({
           chain: mainnet,
           transport: http(
-            `https://eth-mainnet.alchemyapi.io/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`
+            `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`
           ),
         })
       }).not.toThrow()
