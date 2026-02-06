@@ -29,7 +29,7 @@ import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { bondingPeriodOptions } from "data/uiConfig"
 import { differenceInDays, differenceInHours, differenceInMinutes, formatDistanceToNowStrict, isFuture } from "date-fns"
 import { formatDistance } from "utils/formatDistance"
-import { LighterSkeleton } from "components/_skeleton"
+
 import { useGeo } from "context/geoContext"
 import { useStrategyData } from "data/hooks/useStrategyData"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
@@ -56,7 +56,6 @@ const BondingTableCard = (props: TableProps) => {
   )
   const {
     data: userData,
-    isLoading,
     refetch,
   } = useUserStrategyData(
     cellarConfig.cellar.address,

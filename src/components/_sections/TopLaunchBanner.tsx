@@ -4,11 +4,9 @@ import {
   Text,
   Button,
   Link,
-  Flex,
   HStack,
   Grid,
   GridItem,
-  Tooltip,
 } from "@chakra-ui/react"
 import NextLink from "next/link"
 import * as React from "react"
@@ -20,11 +18,10 @@ type Props = {
 }
 
 export default function TopLaunchBanner({
-  targetDate,
+  targetDate: _targetDate,
   blogHref = "https://somm.finance/blog/putting-steth-to-work-where-it-matters-most",
 }: Props) {
   const lidoSrc = "/assets/images/eth-lido-uni.svg"
-  const lidoFallbackPng = "/assets/icons/lido.png"
 
   // Static body text (no "Read more" control)
   function ExpandableBody({ text }: { text: string }) {

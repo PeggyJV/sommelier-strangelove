@@ -59,14 +59,6 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 import { WrongNetworkBanner } from "components/_banners/WrongNetworkBanner"
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-} from "@chakra-ui/react"
 
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
@@ -168,16 +160,6 @@ export const PortfolioCard = (props: BoxProps) => {
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
 
-  // Determine if any legacy bonded tranche is matured (ready to withdraw LP tokens)
-  const hasMaturedLegacyTranche = Boolean(
-    (((userStakes as any)?.userStakes || []) as any[]).some(
-      (t: any) => {
-        const ts = Number(t?.unbondTimestamp ?? 0)
-        return ts !== 0 && ts * 1000 < Date.now()
-      }
-    )
-  )
-
   // Calculate combined Net Value (free LP + bonded LP) for legacy vaults
   const bondedAmount = (userStakes as any)?.totalBondedAmount
   const tokenPrice =
@@ -263,7 +245,6 @@ export const PortfolioCard = (props: BoxProps) => {
   )
 
   const isMobile = useBetterMediaQuery("(max-width: 768px)")
-  const [isAssetsOpen, setAssetsOpen] = useState(false)
 
   const compactUSD = (maybeCurrency?: string) => {
     if (!maybeCurrency) return maybeCurrency

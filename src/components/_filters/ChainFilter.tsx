@@ -186,7 +186,7 @@ export const ChainFilter = memo((props: ChainFilterProps) => {
                       id={chain.id}
                       defaultChecked={true}
                       isChecked={checkedStates.get(chain.id) || false}
-                      onChange={(e) => {
+                      onChange={(_e) => {
                         handleChainClick(chain.id)
                         toggleCheck(chain.id)
                       }}

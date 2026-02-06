@@ -19,11 +19,11 @@ export const InputEthereumAddress: React.FC<
   InputProps & { disabled?: boolean }
 > = ({ disabled, ...rest }) => {
   const { addToast, closeAll } = useBrandedToast()
-  const { register, setValue, getValues, getFieldState } =
+  const { register, setValue, getValues: _getValues, getFieldState } =
     useFormContext<SnapshotFormValues>()
   const isError = !!getFieldState("eth_address").error
-  const [isActive, setActive] = useState(false)
-  const { address, isConnected } = useAccount()
+  const [_isActive, setActive] = useState(false)
+  const { address, isConnected: _isConnected } = useAccount()
 
   const onAutofillClick = async () => {
     try {

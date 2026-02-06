@@ -275,7 +275,7 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = memo((
                       isChecked={
                         checkedStates.get(token.symbol) || false
                       }
-                      onChange={(e) => {
+                      onChange={(_e) => {
                         handleTokenClick(token.symbol)
                         toggleCheck(token.symbol)
                       }}

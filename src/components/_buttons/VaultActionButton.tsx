@@ -1,12 +1,10 @@
 import {
-  Button,
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverBody,
   Heading,
   Stack,
-  Text,
 } from "@chakra-ui/react"
 import { useAccount, useSwitchChain } from "wagmi"
 import ChainSwitcherInline from "components/network/ChainSwitcherInline"

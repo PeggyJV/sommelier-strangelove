@@ -7,7 +7,6 @@ type MigrationModalProps = Pick<ModalProps, "isOpen" | "onClose"> & {
 }
 
 export const AlphaStethMigrationTab: FC<MigrationModalProps> = ({
-  isOpen,
   onClose,
   onSuccessfulMigration,
 }) => {

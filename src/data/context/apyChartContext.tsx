@@ -80,20 +80,6 @@ const hourlyChartProps: Partial<LineSvgProps<LineSeries>> = {
   },
 }
 
-const dayChartProps: Partial<LineSvgProps<LineSeries>> = {
-  axisBottom: {
-    format: "%d",
-    tickValues: "every day",
-  },
-  xFormat: "time:%b %d, %Y",
-  xScale: {
-    type: "time",
-    format: "%d",
-    useUTC: false,
-    precision: "day",
-  },
-}
-
 const monthChartProps: Partial<LineSvgProps<LineSeries>> = {
   axisBottom: {
     format: "%d",
@@ -172,7 +158,7 @@ export const ApyChartProvider: FC<{
   const [showLine, setShowLine] = useState<ShowLine>({
     apy: true,
   })
-  const [timeline, setTimeline] = useState<Timeline>("7D")
+  const [_timeline, setTimeline] = useState<Timeline>("7D")
   const cellarData = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address === address &&
@@ -187,7 +173,7 @@ export const ApyChartProvider: FC<{
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
 
-  const [weeklyDataRaw, setWeeklyDataRaw] = useState<
+  const [_weeklyDataRaw, setWeeklyDataRaw] = useState<
     GetWeeklyShareValueQuery | undefined
   >(undefined)
   const [weeklyIsFetching, setWeeklyIsFetching] = useState(false)
@@ -217,7 +203,7 @@ export const ApyChartProvider: FC<{
       })
   }, [prevWeek, address, reexecuteWeeklyTrigger]) // re-execute the effect when 'prevWeek' or 'address' changes
 
-  const [monthlyDataRaw, setMonthlyDataRaw] = useState<
+  const [_monthlyDataRaw, setMonthlyDataRaw] = useState<
     GetMonthlyShareValueQuery | undefined
   >(undefined)
   const [monthlyIsFetching, setMonthlyIsFetching] = useState(false)
@@ -272,13 +258,6 @@ export const ApyChartProvider: FC<{
         setAllTimeIsFetching(false)
       })
   }, [address, reexecuteAllTimeTrigger])
-
-  let weeklyData = weeklyDataRaw?.cellar?.dayDatas.filter(
-    (item) => new Date(item.date * 1000) > launchDate
-  )
-  let monthlyData = monthlyDataRaw?.cellar?.dayDatas.filter(
-    (item) => new Date(item.date * 1000) > launchDate
-  )
 
   // data inverted
   let allTimeData = allTimeDataRaw?.cellar?.dayDatas
@@ -407,7 +386,7 @@ export const ApyChartProvider: FC<{
     }
   }, [allTimeData, launchEpoch, cellarConfig.config.cellar.decimals])
 
-  const setDataAllTime = useCallback(() => {
+  const _setDataAllTime = useCallback(() => {
     setTimeline("ALL")
     let apyDatum = createApyChangeDatum({
       data: allTimeData?.map((item) => {

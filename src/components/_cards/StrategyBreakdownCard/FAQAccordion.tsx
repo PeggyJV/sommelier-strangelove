@@ -21,8 +21,6 @@ interface Props extends AccordionProps {
 }
 
 export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
-  if (!data) return null
-
   const [expandedIndex, setExpandedIndex] = useState<
     number[] | undefined
   >(undefined)
@@ -36,6 +34,7 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
   }
 
   const idToIndex = useMemo(() => {
+    if (!data) return new Map<string, number>()
     const map = new Map<string, number>()
     data.forEach((item, idx) => {
       const stable = getStableId(item?.question, item?.id)
@@ -101,6 +100,8 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
       }, 50)
     }
   }, [idToIndex])
+
+  if (!data) return null
 
   const handleChange = (val: number | number[]) => {
     if (Array.isArray(val)) setExpandedIndex(val)

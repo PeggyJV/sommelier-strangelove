@@ -74,8 +74,6 @@ const sommelierAPIAllStrategiesData = async (
     const fetchedOptimismData = okOp
       ? await allOptimismStrategyDataResponse.json()
       : { Response: {} }
-    const fetchedScrollData = { Response: {} as any }
-
     let returnObj = {
       result: {
         data: {

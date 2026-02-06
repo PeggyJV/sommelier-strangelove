@@ -25,7 +25,7 @@ export interface BridgeFormValues {
 
 export const BridgeCard: React.FC = () => {
   const isMounted = useIsMounted();
-  const isLarger768 = useBetterMediaQuery("(min-width: 768px)");
+  const _isLarger768 = useBetterMediaQuery("(min-width: 768px)");
   const { isConnected, chain: wagmiChain } = useAccount();
   const methods = useForm<BridgeFormValues>({
     defaultValues: {

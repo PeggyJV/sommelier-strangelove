@@ -32,7 +32,7 @@ export const CroppedMap: FC<CroppedMapProps> = ({
     <HStack align="flex-start">
       <HStack role="group" pt={1} spacing={-1.5} {...rest}>
         {tokensCropped?.map((token, i) => {
-          const { src, alt, address, symbol, chain } = token
+          const { src, alt, address, symbol, chain: _chain } = token
           return (
             <Avatar
               key={address + i}
@@ -70,7 +70,7 @@ export const CroppedMap: FC<CroppedMapProps> = ({
           label={
             <VStack align="flex-start" minW={120}>
               {tokens.map((token, i) => {
-                const { src, alt, address, symbol, chain } = token
+                const { src, alt, address, symbol, chain: _chain } = token
 
                 return (
                   <HStack key={address + i}>

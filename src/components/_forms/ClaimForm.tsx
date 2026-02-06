@@ -25,7 +25,7 @@ export const ClaimForm: FC = () => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
-  const [data, setData] = useState<any>()
+  const [_data, setData] = useState<any>()
   const watchClaimAmount = watch("claimAmount")
   const isDisabled = isNaN(watchClaimAmount) || watchClaimAmount <= 0
   const isError = errors.claimAmount

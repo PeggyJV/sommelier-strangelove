@@ -20,7 +20,7 @@ export function hasPendingWalletRequest(): boolean {
 
 // Wait for wallet to be ready
 export function waitForWalletReady(): Promise<void> {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, _reject) => {
     if (typeof window === "undefined") {
       resolve()
       return

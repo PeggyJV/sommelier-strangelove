@@ -19,7 +19,7 @@ interface CurrentDepositsProps {
 export const CurrentDeposits: FC<CurrentDepositsProps> = ({
   currentDeposits,
   cellarCap,
-  asset,
+  asset: _asset,
 }) => {
   const theme = useTheme()
   const isDataPresent = currentDeposits && cellarCap

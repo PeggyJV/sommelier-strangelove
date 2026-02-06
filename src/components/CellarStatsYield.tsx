@@ -15,7 +15,6 @@ import { InformationIcon } from "./_icons"
 import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 import { Apy } from "./Apy"
 import { cellarDataMap } from "data/cellarDataMap"
-import { isFuture } from "date-fns"
 import { apyHoverLabel, apyLabel } from "data/uiConfig"
 import { config as utilConfig } from "utils/config"
 import { alphaStethI18n } from "i18n/alphaSteth"
@@ -25,8 +24,6 @@ import {
   type AlphaApyParts,
 } from "components/AlphaStethBreakdown"
 import { useStrategyData } from "data/hooks/useStrategyData"
-import { AlphaApyTooltip } from "components/alpha/AlphaApyTooltip"
-import { KpiLabelWithInfo } from "components/alpha/KpiLabelWithInfo"
 
 // Define an interface for APY data which includes the optional 'formatted' property
 interface ApyData {
@@ -57,9 +54,6 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
     )
 
   const tvm = strategyData?.tvm
-  const stakingEnd = strategyData?.stakingEnd
-  const isStakingStillRunning =
-    stakingEnd?.endDate && isFuture(stakingEnd?.endDate)
   const baseApy: ApyData = strategyData?.baseApy
     ? (strategyData.baseApy as ApyData)
     : { formatted: undefined }
@@ -69,10 +63,6 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
   const extraRewardsApy: ApyData = strategyData?.extraRewardsApy
     ? (strategyData.extraRewardsApy as ApyData)
     : { formatted: undefined }
-  const merkleRewardsApy: number | undefined =
-    strategyData?.merkleRewardsApy
-      ? strategyData.merkleRewardsApy
-      : undefined
 
   const baseApySumRewards = strategyData?.baseApySumRewards
   const isAlpha =

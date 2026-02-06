@@ -53,7 +53,7 @@ export default function Countdown({
   targetDate,
   onExpire,
   size = "md",
-  variant = "plain",
+  variant: _variant = "plain",
 }: CountdownProps) {
   // Prevent hydration mismatch: render zeros until mounted
   const [mounted, setMounted] = useState(false)

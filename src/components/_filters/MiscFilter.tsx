@@ -145,7 +145,7 @@ export const MiscFilter = (props: MiscFilterProps) => {
                     isChecked={
                       checkedStates.get(category.name)!.checked
                     }
-                    onChange={(e) => {
+                    onChange={(_e) => {
                       toggleCheck(category.name)
                     }}
                   />

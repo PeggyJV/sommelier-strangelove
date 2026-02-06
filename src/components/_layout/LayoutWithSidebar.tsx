@@ -12,12 +12,12 @@ export const LayoutWithSidebar: FC<{ children: ReactNode }> = ({
   const { isConnected: connected } = useAccount()
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const { ref, inView } = useInView({
+  const { ref } = useInView({
     threshold: 0,
   })
 
   // using local state to avoid Next.js errors
-  const [isConnected, setConnected] = useState(false)
+  const [, setConnected] = useState(false)
   useEffect(() => {
     setConnected(connected)
   }, [connected])

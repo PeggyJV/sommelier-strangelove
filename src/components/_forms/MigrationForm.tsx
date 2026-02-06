@@ -11,7 +11,6 @@ import {
   Image,
   Stack,
   Text,
-  Link,
 } from "@chakra-ui/react"
 import { useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -21,7 +20,6 @@ import {
   useAccount,
   usePublicClient,
   useWriteContract,
-  useWaitForTransactionReceipt,
 } from "wagmi"
 import { toEther } from "utils/formatCurrency"
 import { analytics } from "utils/analytics"
@@ -39,7 +37,6 @@ import {
   parseUnits,
   zeroAddress,
 } from "viem"
-import { ExternalLinkIcon } from "components/_icons"
 
 interface FormValues {
   withdrawAmount: number
@@ -60,7 +57,7 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
 
   const { id: _id } = useDepositModalStore()
 
-  const { addToast, close, closeAll, update } = useBrandedToast()
+  const { addToast, close, closeAll } = useBrandedToast()
   const { address } = useAccount()
   const publicClient = usePublicClient()
   const { writeContractAsync } = useWriteContract()

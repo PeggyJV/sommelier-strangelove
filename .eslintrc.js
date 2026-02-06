@@ -18,7 +18,11 @@ module.exports = {
     "@next/next/no-html-link-for-pages": "off",
     "@next/next/no-img-element": "off",
     // Temporary: reduce strictness to get CI pipeline working
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_",
+      "caughtErrorsIgnorePattern": "^_"
+    }],
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "warn",

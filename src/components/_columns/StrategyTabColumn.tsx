@@ -1,6 +1,5 @@
 import { Text, Tooltip, HStack, Box, Flex } from "@chakra-ui/react"
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
-import { ApyRewardsSection } from "components/_tables/ApyRewardsSection"
 import { StrategySection } from "components/_tables/StrategySection"
 import StrategyRow from "components/_vaults/StrategyRow"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
@@ -101,8 +100,8 @@ export const StrategyTabColumn = ({
 
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
-        if ((row as any)?.original?.isSommNative) return null
         const [isHover, setIsHover] = useState(false)
+        if ((row as any)?.original?.isSommNative) return null
         const handleMouseOver = () => {
           setIsHover(true)
         }

@@ -19,7 +19,6 @@ import {
   Button,
 } from "@chakra-ui/react"
 import { Link } from "components/Link"
-import truncateWalletAddress from "src/utils/truncateWalletAddress"
 import {
   useAccount,
   useDisconnect,
@@ -30,9 +29,7 @@ import Jazzicon, { jsNumberForAddress } from "react-jazzicon"
 import { BaseButton } from "../BaseButton"
 import { ChevronDownIcon, LogoutCircleIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
-import { cellarDataMap } from "data/cellarDataMap"
 import { useBrandedToast } from "hooks/chakra"
-import { useRouter } from "next/router"
 import { chainConfig } from "data/chainConfig"
 import { tokenConfig, tokenConfigMap } from "data/tokenConfig"
 import { useImportToken } from "hooks/web3/useImportToken"
@@ -56,9 +53,6 @@ export const ConnectedPopover = () => {
   const avatarSrc = sommToken
     ? sommToken.src
     : "/assets/icons/somm.svg"
-
-  const id = useRouter().query.id as string | undefined
-  const selectedStrategy = (!!id && cellarDataMap[id]) || undefined
 
   const importToken = useImportToken({
     onSuccess: (data) => {

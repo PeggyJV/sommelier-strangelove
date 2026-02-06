@@ -21,7 +21,7 @@ export const CardStat: FC<CardStatProps> = ({
   label,
   labelProps,
   tooltip,
-  statIcon,
+  statIcon: _statIcon,
   children,
   ...rest
 }) => {

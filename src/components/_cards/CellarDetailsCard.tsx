@@ -5,7 +5,6 @@ import {
   Image,
   Link,
   SimpleGrid,
-  Stack,
   Text,
   VStack,
   Wrap,

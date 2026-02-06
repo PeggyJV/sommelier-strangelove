@@ -11,7 +11,7 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react"
-import { memo, FC, Suspense } from "react"
+import { memo, FC } from "react"
 import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { AllStrategiesData } from "data/actions/types"
@@ -119,7 +119,7 @@ export const HeroTr: FC<BorderTrProps> = ({
 }
 
 export const BorderTd: FC<TableCellProps & { href: string }> = ({
-  href,
+  href: _href,
   ...props
 }) => {
   return (
@@ -137,11 +137,9 @@ export interface StrategyTableProps {
 
 export const StrategyTable = memo(
   ({ columns, data, showHeader = true }: StrategyTableProps) => {
-    if (!data || !Array.isArray(data) || data.length === 0) {
-      return null
-    }
-
     StrategyTable.displayName = "StrategyTable"
+
+    const safeData = data && Array.isArray(data) ? data : []
 
     const {
       getTableProps,
@@ -152,10 +150,15 @@ export const StrategyTable = memo(
     } = useTable<any>(
       {
         columns,
-        data,
+        data: safeData,
       },
       useSortBy
     )
+
+    if (!data || !Array.isArray(data) || data.length === 0) {
+      return null
+    }
+
     return (
       <TableContainer
         borderColor="surface.secondary"

@@ -3,7 +3,7 @@ import { PageHome } from "components/_pages/PageHome"
 import { useState, useEffect } from "react"
 
 const Home: NextPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [_isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     setIsModalOpen(true)

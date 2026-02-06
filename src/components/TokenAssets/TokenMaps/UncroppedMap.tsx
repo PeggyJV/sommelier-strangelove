@@ -20,7 +20,7 @@ export const UncroppedMap: FC<UncroppedMapProps> = ({
     <HStack>
       <HStack role="group" pt={1} spacing={-1.5} {...rest}>
         {tokens.map((token, i) => {
-          const { src, alt, address, symbol, chain } = token
+          const { src, alt, address, symbol, chain: _chain } = token
           return (
             <Avatar
               key={address + i}

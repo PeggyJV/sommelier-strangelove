@@ -6,10 +6,7 @@ import {
   Text,
   VStack,
   Image,
-  Button,
   Avatar,
-  Stack,
-  Tooltip,
 } from "@chakra-ui/react"
 import { useEffect, useMemo, useState } from "react"
 import ConnectGate from "components/wallet/ConnectGate"
@@ -20,8 +17,6 @@ import KPIBox from "components/_vaults/KPIBox"
 import ActionButton from "components/ui/ActionButton"
 import { config as utilConfig } from "utils/config"
 import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
-import { InformationIcon } from "components/_icons"
-import { alphaStethI18n } from "i18n/alphaSteth"
 import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 
 type Vault = {
@@ -46,11 +41,11 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     (vault?.provider as any)?.title ||
     (vault?.provider as string) ||
     ""
-  const built = Array.isArray(vault?.builtWith)
+  const _built = Array.isArray(vault?.builtWith)
     ? vault?.builtWith
     : []
   // Prefer list TVL; fallback to individual strategy data if missing
-  const netVal =
+  const _netVal =
     typeof vault?.baseApySumRewards?.value === "string"
       ? parseFloat(vault?.baseApySumRewards?.value)
       : (vault?.baseApySumRewards?.value as number | undefined)
@@ -74,20 +69,18 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   // User net value (reuse manage page logic via hook)
   const strategyAddress = vault?.config?.cellar?.address
   const strategyChainId = vault?.config?.chain?.id
-  const { data: stratData } =
-    strategyAddress && strategyChainId
-      ? useStrategyData(strategyAddress, strategyChainId)
-      : ({} as any)
+  const { data: stratData } = useStrategyData(
+    strategyAddress ?? "",
+    strategyChainId ?? "",
+    !!strategyAddress && !!strategyChainId
+  )
   const tvl = stratData?.tvm?.formatted ?? vault?.tvm?.formatted
-  const { data: userStratData } =
-    strategyAddress && strategyChainId
-      ? useUserStrategyData(
-          strategyAddress,
-          strategyChainId,
-          // Gate by connection status implicitly via hook (enabled flag)
-          true
-        )
-      : ({} as any)
+  const { data: userStratData } = useUserStrategyData(
+    strategyAddress ?? "",
+    strategyChainId ?? "",
+    // Gate by connection status implicitly via hook (enabled flag)
+    !!strategyAddress && !!strategyChainId
+  )
   const netValueFmt: string | undefined = (userStratData as any)
     ?.userStrategyData?.userData?.netValue?.formatted
 

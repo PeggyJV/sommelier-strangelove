@@ -29,7 +29,7 @@ export const WithdrawQueueButton = ({ buttonLabel, onSuccessfulWithdraw, showToo
         textAlign="center"
       >
         <BaseButton
-          onClick={(e) => {
+          onClick={(_e) => {
             onOpen()
           }}
           {...props}

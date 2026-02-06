@@ -82,7 +82,7 @@ export function AlphaApyPopover() {
                 as={NextLink}
                 href="/strategies/Alpha-stETH/manage?tab=faqs&faq=fees&autoscroll=1#faq-fees"
                 textDecoration="underline"
-                onClick={(e) => {
+                onClick={(_e) => {
                   try {
                     if (typeof window !== "undefined") {
                       localStorage.setItem("alpha-faq-autoscroll", "1")
@@ -110,7 +110,7 @@ export function AlphaApyPopover() {
               display="inline-block"
               mt={2}
               textDecoration="underline"
-              onClick={(e) => {
+              onClick={(_e) => {
                 try {
                   if (typeof window !== "undefined") {
                     localStorage.setItem("alpha-faq-autoscroll", "1")

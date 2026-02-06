@@ -13,7 +13,7 @@ interface Props extends FlexProps {
 
 export const UserStats: React.FC<Props> = ({
   data,
-  children,
+  children: _children,
   ...rest
 }) => {
   const { isConnected } = useAccount()

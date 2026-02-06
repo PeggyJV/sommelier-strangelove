@@ -19,15 +19,15 @@ import { validateSommelierAddress } from "utils/validateSommelierAddress"
 import { BridgeFormValues } from "."
 
 export const InputSommelierAddress: React.FC<InputProps> = ({
-  children,
+  children: _children,
   ...rest
 }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getValues, getFieldState } =
     useFormContext<BridgeFormValues>()
   const isError = !!getFieldState("address").error
-  const [isActive, setActive] = useState(false)
-  const { isConnected } = useAccount()
+  const [_isActive, setActive] = useState(false)
+  const { isConnected: _isConnected } = useAccount()
 
   const onAutofillClick = async (isValidateAddress?: boolean) => {
     try {
@@ -41,9 +41,7 @@ export const InputSommelierAddress: React.FC<InputProps> = ({
           shouldValidate: true,
         }
       )
-    } catch (e) {
-      const error = e as Error
-
+    } catch (_e) {
       return addToast({
         heading: "Keplr not found",
         body: (

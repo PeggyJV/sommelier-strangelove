@@ -25,7 +25,7 @@ export const UnbondForm = () => {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>()
-  const [data, setData] = useState<any>()
+  const [_data, setData] = useState<any>()
   const watchUnbondAmount = watch("unbondAmount")
   const isDisabled =
     isNaN(watchUnbondAmount) || watchUnbondAmount <= 0

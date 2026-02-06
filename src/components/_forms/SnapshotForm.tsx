@@ -28,7 +28,7 @@ const SnapshotForm: React.FC<SnapshotFormProps> = ({
   const { addToast, close } = useBrandedToast()
 
   const [registrationMessage, setRegistrationMessage] = useState("")
-  const [stakedSommTokens, setStakedSommTokens] = useState<
+  const [stakedSommTokens, _setStakedSommTokens] = useState<
     number | null
   >(null)
 

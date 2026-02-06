@@ -16,15 +16,15 @@ import { useAccount } from "wagmi"
 import { BridgeFormValues } from "."
 
 export const InputEthereumAddress: React.FC<InputProps> = ({
-  children,
+  children: _children,
   ...rest
 }) => {
   const { addToast, closeAll } = useBrandedToast()
   const { register, setValue, getValues, getFieldState } =
     useFormContext<BridgeFormValues>()
   const isError = !!getFieldState("address").error
-  const [isActive, setActive] = useState(false)
-  const { address, isConnected } = useAccount()
+  const [_isActive, setActive] = useState(false)
+  const { address, isConnected: _isConnected } = useAccount()
 
   const onAutofillClick = async (isValidateAddress?: boolean) => {
     try {
