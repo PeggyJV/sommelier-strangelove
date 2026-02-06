@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { getAllStrategiesData } from "data/actions/common/getAllStrategiesData"
-import { useAccount, usePublicClient } from "wagmi"
+import { useAccount } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { fetchCellarStrategyData } from "queries/get-all-strategies-data"

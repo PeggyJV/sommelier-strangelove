@@ -46,8 +46,8 @@ export const TxHashToastBody = ({
 export const BridgeTxHashToastBody = ({
   hash,
   amount,
-  addToast,
-  closeAll,
+  addToast: _addToast,
+  closeAll: _closeAll,
 }: {
   hash: string
   amount: string

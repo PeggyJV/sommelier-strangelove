@@ -23,11 +23,11 @@ interface InputSommelierAddressProps extends InputProps {
 export const InputSommelierAddress: FC<
   InputSommelierAddressProps
 > = ({ disabled, ...rest }) => {
-  const { addToast, closeAll } = useBrandedToast()
+  const { addToast, closeAll: _closeAll } = useBrandedToast()
   const { register, setValue, getFieldState } = useFormContext()
   const isError = !!getFieldState("somm_address").error
-  const [isActive, setActive] = useState(false)
-  const { isConnected } = useAccount()
+  const [_isActive, setActive] = useState(false)
+  const { isConnected: _isConnected } = useAccount()
 
   const onAutofillClick = async () => {
     try {
@@ -38,8 +38,7 @@ export const InputSommelierAddress: FC<
       setValue("somm_address", key.bech32Address, {
         shouldValidate: true,
       })
-    } catch (e) {
-      const error = e as Error
+    } catch (_e) {
       addToast({
         heading: "Keplr not found",
         status: "error",

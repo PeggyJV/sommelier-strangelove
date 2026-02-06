@@ -8,7 +8,7 @@ export const getAllContracts = async (
 ) => {
   let contracts: AllContracts = {}
 
-  for (const [key, cellar] of Object.entries(cellarDataMap)) {
+  for (const [_key, cellar] of Object.entries(cellarDataMap)) {
     const provider = providerMap.get(cellar.config.chain.id)
     const signer = signerMap.get(cellar.config.chain.id)
 

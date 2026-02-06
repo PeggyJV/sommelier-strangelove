@@ -3,7 +3,6 @@ import { Chain as ViemChain } from "viem"
 import {
   ALCHEMY_API_URL,
   INFURA_API_URL,
-  QUICKNODE_API_URL,
 } from "context/rpc_context"
 
 export interface Chain {

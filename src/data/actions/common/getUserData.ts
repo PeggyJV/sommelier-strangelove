@@ -1,15 +1,10 @@
-import { formatUnits } from "viem"
-import { useAccount, usePublicClient } from "wagmi"
-import { cellarDataMap } from "data/cellarDataMap"
-import { getStrategyData } from "./getStrategyData"
-import { getAllStrategiesData } from "./getAllStrategiesData"
+import { usePublicClient } from "wagmi"
 import { useQuery } from "@tanstack/react-query"
-import { formatUSD } from "utils/formatCurrency"
 
 export const getUserData = async (
-  address: string,
-  publicClient: any,
-  chainId: number
+  _address: string,
+  _publicClient: any,
+  _chainId: number
 ) => {
   try {
     // This legacy function isn't used for critical paths anymore.
@@ -33,13 +28,13 @@ export const getUserData = async (
 }
 
 export const getUserDataWithContracts = async ({
-  contracts,
-  address,
+  contracts: _contracts,
+  address: _address,
   strategyData,
-  userAddress,
-  sommPrice,
-  baseAssetPrice,
-  chain,
+  userAddress: _userAddress,
+  sommPrice: _sommPrice,
+  baseAssetPrice: _baseAssetPrice,
+  chain: _chain,
 }: {
   contracts: any
   address: string

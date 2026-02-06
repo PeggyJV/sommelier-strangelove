@@ -74,5 +74,5 @@ export function getSortedVaults(
   })
 
   // Remove decoration
-  return sorted.map(({ __index, tvl, netValue, ...rest }) => rest)
+  return sorted.map(({ __index: _index, tvl: _tvl, netValue: _netValue, ...rest }) => rest)
 }

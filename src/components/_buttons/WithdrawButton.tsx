@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { cellarDataMap } from "data/cellarDataMap"
 import { useRouter } from "next/router"
 
 export const WithdrawButton = ({ isDeprecated, ...buttonProps }:
@@ -26,12 +25,10 @@ export const WithdrawButton = ({ isDeprecated, ...buttonProps }:
     onClose()
   }
   const [isOracleModalOpen, setOracleModalOpen] = useState(false)
-  const openOracleModal = () => setOracleModalOpen(true)
   const closeOracleModal = () => setOracleModalOpen(false)
 
-  const { id: _id } = useDepositModalStore()
-  const id = (useRouter().query.id as string) || _id
-  const cellarData = cellarDataMap[id]
+  const { id: _depId } = useDepositModalStore()
+  const _id = (useRouter().query.id as string) || _depId
 
   return (
     <>
@@ -48,7 +45,7 @@ export const WithdrawButton = ({ isDeprecated, ...buttonProps }:
           textAlign="center"
         >
           <SecondaryButton
-            onClick={(e) => {
+            onClick={(_e) => {
               //! if share price oracle updating..
               //if (cellarData.slug === "Turbo-SOMM") {
               //  openOracleModal()

@@ -4,11 +4,7 @@ import {
   Box,
   Button,
   Center,
-  Grid,
-  HStack,
-  Spacer,
   Text,
-  VStack,
   Collapse,
 } from "@chakra-ui/react"
 import { ErrorCard } from "components/_cards/ErrorCard"
@@ -21,7 +17,7 @@ import {
   TransparentSkeleton,
   LightSkeleton,
 } from "components/_skeleton"
-import { StrategyTable } from "components/_tables/StrategyTable"
+
 import SommNativeList from "components/SommNativeList"
 import { useAllStrategiesData } from "data/hooks/useAllStrategiesData"
 import {
@@ -51,16 +47,16 @@ import { useSommNativeVaults } from "data/hooks/useSommNativeVaults"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { config as utilConfig } from "utils/config"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
-import WithdrawalWarningBanner from "components/_sections/WithdrawalWarningBanner"
+
 import { sortVaultsForMainPage } from "utils/sortVaults"
 
 import SectionHeader from "components/_sections/SectionHeader"
 import { alphaSteth } from "data/strategies/alpha-steth"
-import { MigrationModal } from "components/_modals/MigrationModal"
+
 import { toEther } from "utils/formatCurrency"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 import dynamic from "next/dynamic"
-import { InView } from "react-intersection-observer"
+
 import { ChevronUpIcon, ChevronDownIcon } from "components/_icons"
 import {
   restoreLegacyVisibility,
@@ -127,7 +123,7 @@ export const PageHome = () => {
   const { isConnected } = useAccount()
   const { userBalances } = useUserBalances()
   const { data: userDataAllStrategies } = useUserDataAllStrategies()
-  const { data: sommNativeMin, isLoading: isSommMinLoading } =
+  const { data: sommNativeMin, isLoading: _isSommMinLoading } =
     useSommNativeVaults()
 
   // Check user balances in migration source vaults
@@ -248,7 +244,7 @@ export const PageHome = () => {
   }, [cellarDataMap])
 
   // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
-  const constantOrderedAllUniqueAssetsArray = useMemo(() => {
+  const _constantOrderedAllUniqueAssetsArray = useMemo(() => {
     return [
       ...constantAllUniqueAssetsArray.filter(
         (pair) => pair.symbol === "WETH"
@@ -286,7 +282,7 @@ export const PageHome = () => {
   const [showIncentivised, setShowIncentivised] =
     useState<boolean>(false)
 
-  const [selectedMiscFilters, setSelectedMiscFilters] = useState<
+  const [_selectedMiscFilters, setSelectedMiscFilters] = useState<
     MiscFilterProp[]
   >([
     {
@@ -309,7 +305,7 @@ export const PageHome = () => {
   const initialShowDeprecated = false
   const initialShowIncentivised = false
 
-  const hasFiltersChanged = useMemo(() => {
+  const _hasFiltersChanged = useMemo(() => {
     return (
       !(
         JSON.stringify(selectedChainIds) !==
@@ -329,7 +325,7 @@ export const PageHome = () => {
     showIncentivised,
   ])
 
-  const resetFilters = useCallback(() => {
+  const _resetFilters = useCallback(() => {
     setSelectedChainIds(initialChainIds)
     setSelectedDepositAssets(initialDepositAssets)
     setShowDeprecated(initialShowDeprecated)
@@ -453,7 +449,7 @@ export const PageHome = () => {
           }
         )
 
-        const netValue = Number(
+        const _netValue = Number(
           userData?.userStrategyData?.userData?.netValue?.value ?? 0
         )
 
@@ -503,7 +499,7 @@ export const PageHome = () => {
     sommNativeMin,
   ])
 
-  const WithdrawalStatusPanel = () => (
+  const _WithdrawalStatusPanel = () => (
     <Box
       mt={6}
       mb={4}

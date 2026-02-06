@@ -165,7 +165,7 @@ export const TokenPriceChartProvider: FC<{
   const [showLine, setShowLine] = useState<ShowLine>({
     tokenPrice: true,
   })
-  const [timeline, setTimeline] = useState<Timeline>("1M")
+  const [_timeline, setTimeline] = useState<Timeline>("1M")
   const cellarData = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address === address &&

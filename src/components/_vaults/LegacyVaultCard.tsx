@@ -1,8 +1,6 @@
 import {
   Avatar,
-  Badge,
   Box,
-  Button,
   HStack,
   Image,
   Text,
@@ -62,7 +60,7 @@ export default function LegacyVaultCard({
   const netFormatted = vault?.baseApySumRewards?.formatted ?? "–"
   const chainName = vault?.config?.chain?.displayName ?? "Ethereum"
   const chainLogo = (vault as any)?.config?.chain?.logoPath
-  const status: "active" | "paused" | "withdrawals-only" =
+  const _status: "active" | "paused" | "withdrawals-only" =
     vault?.status ?? (vault?.deprecated ? "paused" : "paused")
 
   // Wallet/chain/balance state
@@ -79,10 +77,11 @@ export default function LegacyVaultCard({
   // User net value (manage page logic)
   const stratAddress = cellarConfig?.cellar?.address
   const stratChainId = cellarConfig?.chain?.id
-  const { data: userStratData } =
-    stratAddress && stratChainId
-      ? useUserStrategyData(stratAddress, stratChainId, enabled)
-      : ({} as any)
+  const { data: userStratData } = useUserStrategyData(
+    stratAddress ?? "",
+    stratChainId ?? "",
+    enabled && !!stratAddress && !!stratChainId
+  )
 
   // Use user's actual net value for withdrawal logic, not the display net value
   const userNetValue =

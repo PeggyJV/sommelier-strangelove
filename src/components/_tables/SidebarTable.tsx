@@ -27,7 +27,7 @@ interface BorderTrProps extends TableRowProps {
 
 export const BorderTr: FC<BorderTrProps> = ({
   slug,
-  name,
+  name: _name,
   ...props
 }) => {
   const router = useRouter()
@@ -43,7 +43,7 @@ export const BorderTr: FC<BorderTrProps> = ({
       cursor="pointer"
       onClick={() => {
         router.push(slug)
-        const landingTyp = landingType()
+        const _landingTyp = landingType()
         //  analytics.track("strategy.selection", {
         //   strategyCard: name,
         //   landingType: landingType(),

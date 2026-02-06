@@ -2,8 +2,6 @@ import React, { useState, useEffect, useMemo } from "react"
 import {
   FormControl,
   FormErrorMessage,
-  FormLabel,
-  FormHelperText,
   Icon,
   VStack,
   Button,
@@ -14,9 +12,6 @@ import {
   Stack,
   Text,
   Link,
-  Tooltip,
-  InputRightElement,
-  InputGroup,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -35,7 +30,6 @@ import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 import { Token } from "data/tokenConfig"
 import { ModalOnlyTokenMenu } from "components/_menus/ModalMenu"
-import { InformationIcon } from "components/_icons"
 import { FAQAccordion } from "components/_cards/StrategyBreakdownCard/FAQAccordion"
 import withdrawQueueV0821 from "src/abi/withdraw-queue-v0.8.21.json"
 import { fetchCellarPreviewRedeem } from "queries/get-cellar-preview-redeem"
@@ -155,7 +149,7 @@ export const WithdrawQueueForm = ({
     cellarConfig.chain.withdrawQueueAddress,
   ])
 
-  const [_, wait] = useWaitForTransaction({
+  const [_waitState, wait] = useWaitForTransaction({
     skip: true,
   })
 
@@ -850,7 +844,7 @@ export const WithdrawQueueForm = ({
         onClose() // Close modal after successful withdraw.
       }
 
-      const onError = (error: Error) => {
+      const onError = (_error: Error) => {
         // Can track here if we want
       }
 
@@ -1144,7 +1138,7 @@ export const WithdrawQueueForm = ({
                   textAlign={"center"}
                   fontWeight={"bold"}
                 >
-                  {((useRouter().query.id as string) || _id) ===
+                  {id ===
                   config.CONTRACT.ALPHA_STETH.SLUG
                     ? "When replacing a BoringQueue request, your amount and asset are preserved; the deadline and discount can be updated."
                     : "When replacing a BoringQueue request, only the deadline is updated."}
@@ -1281,7 +1275,7 @@ export const WithdrawQueueForm = ({
                 <ModalOnlyTokenMenu
                   depositTokens={
                     cellarConfig.boringVault
-                      ? ((useRouter().query.id as string) || _id) ===
+                      ? id ===
                         config.CONTRACT.ALPHA_STETH.SLUG
                         ? Object.keys(
                             cellarDataMap[id].config
@@ -1302,7 +1296,7 @@ export const WithdrawQueueForm = ({
                       : [strategyBaseAsset.symbol]
                   }
                   activeAsset={
-                    ((useRouter().query.id as string) || _id) ===
+                    id ===
                     config.CONTRACT.ALPHA_STETH.SLUG
                       ? selectedToken.address
                       : strategyBaseAsset.address
@@ -1357,7 +1351,7 @@ export const WithdrawQueueForm = ({
           ? "Replace Request"
           : "Submit"}
       </BaseButton>
-      {((useRouter().query.id as string) || _id) ===
+      {id ===
         config.CONTRACT.ALPHA_STETH.SLUG &&
         boringQueue &&
         isRequestValid &&

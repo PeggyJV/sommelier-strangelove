@@ -10,9 +10,9 @@ type ConnectWalletPopoverProps = ConnectButtonProps & {
 
 export const ConnectWalletPopover = memo(
   ({
-    unstyled,
+    unstyled: _unstyled,
     children,
-    wagmiChainId,
+    wagmiChainId: _wagmiChainId,
     ...rest
   }: ConnectWalletPopoverProps) => {
     const { isConnecting, cancelConnection } = useWalletConnection()
@@ -36,11 +36,11 @@ export const ConnectWalletPopover = memo(
       <ConnectButton.Custom>
         {({
           account,
-          chain,
+          chain: _chain,
           openAccountModal,
-          openChainModal,
+          openChainModal: _openChainModal,
           openConnectModal,
-          mounted,
+          mounted: _mounted,
         }) => {
           const isAlreadyConnected = Boolean(account?.address)
           const handleClick = () => {

@@ -7,7 +7,6 @@ import { ConnectWalletPopover } from "./ConnectWalletPopover"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
 import ChainButton from "../ChainButton"
 import {
-  chainConfig,
   chainConfigMap,
   getChainByViemId,
 } from "src/data/chainConfig"
@@ -21,7 +20,7 @@ export interface ConnectButtonProps
 
 const ConnectButton = (props: ConnectButtonProps) => {
   const { isConnected, chain: viemChain } = useAccount()
-  const isLarger992 = useBetterMediaQuery("(min-width: 992px)")
+  const _isLarger992 = useBetterMediaQuery("(min-width: 992px)")
   const chain = getChainByViemId(viemChain?.name)
 
   // Use the actual current chain from wallet, fallback to default if not connected
@@ -31,7 +30,7 @@ const ConnectButton = (props: ConnectButtonProps) => {
   const currentChainConfig =
     chainConfigMap[currentChainId] || chainConfigMap["ethereum"]
 
-  const handleNetworkChange = (chainId: string) => {
+  const handleNetworkChange = (_chainId: string) => {
     // This will be handled by the ChainButton component
   }
 

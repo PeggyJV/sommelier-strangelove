@@ -52,7 +52,7 @@ export const PortofolioItem: FC<PortofolioItemProps> = ({
     (token) => token.symbol === symbol && cellarData.config.chain.id === token.chain
   )!
 
-  const { data: coinGeckoPrice, error } = useCoinGeckoPrice(
+  const { data: coinGeckoPrice, error: _error } = useCoinGeckoPrice(
     baseAsset
   )
 

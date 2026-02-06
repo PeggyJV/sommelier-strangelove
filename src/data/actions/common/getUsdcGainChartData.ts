@@ -15,7 +15,7 @@ export const getUsdcGainChartData = async (
   props: GetUsdcGainChartData
 ) => {
   try {
-    const { day, interval, firstDate } = props
+    const { day: _day, interval, firstDate } = props
     const isDaily = interval === "daily"
     const usdcData = props.usdcData
 
@@ -60,7 +60,7 @@ export const getUsdcGainChartData = async (
       }
     })
     return {
-      usdcDatum: Array.from(usdcMap, ([_, v]) => v).slice(
+      usdcDatum: Array.from(usdcMap, ([_k, v]) => v).slice(
         isDaily ? 1 : 0
       ),
     }

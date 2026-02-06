@@ -27,7 +27,6 @@ import { config } from "utils/config"
 import {
   useAccount,
   useWriteContract,
-  useWaitForTransactionReceipt,
   useSwitchChain,
 } from "wagmi"
 import {
@@ -51,7 +50,6 @@ import { ExternalLinkIcon } from "components/_icons"
 import { analytics } from "utils/analytics"
 import { useRouter } from "next/router"
 import { cellarDataMap } from "data/cellarDataMap"
-import { useWaitForTransaction } from "hooks/wagmi-helper/useWaitForTransactions"
 import { useCreateContracts } from "data/hooks/useCreateContracts"
 import { waitTime, depositAssetDefaultValue } from "data/uiConfig"
 import { useGeo } from "context/geoContext"
@@ -142,7 +140,6 @@ export const SommelierTab = ({
   const { address, chain } = useAccount()
   const { switchChainAsync } = useSwitchChain()
   const { writeContractAsync } = useWriteContract()
-  const { data: waitForTransaction } = useWaitForTransactionReceipt()
   const geo = useGeo()
 
   // Attribution (deposit started/receipt/error): send to ingestion API using Vercel KV backend
@@ -166,9 +163,9 @@ export const SommelierTab = ({
 
   const [selectedToken, setSelectedToken] =
     useState<TokenType | null>(null)
-  const [isDepositFeeLoading, setIsDepositFeeLoading] =
+  const [isDepositFeeLoading, _setIsDepositFeeLoading] =
     useState(false)
-  const [depositFee, setDepositFee] = useState(0)
+  const [depositFee, _setDepositFee] = useState(0)
   const methods = useForm<FormValues>({
     defaultValues: { slippage: config.SWAP.SLIPPAGE },
   })
@@ -208,12 +205,10 @@ export const SommelierTab = ({
   const { cellarSigner, boringVaultLens } =
     useCreateContracts(cellarConfig)
 
-  const { data: strategyData, isLoading } = useStrategyData(
+  const { isLoading } = useStrategyData(
     cellarConfig.cellar.address,
     cellarConfig.chain.id
   )
-  const isAlpha = id === config.CONTRACT.ALPHA_STETH.SLUG
-
   const { userBalances } = useUserBalances()
 
   const selectedTokenBalance = userBalances.data?.find(
@@ -276,17 +271,7 @@ export const SommelierTab = ({
       },
     })
 
-  const cellarContract =
-    paidClient &&
-    getContract({
-      address: getAddress(cellarConfig.cellar.address),
-      abi: cellarConfig.cellar.abi,
-      client: {
-        public: paidClient,
-      },
-    })
-
-  const queryDepositFeePercent = async (assetAddress: string) => {
+  const _queryDepositFeePercent = async (assetAddress: string) => {
     if (
       assetAddress === cellarConfig.baseAsset.address ||
       cellarConfig.boringVault
@@ -299,9 +284,9 @@ export const SommelierTab = ({
     ])
     if (!result) return 0
 
-    const [isSupported, _, depositFee] = result as [boolean, any, any]
+    const [isSupported, _holdingPosition, depositFeeResult] = result as [boolean, any, any]
 
-    return isSupported ? Number(depositFee) : 0
+    return isSupported ? Number(depositFeeResult) : 0
   }
 
   // Helper: wrap writeContractAsync and swallow user-rejected with toast, returning undefined
@@ -358,7 +343,7 @@ export const SommelierTab = ({
     }
   }
 
-  const doDepositTx = async (
+  const _doDepositTx = async (
     nativeDeposit: boolean,
     amtInWei: bigint,
     assetAddress: string
@@ -392,7 +377,7 @@ export const SommelierTab = ({
       args = [assetAddress, amtInWei, minimumMint]
       value = BigInt(0)
     } else {
-      const minimumMint = await cellarSigner?.read.previewDeposit([
+      const _minimumMint = await cellarSigner?.read.previewDeposit([
         amtInWei,
       ])
       fnName = "deposit"
@@ -772,7 +757,7 @@ export const SommelierTab = ({
     }
   }
 
-  const onSubmit = async (data: any, e: any) => {
+  const onSubmit = async (data: any, _e: any) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
@@ -1087,7 +1072,7 @@ export const SommelierTab = ({
     }
   }
 
-  const onError = async (errors: any, e: any) => {
+  const onError = async (_errors: any, _e: any) => {
     // try and handle basic cases
     // gasFailure
     // onChain assert

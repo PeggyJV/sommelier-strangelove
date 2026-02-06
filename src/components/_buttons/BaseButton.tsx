@@ -14,7 +14,7 @@ export interface BaseButtonProps extends Omit<ButtonProps, "icon"> {
 export const BaseButton = forwardRef<
   BaseButtonProps,
   "button"
->(({ icon, variant, iconProps, ...rest }, ref) => {
+>(({ icon, variant: _variant, iconProps, ...rest }, ref) => {
   return (
     <Button
       ref={ref}

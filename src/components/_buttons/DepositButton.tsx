@@ -32,7 +32,6 @@ export const DepositButton: FC<ButtonProps> = (props) => {
   const notifyModal = useDisclosure()
 
   const [isOracleModalOpen, setOracleModalOpen] = useState(false)
-  const openOracleModal = () => setOracleModalOpen(true)
   const closeOracleModal = () => setOracleModalOpen(false)
 
   const { id: _id } = useDepositModalStore()

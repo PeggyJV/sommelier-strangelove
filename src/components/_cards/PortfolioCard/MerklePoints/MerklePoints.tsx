@@ -66,7 +66,7 @@ export const MerklePoints = ({
     })
   }, [cellarConfig.chain.wagmiId])
 
-  const [_, wait] = useWaitForTransaction({
+  const [, wait] = useWaitForTransaction({
     skip: true,
   })
 

@@ -1,4 +1,4 @@
-import { Box, Stack, Text, StackProps } from "@chakra-ui/react"
+import { Stack, Text, StackProps } from "@chakra-ui/react"
 
 type KPIBoxProps = StackProps & {
   label: string

@@ -29,8 +29,7 @@ export const isValidURL = (value: string) => {
 
 export const Highlight = ({ id }: HighlightProps) => {
   const content = strategyPageContentData[id]
-  const [expandHowItWorks, setExpandHowItWorks] = useState(false)
-  const howItWorks = content.howItWorks.split("<br/><br/>")
+  const [_expandHowItWorks, _setExpandHowItWorks] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const router = useRouter()
   const cellarData = cellarDataMap[id]

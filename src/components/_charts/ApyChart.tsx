@@ -50,7 +50,7 @@ export const ApyChart = ({
     point,
   }) => {
     const { id } = point
-    const [_, i] = id.split(".")
+    const [, i] = id.split(".")
     if (isLarger768) {
       return (
         <Stack

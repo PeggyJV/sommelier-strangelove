@@ -51,7 +51,7 @@ function formatTimeRemaining(deadline: number): string {
     return "Expired"
   }
 
-  const seconds = Math.floor((timeLeft / 1000) % 60)
+  const _seconds = Math.floor((timeLeft / 1000) % 60)
   const minutes = Math.floor((timeLeft / 1000 / 60) % 60)
   const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24)
   const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24))
@@ -293,7 +293,7 @@ const WithdrawQueueCard = (props: TableProps) => {
         // Can track here if we want
       }
 
-      const onError = (error: Error) => {
+      const onError = (_error: Error) => {
         // Can track here if we want
       }
 
