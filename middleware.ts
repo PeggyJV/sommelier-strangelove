@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { analyticsMiddleware } from "./src/middleware/analytics"
 
 export function middleware(req: NextRequest) {
   const host = (
@@ -19,9 +20,13 @@ export function middleware(req: NextRequest) {
     return new NextResponse("Forbidden", { status: 403 })
   }
 
-  const res = NextResponse.next()
-  res.headers.set("x-somm-domain", host)
-  return res
+  // Apply analytics middleware first
+  const analyticsResponse = analyticsMiddleware(req)
+  
+  // Add domain header to analytics response
+  analyticsResponse.headers.set("x-somm-domain", host)
+  
+  return analyticsResponse
 }
 
 export const config = {

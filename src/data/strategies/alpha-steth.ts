@@ -97,6 +97,7 @@ export const alphaSteth: CellarData = {
     teller: {
       address: config.CONTRACT.ALPHA_STETH_TELLER.ADDRESS,
       abi: config.CONTRACT.ALPHA_STETH_TELLER.ABI,
+      referred: config.CONTRACT.ALPHA_STETH_TELLER.REFERRED,
     },
     boringQueue: {
       address: config.CONTRACT.ALPHA_STETH_BORING_QUEUE.ADDRESS,

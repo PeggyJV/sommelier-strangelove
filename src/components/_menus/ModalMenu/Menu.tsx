@@ -77,22 +77,58 @@ export const Menu = ({
     Token | undefined
   >(defaultToken)
 
+  // Restore last used values from sessionStorage
+  useEffect(() => {
+    try {
+      const key = `deposit:last:${cellarConfig.cellar.address}`
+      const raw = sessionStorage.getItem(key)
+      if (raw) {
+        const parsed = JSON.parse(raw) as {
+          tokenSymbol?: string
+          amount?: number
+        }
+        if (parsed?.tokenSymbol) {
+          const found = depositTokenConfig.find(
+            (t) => t.symbol === parsed.tokenSymbol
+          )
+          if (found) {
+            setSelectedToken(found)
+            onChange(found)
+          }
+        }
+        if (
+          typeof parsed?.amount === "number" &&
+          !Number.isNaN(parsed.amount)
+        ) {
+          setValue("depositAmount", parsed.amount)
+        }
+      }
+    } catch {}
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const setMax = () => {
     // analytics.track("deposit.max-selected", {
     //   value: selectedTokenBalance?.value?.toString(),
     // })
 
-    return setValue(
-      "depositAmount",
-      parseFloat(
-        toEther(
-          selectedTokenBalance?.value,
-          selectedTokenBalance?.decimals,
-          false,
-          6
-        )
+    const amt = parseFloat(
+      toEther(
+        selectedTokenBalance?.value,
+        selectedTokenBalance?.decimals,
+        false,
+        6
       )
     )
+    try {
+      const key = `deposit:last:${cellarConfig.cellar.address}`
+      const payload = {
+        tokenSymbol: (selectedToken || value)?.symbol,
+        amount: amt,
+      }
+      sessionStorage.setItem(key, JSON.stringify(payload))
+    } catch {}
+    return setValue("depositAmount", amt)
   }
   const [displayedBalance, setDisplayedBalance] = useState(0)
   useEffect(() => {
@@ -236,6 +272,17 @@ export const Menu = ({
                       setSelectedToken(token)
                       setDisplayedBalance(0)
                       setValue("depositAmount", 0)
+                      try {
+                        const key = `deposit:last:${cellarConfig.cellar.address}`
+                        const payload = {
+                          tokenSymbol: token.symbol,
+                          amount: 0,
+                        }
+                        sessionStorage.setItem(
+                          key,
+                          JSON.stringify(payload)
+                        )
+                      } catch {}
                     }}
                   >
                     <HStack justify="space-between">
@@ -340,6 +387,15 @@ export const Menu = ({
                 ) // Keep token decimal places as max
                 event.target.value = val
               }
+              // persist on change (debounced via browser task queue)
+              try {
+                const key = `deposit:last:${cellarConfig.cellar.address}`
+                const payload = {
+                  tokenSymbol: (selectedToken || value)?.symbol,
+                  amount: Number(val),
+                }
+                sessionStorage.setItem(key, JSON.stringify(payload))
+              } catch {}
             },
             required: "Enter amount",
             valueAsNumber: true,
@@ -375,6 +431,7 @@ export const Menu = ({
             },
           })}
         />
+
         <HStack spacing={0} fontSize="11px" textAlign="right" pr="2">
           <Text as="span">
             $ {Number(displayedBalance.toFixed(2)).toLocaleString()}

@@ -18,6 +18,12 @@
     "test": "jest --config jest.json",
     "test:watch": "jest --config jest.json --watch",
     "test:coverage": "jest --config jest.json --coverage",
+    "discover:startblock:alpha": "node scripts/analytics/find-start-block-alpha-steth.mjs",
+    "print:startblock:alpha": "node -e \"console.log(require('./scripts/analytics/.alpha-start-block.json').alpha_steth)\"",
+    "export:alpha:all": "node scripts/analytics/export-alpha-deposits.mjs",
+    "export:alpha:tg": "node scripts/analytics/export-alpha-deposits.mjs --post-telegram",
+    "export:alpha:limit": "node scripts/analytics/export-alpha-deposits.mjs --limit=100",
+    "test:tg": "node --test scripts/analytics/__tests__/tg-template.test.mjs",
     "test:ci": "jest --config jest.json --coverage --runInBand",
     "test:unit": "jest --config jest.json --testPathPattern=__tests__/components",
     "test:integration": "jest --config jest.json --testPathPattern=__tests__/integration",
@@ -76,7 +82,7 @@
     "framer-motion": "^11.2.10",
     "graz": "^0.0.38",
     "html-react-parser": "^5.2.5",
-    "next": "15.3.2",
+    "next": "15.3.6",
     "next-sanity": "^1.0.0",
     "next-seo": "^5.15.0",
     "node-fetch": "^3.3.2",
@@ -138,15 +144,7 @@
   },
   "private": true,
   "volta": {
-    "node": "22.4.0",
-    "yarn": "1.22.17"
-  },
-  "prettier": {
-    "semi": false,
-    "printWidth": 70,
-    "tabWidth": 2,
-    "useTabs": false,
-    "bracketSpacing": true
+    "node": "22.4.0"
   },
   "pnpm": {
     "overrides": {

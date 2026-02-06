@@ -218,7 +218,8 @@ export const AlphaStethMigrationForm = ({
   // Attribution: helper to send events to ingestion API
   const sendIngest = async (evt: any) => {
     try {
-      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true") return
+      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true")
+        return
       await fetch("/api/ingest-rpc", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -418,11 +419,14 @@ export const AlphaStethMigrationForm = ({
       // Attribution: record deposit initiation
       try {
         const domain = window.location.hostname
-        const pagePath = window.location.pathname + window.location.search
+        const pagePath =
+          window.location.pathname + window.location.search
         const sessionId =
-          localStorage.getItem("somm_session_id") || crypto.randomUUID()
+          localStorage.getItem("somm_session_id") ||
+          crypto.randomUUID()
         localStorage.setItem("somm_session_id", sessionId)
-        const toAddress = (alphaStethConfig.teller?.address || alphaStethConfig.cellar.address) as string
+        const toAddress = (alphaStethConfig.teller?.address ||
+          alphaStethConfig.cellar.address) as string
         await sendIngest({
           stage: "request",
           domain,
@@ -452,6 +456,8 @@ export const AlphaStethMigrationForm = ({
           sourceConfig.baseAsset.address,
           amountOfBaseAsset,
           minimumMint,
+          (alphaStethConfig.teller?.referred ??
+            ZERO_ADDR) as `0x${string}`,
         ],
       })
 
@@ -463,11 +469,14 @@ export const AlphaStethMigrationForm = ({
         // Attribution: record deposit receipt
         try {
           const domain = window.location.hostname
-          const pagePath = window.location.pathname + window.location.search
+          const pagePath =
+            window.location.pathname + window.location.search
           const sessionId =
-            localStorage.getItem("somm_session_id") || crypto.randomUUID()
+            localStorage.getItem("somm_session_id") ||
+            crypto.randomUUID()
           localStorage.setItem("somm_session_id", sessionId)
-          const toAddress = (alphaStethConfig.teller?.address || alphaStethConfig.cellar.address) as string
+          const toAddress = (alphaStethConfig.teller?.address ||
+            alphaStethConfig.cellar.address) as string
           await sendIngest({
             stage: "receipt",
             domain,
@@ -528,11 +537,14 @@ export const AlphaStethMigrationForm = ({
       // Attribution: record deposit error if we were in deposit phase
       try {
         const domain = window.location.hostname
-        const pagePath = window.location.pathname + window.location.search
+        const pagePath =
+          window.location.pathname + window.location.search
         const sessionId =
-          localStorage.getItem("somm_session_id") || crypto.randomUUID()
+          localStorage.getItem("somm_session_id") ||
+          crypto.randomUUID()
         localStorage.setItem("somm_session_id", sessionId)
-        const toAddress = (alphaStethConfig.teller?.address || alphaStethConfig.cellar.address) as string
+        const toAddress = (alphaStethConfig.teller?.address ||
+          alphaStethConfig.cellar.address) as string
         await sendIngest({
           stage: "error",
           domain,

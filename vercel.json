@@ -30,5 +30,8 @@
   "installCommand": "npx pnpm@9 install --no-frozen-lockfile --config.strict-peer-dependencies=false",
   "github": {
     "silent": true
-  }
+  },
+  "crons": [
+    { "path": "/api/daily-telegram", "schedule": "5 6 * * *" }
+  ]
 }
