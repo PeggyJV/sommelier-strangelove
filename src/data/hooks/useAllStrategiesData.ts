@@ -12,6 +12,8 @@ import {
   supportedChains,
 } from "src/data/chainConfig"
 
+const DEBUG_FETCH = process.env.NEXT_PUBLIC_DEBUG_FETCH === "1"
+
 export const useAllStrategiesData = () => {
   const { chain: viemChain } = useAccount()
   const { data: allContracts } = useAllContracts()
@@ -44,6 +46,11 @@ export const useAllStrategiesData = () => {
           setError(error)
         } else {
           setcellarData(data)
+          if (DEBUG_FETCH) {
+            console.log("[strategies] cache hydrate", {
+              cellars: data?.cellars?.length,
+            })
+          }
           // Clear any previous error once data is successfully loaded
           setError(null)
         }
@@ -60,13 +67,25 @@ export const useAllStrategiesData = () => {
     queryFn: async () => {
       return await getAllStrategiesData({
         allContracts: allContracts!,
-        sommPrice: sommPrice!,
+        sommPrice: sommPrice ?? "0",
         cellarData: cellarData,
       })
     },
-    enabled: !!allContracts && !!sommPrice && !!cellarData,
+    enabled: !!allContracts && !!cellarData,
     staleTime: 120_000,
   })
+
+  useEffect(() => {
+    if (DEBUG_FETCH) {
+      console.log("[strategies] query flags", {
+        contracts: !!allContracts,
+        sommPrice: !!sommPrice,
+        cellarData: !!cellarData,
+        enabled: !!allContracts && !!cellarData,
+        error: Boolean(error),
+      })
+    }
+  }, [allContracts, sommPrice, cellarData, error])
 
   return {
     ...query,

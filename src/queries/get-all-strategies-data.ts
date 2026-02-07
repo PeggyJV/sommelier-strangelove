@@ -9,6 +9,8 @@ const getUrl = () => {
   return `/api/sommelier-api-all-strategies-data`
 }
 
+const DEBUG_FETCH = process.env.NEXT_PUBLIC_DEBUG_FETCH === "1"
+
 export const fetchCellarStrategyData = async () => {
   const url = getUrl()
 
@@ -20,6 +22,14 @@ export const fetchCellarStrategyData = async () => {
     }
 
     const result = await data.json()
+    if (DEBUG_FETCH) {
+      const count = result?.result?.data?.cellars?.length ?? 0
+      console.log("[strategies] fetch", {
+        url,
+        status: data.status,
+        count,
+      })
+    }
 
     return result.result
   } catch (error) {
