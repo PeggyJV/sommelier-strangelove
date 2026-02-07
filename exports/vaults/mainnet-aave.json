@@ -1,0 +1,1865 @@
+[
+  {
+    "wallet": "0x24691a00779d375a5447727e1610d327d04b3c5f",
+    "amount": "3498.953000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "3498953000000000000000",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "amount": "1776.847609",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "1776847609752532350127",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe42d15539d9f0a5adab3869369992439ccde39cc",
+    "amount": "100.908000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "100908000477821380904",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x225e9b54f41f44f42150b6aaa730da5f2d23faf2",
+    "amount": "99.982140",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "99982140211954010564",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6b1f634456777a7d52a9f86004fac3b82061decf",
+    "amount": "99.389929",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "99389929576237824652",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa1eed1566f5ec6c1b3985b6fc9f101a68fdb7071",
+    "amount": "60.044228",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "60044228315617752463",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9c9e1710ecd8ce63210b2ee31fc8873a2928216a",
+    "amount": "57.687991",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "57687991715889827175",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8530acf27f4d2b4fa876f2a4879673046f3efc61",
+    "amount": "39.989210",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "39989210999057213104",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x36d6cbd3882deadb90d33913eaf58f78277851b0",
+    "amount": "20.000005",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "20000005000000000000",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x91bcaacf3a997e467c8a16fb8c56a80413d0c207",
+    "amount": "14.621573",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "14621573236382707755",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x80c598191f70b4d7acf7f9418b64206e29d4501c",
+    "amount": "9.993747",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "9993747569678680717",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1243954b4e6aedf4a07e4282d44fd2e9ac502e93",
+    "amount": "8.000394",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "8000394694873214829",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8bad9676be501bed290a505e0bd8549d3b1ee6c7",
+    "amount": "7.382165",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "7382165229332623874",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x685bb42e39286e204f72428d5613bd83694bdc13",
+    "amount": "6.003633",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "6003633318314156709",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x424d1dadd4c6fb32447174d710553f5aca404ce7",
+    "amount": "5.000271",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "5000271210136785336",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb6631e52e513eee0b8c932d7c76f8ccfa607a28e",
+    "amount": "4.999611",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "4999611000000000000",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x07a1f6fc89223c5ebd4e4ddae89ac97629856a0f",
+    "amount": "4.995472",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "4995472939529423309",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4cb8799bc9ea109ea7d829655441a75bca068917",
+    "amount": "3.996239",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "3996239443537247926",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x430cb8a75efa520847e0692859eb8d8fa5b68993",
+    "amount": "2.393872",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "2393872863048552181",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc70c99c1485eccc693e434433edbf5c27f937499",
+    "amount": "0.999827",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "999827461165130181",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6b8a17f179234c552cb6c105e94e5224c80e2f99",
+    "amount": "0.999374",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "999374779795970702",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x86b1f19e354ec120c72bbed3031db87210ee0cc2",
+    "amount": "0.638366",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "638366096818954551",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x77984dc88aab3d9c843256d7aabdc82540c94f69",
+    "amount": "0.504711",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "504711747796513044",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9fc5756eae2b34c19f68958dd3481285baf85820",
+    "amount": "0.500302",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "500302091540377057",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5853ed4f26a3fcea565b3fbc698bb19cdf6deb85",
+    "amount": "0.498824",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "498824983598260001",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8f87c962d0103f41e432d159bb50e369bc078b9e",
+    "amount": "0.249969",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "249969623076669220",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc71e2178e6b331b0f0b6f52173479e6809ea93c1",
+    "amount": "0.003948",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "3948844840427325",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x485f5df0654c8405d6124821e95f093adec1b16b",
+    "amount": "0.003801",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "3801271474177479",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf791da446d04282f921f38fbf954ad5caee899a3",
+    "amount": "0.000991",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "991213955167823",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5d50be2f7eb12f014777b24be0c7170bf48cbed3",
+    "amount": "0.000989",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "989329489757109",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb259ee1751c6f7577520a016150b9bf1dea13399",
+    "amount": "0.000970",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "970547020421344",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xcc21ff19856108d54f983f6cbe2fbe50504af846",
+    "amount": "0.000965",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "965334387726715",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe76d4f0b98755b704053940cb035ce0a1ad36160",
+    "amount": "0.000962",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "962875781924479",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xef66347f3e7355e9532e3ca1821a5731304f7ab4",
+    "amount": "0.000952",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "952560637656881",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7bc0ceafffc2f2322f07c3058ffbcc2fa7c2af7d",
+    "amount": "0.000936",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "936995870590047",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd0d004b4ce867785d9ab4c684f0497680aa7b6ae",
+    "amount": "0.000930",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "930523118462809",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x25faf04c86f59e4e5f640a1a84432bedb3bed6b7",
+    "amount": "0.000919",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "919134723590260",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdadbaaa52c905b4aa2512b74777ba9ab56b8d190",
+    "amount": "0.000902",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "902123632345337",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa55089c2df77a0f6f3657d74bd669533af1e0cdb",
+    "amount": "0.000899",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "899185568032824",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x33d98acbe46f0e3f9d860377981a9f59a986c59e",
+    "amount": "0.000884",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "884206439647152",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa4d315ff2b09bfdbd37628925dacbae5d872b1a0",
+    "amount": "0.000864",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "864459257053215",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc6d3d4439ebf7905482e6065145696fdc111641a",
+    "amount": "0.000846",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "846381230736148",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3d6c1cabe6de911310a7ed6d560c11261a5b5c07",
+    "amount": "0.000845",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "845852028482672",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6c86b9442246ff449eb67b969c4fa51f43253858",
+    "amount": "0.000834",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "834102886717713",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xcf6d47f89861a0463054deb02cf906c4653e3b02",
+    "amount": "0.000830",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "830688848563008",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdd661b78948ed1360fc62b60207709d05cb1bb56",
+    "amount": "0.000827",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "827936577103871",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x45815cd56f2e73e886afd0cc5a547e8b3543cdf4",
+    "amount": "0.000821",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "821717538516178",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8475c6b593d4d88704090f1c548db046b8e4392e",
+    "amount": "0.000820",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "820716987625588",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x82dc92b01c7ff54911842956083795f60f6f64f4",
+    "amount": "0.000808",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "808952749717854",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xfa270de8c80d37aff947e75968f97f3abcb39fb0",
+    "amount": "0.000803",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "803943997839280",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x68082896af481078e6d3867e23aa0e751cbddf45",
+    "amount": "0.000797",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "797666789407676",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf67d9569af280e1f8c1aeb5377ae67659b4881d6",
+    "amount": "0.000797",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "797193634156023",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x20844ce339c0efe2419e7aba6e66311cd678ba61",
+    "amount": "0.000796",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "796857296058759",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x36cfac241210f4b1d35f44a2e52853f0b3272e76",
+    "amount": "0.000793",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "793558873878971",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf2a7594190d0a719f43bb79f90a45414282e0261",
+    "amount": "0.000785",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "785087481992965",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x47da3df522bb332db52ba8363245cb69f258db19",
+    "amount": "0.000773",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "773391258972556",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5f2056890a832cf07489b7d8358e729d6adcf4c3",
+    "amount": "0.000733",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "733029944459325",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x613798d4f81649d505314e4ca305fb161f0b59c8",
+    "amount": "0.000730",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "730938417665851",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x62d51fa08b15411d9429133ae5f224abf3867729",
+    "amount": "0.000727",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "727903657775081",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x466f590dfcb475f12d473a20d3755c06221b9d98",
+    "amount": "0.000715",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "715214069492942",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xebd2929292ee3fced307f91b66698957d862009d",
+    "amount": "0.000700",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "700084145634995",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x60931f62c4a80623df942d0e88feb34c67bcff13",
+    "amount": "0.000694",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "694059285169272",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x637fed24d31822d36a74fd9e35fa5b9f05820ef0",
+    "amount": "0.000680",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "680252278812532",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x580275cf2c0a6ccaf4259f493a32a6b9bc67eb0f",
+    "amount": "0.000667",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "667153782844385",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9325564ade7683706107685cf1993678b1163261",
+    "amount": "0.000666",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "666217779757271",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa42fc4ff23fa47aebaf17230aa01865d2713d6ba",
+    "amount": "0.000658",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "658645793222341",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd2925983502b2f849c96dbe449179e8b09d8c6a7",
+    "amount": "0.000654",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "654407055523567",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4493bb7375442430afccd32733d24ac722595ae6",
+    "amount": "0.000629",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "629830865485009",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xbce338b553195f9ef224f7854e89d4aa75c8b83a",
+    "amount": "0.000628",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "628381824097322",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdaed957ed3d5870b3c28aa31082e5e5ee15a4e0f",
+    "amount": "0.000624",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "624920522252484",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xfe7822b3d238010b17db84a0a7a0f8ab5e9da215",
+    "amount": "0.000594",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "594610457539913",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x707ebd51d691232fd0d7e6bd096203c5e3790b29",
+    "amount": "0.000571",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "571096679811254",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2549e29f14d9f356a69e900032ba33256f9e9761",
+    "amount": "0.000568",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "568762227001584",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf2cd4f73becca0040320ac579d8ac39d996c74f3",
+    "amount": "0.000548",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "548669352946664",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xbe68d5e2fd5bc28757332107197da85c3982785b",
+    "amount": "0.000536",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "536382106036855",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x755bdae53b234c6d1b7be9ce7f316cf8f03f2533",
+    "amount": "0.000532",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "532598970583863",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x56311eecf9141d6135fc5a60f7de7145da6b61e3",
+    "amount": "0.000526",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "526527974228422",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x73240c21424e2e33166bbd42f139b0676c87c440",
+    "amount": "0.000525",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "525983523116450",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc4fb550fa8f2a6e5178711e56d5b48dedf897e5e",
+    "amount": "0.000523",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "523754653280090",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x64d678d0acaffdf72d70dd6549aa44253470fd1d",
+    "amount": "0.000515",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "515970103110013",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1d5e65a087ebc3d03a294412e46ce5d6882969f4",
+    "amount": "0.000514",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "514775579867143",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf5b4635f3858a2bc80a17bd4450e05a35ad99a72",
+    "amount": "0.000513",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "513646843039807",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6169dc3bb62b8d23c195ea8ba782f9db6f565f26",
+    "amount": "0.000503",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "503844072616444",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa71a1d1c9bdde3ad069e13e52590b1d7536f58b5",
+    "amount": "0.000483",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "483966188141020",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6ef3f0ff397c3de367c6ca2cc3e6b6955e7993a5",
+    "amount": "0.000451",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "451499541868040",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4d31a9cefde822f7474a7c019164db1b9067e16f",
+    "amount": "0.000448",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "448181387696698",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5e649b2c67379888ee7e00dfa8655e6f1be44eaa",
+    "amount": "0.000443",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "443012055629186",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8c534ecc397d4c82607aa36e046ac127c2b0e510",
+    "amount": "0.000442",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "442040137265650",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf8adc43642292f385dee0d9cd9373edf3c1d51f2",
+    "amount": "0.000412",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "412338357545170",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7f2fccaf717128bdf5efabd67a8ea9a812d5813e",
+    "amount": "0.000397",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "397268466733781",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xfb349a5c6f61d8bebed0185e21f283c2c3671b27",
+    "amount": "0.000386",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "386158179929279",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd4e26683635bf3dc9ead5f31b935c33cc1ce1838",
+    "amount": "0.000380",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "380940639572299",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x44aac8a5450461b39eabfa1ca0758ff73498d7f9",
+    "amount": "0.000380",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "380682044516556",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x0822558cb4f186ddcd2c2d685bd169808521453c",
+    "amount": "0.000367",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "367276932585326",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa9dc7b2635414f9cab240bfd819614878771d657",
+    "amount": "0.000357",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "357251643617560",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa58341b962c46e905eeafaea7ef809b34d836880",
+    "amount": "0.000310",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "310382791186877",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xef36a85a3bd178cb3e92396e2de423cf2cc9a9cb",
+    "amount": "0.000299",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "299028740396311",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xbc1f0ba3866c429837c8436197b1d3a19470857f",
+    "amount": "0.000287",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "287081821696065",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xae8453d0d4c581dec82dab0ff1c5048690bd6c12",
+    "amount": "0.000286",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "286621469091124",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd02989ed8049e3c21c793871a07d022101aaf0e0",
+    "amount": "0.000285",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "285540844906324",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x45708f3f4399c320073bb457af93e76de84418a4",
+    "amount": "0.000285",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "285250262931004",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6e128af214a89d745e38d8a9bb51d7439abf29d5",
+    "amount": "0.000279",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "279817715019716",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1e18b8b6f27568023e0b577cbee1889391b2f444",
+    "amount": "0.000264",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "264317246136856",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe731dc163d39b9c0db6df0a28a645252e5ca1e3b",
+    "amount": "0.000224",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "224442972581327",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x32a9cd6d2f2fa4f556d04bd6aebd7c459fd47290",
+    "amount": "0.000216",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "216069418868162",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x93fbd628b3360b6beba58c15c4397a235098bb18",
+    "amount": "0.000195",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "195148655431755",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x6780ba11012aa01f2eb0283908672667b6f459d1",
+    "amount": "0.000190",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "190974599818471",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe29999070368edebcb170647d6bfde11b32767a8",
+    "amount": "0.000167",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "167406751107888",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xcd6b1c406e9a8da31162527c40a90343b5bb9cfb",
+    "amount": "0.000164",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "164578372518592",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x0d4f8ecb3140eda5cbdb32459720189e739e5b1b",
+    "amount": "0.000164",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "164175660834741",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x88a769db5055b046c9a45db621978bbec65c8c5b",
+    "amount": "0.000161",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "161433346734373",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5b8f8fb66d4ccaf3c4fb056bf69fbd9c2a0f8d9a",
+    "amount": "0.000154",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "154754346609313",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x71ff8aacae5b7b571c2c64d3a56463c5c59245d9",
+    "amount": "0.000133",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "133328247284218",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x277fd8df0ae60adf7a669232e4cfc1fd665b28b1",
+    "amount": "0.000128",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "128174353016500",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb40e68c381d1ae3a3d2c6e73ad5fc539ebfec4e1",
+    "amount": "0.000122",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "122178847234295",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb80bd21033cc4dcfdc9dfe5ec9e46cabd4128d8d",
+    "amount": "0.000082",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "82013114729247",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xc885bb2e818f0a6ce2b1276f9c0a281a5ecf032d",
+    "amount": "0.000079",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "79022258504772",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe5489a6c50f73da9d2cd4d94f048b62a2b64479c",
+    "amount": "0.000073",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "73866920888878",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb4d099de814810490f601546c15266596f79ea55",
+    "amount": "0.000067",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "67113789700133",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xddfbed7bc0e58fb7c590a8a605d77e0ea5640bc4",
+    "amount": "0.000065",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "65056033821558",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8a71d2b7d3ca2aa535dcf689c66ac68fa36d5b5a",
+    "amount": "0.000060",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "60937678106542",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5505f7442fcbad24f65265c422f8a055993815c4",
+    "amount": "0.000058",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "58606737518968",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf0412b563d892461a74780743e3bf8f2053f991c",
+    "amount": "0.000052",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "52063501492692",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x901a664271fcda5065027edcd339ca50cd9d77f3",
+    "amount": "0.000035",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "35504565866319",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x360fa2900cb094688f5f9c0ce875df56cb8b0639",
+    "amount": "0.000033",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "33702065039088",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xfee076d1b2976430ab3ee7975ef9d2c54c63f27c",
+    "amount": "0.000026",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "26205685356651",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xee836251ee934c3126ac5d9bb29ae9177a6a12e6",
+    "amount": "0.000019",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "19554742873998",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf71ab8e0dd65aabbe6c98b09942dd71249490006",
+    "amount": "0.000008",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "8714087212056",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8459251fb4d229a290145734fa53eea1b4b804f1",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "989881494704",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x096ca3674329bb66dd7cc14d1511dfb7728b9193",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "931207407469",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5733d440749d5cf01c14cdb653613bda8aa6a420",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "927359808284",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x816904bd465542f82cf5918f276d1f1fbadd590b",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "918341005352",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x225c4cfc17d5ee7bf3e682396b12c0f6a7709d7d",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "901409017274",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x68575571e75d2cfa4222e0f8e7053f056eb91d6c",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "877981523870",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5a60d345fb510a6cc230febc83c7ff7016eca0bf",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "877492576534",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa98391a65a1c1edfe0ca4dc01ac91dfe67aaf744",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "871965510834",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x56c1589b0b6899b9d6e9334e98c9d16d8082cd91",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "869134684387",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2bc1ef8e62bb770113a880ce77f4747cd2ebad4c",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "868053062733",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xaa40dadd5b5488bf312ef50e58f08c47b935c316",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "864923600415",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5ab0e4e355b08e692933c1f6f85fd0be56ad18a6",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "863258646049",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x942f42797264377a483a77ba4dec3350066692b8",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "853314679343",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdb6c18087cb71164f9b47981d684e68c697b319e",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "827784800235",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4d05b7d8b81933d1c467ec30ef4d0b7423364d27",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "824560690603",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x102547bd0075f7228f351452f762be6047356814",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "799534414356",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x68f7de23556f357a5a805cb60c957b9dd26b3817",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "785746086063",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x002525a77d262dd11ec63c9146a821b11564ce29",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "785623096442",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xca2a58f421c027e98d41bcb8c4ae019f610dd000",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "782112964968",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7a75789832c4fc67edea0dc8aee186af4d1248b3",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "771267173101",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9a74d3f2ad89fe13bc57bd0a98b0c681a6b8fcad",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "763623433081",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5223c1cea83491af1b05429c64953bc845baeb05",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "744235034176",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3aba956f1782d08413e3bce94bd29644f9f27e73",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "727561297352",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7bfee91193d9df2ac0bfe90191d40f23c773c060",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "694253854704",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x40e202d737d55c8ccd76fa7d48ff2bbb071b2bc1",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "675766778767",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe4acdc9ee4a572c25a14e88d49f08bb625af34c3",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "657390182294",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x035221cf1bdccd8100531b6b6dcc06fa806a88ba",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "645660710090",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb73ec84f2a4f677d1f8271b18dfb3f468c141971",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "635493566275",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3d95c463726b48c5b8cb0db51994acee7b8e5304",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "633915230369",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x5ecd317902402264b5909f7f2c69b1ce8abeadb5",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "631276516430",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x0d146f543a11d8a1753a7bb42ae556915796dbbb",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "628036334489",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x24fb753562a74859f794c7584dac0cd9d44b2cf4",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "621113223456",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8a4b89d76a1a745a4a1adebd3793253fba0adadc",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "574995374102",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf07ba2229b4da47895ce0a4ab4298ad7f8cb3a4d",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "546393754269",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x33328111a0fd6e5cfa13c16970dbe30a3ea6796a",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "535387250708",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xeb413e059f891e003c19333889f3a8480ac9dbd1",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "528566467298",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x40a40469314ca4fd9a075c1ee8a5e5c11ce50bcd",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "508743418057",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x65c8b1562033a324359c1eceb1f4837a642669e7",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "507984673971",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xa9727f5e537ae9f7de91be9fce2de6ea47662a60",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "503431163839",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe7e21d548e8938209aa710ebd468dc02a9573fb3",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "503312797474",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe3bfb07bff98c9a8b16389ca4b20ce9c29853e97",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "496126335518",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb612ec3909f4ba5bda1afe0fe99f4564fa83ac17",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "487393015654",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xf63776dc5cef7aaaaace9dec02d5ee55799d10f0",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "483214590829",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xab7c29868dbebcfbeee4403a95d159f9fc019450",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "463719874264",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x3e832dda8cc879463f8937db8f5aa5399edeb429",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "451066179237",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x2e1bfb63fb937b0d8b5d48983c640677c5cd7eac",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "449552082490",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x77c69844f6ec66c9de349a8bd101f6c9ed4a2436",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "426999726154",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xfbf9e03e87101f28d0ffd59ceaa36b764905fb0e",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "411967508583",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x73d38d824fb2a24d1d888da0e582a850cb34343b",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "384179313731",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1c051112075feaee33bcdbe0984c2bb0db53cf47",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "380927743252",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x471caf57822cbc655a96e482c6f3966e11229d71",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "380425688871",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x687e6c2d22cf5768650d7af7b3d88bfac5d3d498",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "371741491326",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe5479903febb574aae0442c5434897d6825d9977",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "351087874961",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7d166495712d215b002ce358f8988999d404bfb5",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "325928590113",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x525b0a23c59fb5fa1d8e413e2c593741d084de46",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "323812594463",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe601043c33d78eaebc8e27e0436e7a0d11efe1b0",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "303134409467",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x8fac841807e21807f511daf3c04a34cd78661f4c",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "272817636058",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdee6eb47183b933bd3ea57b9f5524bafca1eae17",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "272659401483",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1474bba7c2e92db6e5aa65c14edade26317a06ea",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "263772961044",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xb56498456db9d2232a55dd2b4cdbd07466ab624e",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "260166595596",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd25a859d492fa903c317272bd9ffa48df6974289",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "221571151224",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xdff9b6182f015c4d181aca311df0cd043434e2cb",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "213362640302",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x392027fdc620d397ca27f0c1c3dcb592f27a4dc3",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "200616779805",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xed3c3bffcf147850406d0e58ce4f4ebd2b5cd96c",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "187115556413",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x4f942151474fbc3e2f05c078af594f5046756177",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "153240112110",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x84d6e497b23dddd6ab52efdc5e7c730599f2fce3",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "152260547719",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x841122630fead75986e5ebc3efa0d2d912b34a17",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "123490857939",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x55d07cc3b75046ce1eca0cbcd1b20af8afdec4d5",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "116947782784",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x9fb2f141abba97bb83d68de049e40ca10678af81",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "115863511295",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x15112d4562ad8bb9a884eac558a085c22fea46e4",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "103327703266",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1332f3755f48a9c7f618681ae3bdbe618ddf65d9",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "100424453995",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x770b67b46ce96452e711c77473b7e2d6193560e2",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "94821855167",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xd0c83c8e00ecea3f676b31037ceef97c3609d04b",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "77590126028",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0xe6c6523cd68e73c55958bca91616b109b1ed061b",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "76679074739",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x1ce42d3089498ec4daca4994f17d9c2c8f7493e0",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "59810319413",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x45241edc338c496176e244aff0c6bd69096349e8",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "39893867526",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x19282e37b5319727501e9577d79dbcdf43803883",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "38838779750",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x835c0e46cb45180e9ec9b31a3e3f13b2f486adfb",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "29718654444",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  },
+  {
+    "wallet": "0x7637e64b67dc8689ccc109c6e78517636ea977a3",
+    "amount": "0.000000",
+    "deposit_asset": "aave2-CLR-S",
+    "amountRaw": "10949364448",
+    "assetAddress": "0x7bad5df5e11151dc5ee1a648800057c5c934c0d5",
+    "vault": "AAVE",
+    "chainId": 1
+  }
+]

@@ -43,7 +43,15 @@
     "perf:validate": "pnpm build && pnpm size-limit && pnpm lighthouse",
     "perf:report": "node scripts/generate-perf-report.js",
     "audit:lighthouse:mobile": "node scripts/audits/lighthouse-mobile.js",
-    "export:banners": "playwright install --with-deps && node scripts/export-banners.mjs"
+    "export:banners": "playwright install --with-deps && node scripts/export-banners.mjs",
+    "export:social:alpha-steth-l2": "playwright install --with-deps && node scripts/export-social-alpha-steth-l2.mjs",
+    "export:social:alpha-steth-stats": "playwright install --with-deps && node scripts/export-social-alpha-steth-stats.mjs",
+    "export:vaults": "tsx scripts/analytics/export-active-vaults.ts",
+    "render:stat": "pnpm --filter somm-remotion run render:stat -- --props",
+    "thumb:stat": "pnpm --filter somm-remotion run thumb:stat",
+    "render:one": "pnpm --filter somm-remotion run render:one -- --props",
+    "thumb:one": "pnpm --filter somm-remotion run thumb:one",
+    "render:tweet": "pnpm --filter somm-remotion run render:tweet"
   },
   "dependencies": {
     "@analytics/mixpanel": "^0.4.0",

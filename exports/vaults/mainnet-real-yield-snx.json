@@ -1,0 +1,11 @@
+[
+  {
+    "wallet": "0x65c8b1562033a324359c1eceb1f4837a642669e7",
+    "amount": "4",
+    "deposit_asset": "RYSNX",
+    "amountRaw": "4000000000000000000",
+    "assetAddress": "0xcbf2250f33c4161e18d4a2fa47464520af5216b5",
+    "vault": "Real-Yield-SNX",
+    "chainId": 1
+  }
+]
