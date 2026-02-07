@@ -173,6 +173,8 @@ export const WithdrawQueueForm = ({
     useState<number | null>(null)
   const [contractMaxDiscountBps, setContractMaxDiscountBps] =
     useState<number | null>(null)
+  const [contractSecondsToMaturity, setContractSecondsToMaturity] =
+    useState<number | null>(null)
 
   // Pre-validation of request: simulate on-chain call before enabling Submit
   const [isRequestValid, setIsRequestValid] = useState<
@@ -198,6 +200,7 @@ export const WithdrawQueueForm = ({
       try {
         if (!boringQueue || !selectedToken?.address) {
           setIsWithdrawAllowed(null)
+          setContractSecondsToMaturity(null)
           setContractMinDiscountBps(null)
           setContractMaxDiscountBps(null)
           return
@@ -216,6 +219,8 @@ export const WithdrawQueueForm = ({
         const allow = Array.isArray(res)
           ? Boolean(res[0])
           : Boolean(res)
+        const secondsToMaturity =
+          Array.isArray(res) && res.length > 1 ? Number(res[1]) : null
         const minDiscount =
           Array.isArray(res) && res.length > 3 ? Number(res[3]) : null
         const maxDiscount =
@@ -223,12 +228,14 @@ export const WithdrawQueueForm = ({
 
         console.log("withdrawAssets parsed values:", {
           allow,
+          secondsToMaturity,
           minDiscount,
           maxDiscount,
         })
 
         if (!cancelled) {
           setIsWithdrawAllowed(allow)
+          setContractSecondsToMaturity(secondsToMaturity)
           setContractMinDiscountBps(minDiscount)
           setContractMaxDiscountBps(maxDiscount)
         }
@@ -236,6 +243,7 @@ export const WithdrawQueueForm = ({
         logTxDebug("withdraw.preflight", {
           assetOut: selectedToken.address,
           allow,
+          secondsToMaturity,
           minDiscount,
           maxDiscount,
           rawResponse: res,
@@ -243,6 +251,7 @@ export const WithdrawQueueForm = ({
       } catch (e) {
         if (!cancelled) {
           setIsWithdrawAllowed(null)
+          setContractSecondsToMaturity(null)
           setContractMinDiscountBps(null)
           setContractMaxDiscountBps(null)
         }
@@ -347,26 +356,62 @@ export const WithdrawQueueForm = ({
 
         // Check if approval is needed before simulating
         // Only check if we have a valid amount to avoid unnecessary API calls
-        if (
-          cellarContract &&
-          address &&
-          withdrawAmtInBaseDenom > 0n
-        ) {
+        if (!cellarContract || !address) {
+          console.error("Cannot check approval: missing contract or address", {
+            hasCellarContract: !!cellarContract,
+            hasAddress: !!address,
+          })
+          if (!cancelled) {
+            setIsRequestValid(false)
+            setPreflightMessage(
+              `Unable to validate withdrawal. Please refresh the page and try again.`
+            )
+            setDiscountBpsChosen(null)
+            setEffectiveDeadlineSec(null)
+            setIsValidating(false)
+            setLastValidationKey(validationKey)
+          }
+          return
+        }
+
+        if (withdrawAmtInBaseDenom > 0n) {
           try {
+            const spenderAddress = getAddress(
+              cellarConfig.boringQueue
+                ? cellarConfig.boringQueue.address
+                : cellarConfig.chain.withdrawQueueAddress
+            )
+
+            console.log("Preflight: Checking allowance on contract:", {
+              contractAddress: cellarConfig.cellar.address,
+              contractName: "cellarContract (vault shares)",
+              owner: address,
+              spender: spenderAddress,
+              spenderName: cellarConfig.boringQueue ? "BoringQueue" : "WithdrawQueue",
+            })
+
             const allowance = (await cellarContract.read.allowance([
               address,
-              getAddress(
-                cellarConfig.boringQueue
-                  ? cellarConfig.boringQueue.address
-                  : cellarConfig.chain.withdrawQueueAddress
-              ),
+              spenderAddress,
             ])) as bigint
+
+            console.log("Preflight: Approval check:", {
+              userAddress: address,
+              spenderAddress,
+              allowanceRaw: allowance,
+              allowance: allowance.toString(),
+              allowanceType: typeof allowance,
+              needed: withdrawAmtInBaseDenom.toString(),
+              neededType: typeof withdrawAmtInBaseDenom,
+              comparison: `${allowance.toString()} < ${withdrawAmtInBaseDenom.toString()}`,
+              needsApproval: allowance < withdrawAmtInBaseDenom,
+            })
 
             if (allowance < withdrawAmtInBaseDenom) {
               if (!cancelled) {
                 setIsRequestValid(false)
                 setPreflightMessage(
-                  `Approval required. Click "Withdraw" to approve and proceed.`
+                  `Token approval needed. Click "Withdraw" to approve the contract and proceed with your withdrawal.`
                 )
                 setDiscountBpsChosen(null)
                 setEffectiveDeadlineSec(null)
@@ -376,10 +421,21 @@ export const WithdrawQueueForm = ({
               return
             }
           } catch (approvalCheckError) {
-            console.warn(
-              "Could not check approval, continuing with simulation:",
+            console.error(
+              "Failed to check approval, cannot validate withdrawal:",
               approvalCheckError
             )
+            if (!cancelled) {
+              setIsRequestValid(false)
+              setPreflightMessage(
+                `Unable to check token approval status. Please refresh and try again.`
+              )
+              setDiscountBpsChosen(null)
+              setEffectiveDeadlineSec(null)
+              setIsValidating(false)
+              setLastValidationKey(validationKey)
+            }
+            return
           }
         }
 
@@ -590,6 +646,49 @@ export const WithdrawQueueForm = ({
                 setPreflightMessage(
                   `No active withdraw request found to replace.`
                 )
+              } else if (
+                errorMsg.includes("BoringOnChainQueue__NotMatured")
+              ) {
+                let maturityMsg = `Your deposit is still in the cooldown period. Please wait before withdrawing.`
+                if (
+                  contractSecondsToMaturity !== null &&
+                  contractSecondsToMaturity > 0
+                ) {
+                  const hours = Math.floor(
+                    contractSecondsToMaturity / 3600
+                  )
+                  const minutes = Math.floor(
+                    (contractSecondsToMaturity % 3600) / 60
+                  )
+                  if (hours > 24) {
+                    const days = Math.floor(hours / 24)
+                    const remainingHours = hours % 24
+                    maturityMsg = `Your deposit is in cooldown period. Wait ${days} day${
+                      days !== 1 ? "s" : ""
+                    }${
+                      remainingHours > 0
+                        ? ` and ${remainingHours} hour${
+                            remainingHours !== 1 ? "s" : ""
+                          }`
+                        : ""
+                    } before withdrawing.`
+                  } else if (hours > 0) {
+                    maturityMsg = `Your deposit is in cooldown period. Wait ${hours} hour${
+                      hours !== 1 ? "s" : ""
+                    }${
+                      minutes > 0
+                        ? ` and ${minutes} minute${
+                            minutes !== 1 ? "s" : ""
+                          }`
+                        : ""
+                    } before withdrawing.`
+                  } else if (minutes > 0) {
+                    maturityMsg = `Your deposit is in cooldown period. Wait ${minutes} minute${
+                      minutes !== 1 ? "s" : ""
+                    } before withdrawing.`
+                  }
+                }
+                setPreflightMessage(maturityMsg)
               } else if (errorMsg.includes("insufficient")) {
                 setPreflightMessage(
                   `Insufficient balance or shares to complete this withdrawal.`
@@ -599,7 +698,7 @@ export const WithdrawQueueForm = ({
                 errorMsg.includes("TransferFromFailed")
               ) {
                 setPreflightMessage(
-                  `Token transfer failed. You may need to approve the contract first. Click "Withdraw" to proceed with approval.`
+                  `Token approval needed. Click "Withdraw" to approve the contract and proceed with your withdrawal.`
                 )
               } else {
                 setPreflightMessage(
@@ -637,8 +736,15 @@ export const WithdrawQueueForm = ({
             ?.withdrawTokenConfig?.[
             (selectedToken?.symbol || "") as string
           ]
-          const minPct = rules?.minDiscount
-          const maxPct = rules?.maxDiscount
+          // Use on-chain values if available, otherwise fall back to config
+          const minPct =
+            contractMinDiscountBps !== null
+              ? contractMinDiscountBps / 100
+              : rules?.minDiscount
+          const maxPct =
+            contractMaxDiscountBps !== null
+              ? contractMaxDiscountBps / 100
+              : rules?.maxDiscount
           setPreflightMessage(
             `Discount invalid. Allowed range for ${selectedToken.symbol}: ${minPct}%–${maxPct}%.`
           )
@@ -711,42 +817,99 @@ export const WithdrawQueueForm = ({
       return
     }
 
-    const allowance = (await cellarContract?.read.allowance([
-      address!,
-      getAddress(
-        cellarConfig.boringQueue
-          ? cellarConfig.boringQueue.address
-          : cellarConfig.chain.withdrawQueueAddress
-      ),
-    ])) as bigint
-
-    let needsApproval
-    try {
-      needsApproval = (allowance as bigint) < withdrawAmtInBaseDenom
-    } catch (e) {
-      const error = e as Error
-      console.error("Invalid Input: ", error.message)
+    // Check approval status
+    if (!cellarContract) {
+      console.error("Cannot check approval: cellarContract is null")
+      addToast({
+        heading: "Withdraw Queue",
+        status: "error",
+        body: <Text>Unable to check approval status. Please refresh the page and try again.</Text>,
+        closeHandler: closeAll,
+      })
       return
     }
 
+    const spenderAddress = getAddress(
+      cellarConfig.boringQueue
+        ? cellarConfig.boringQueue.address
+        : cellarConfig.chain.withdrawQueueAddress
+    )
+
+    let allowance: bigint
+    try {
+      console.log("Checking allowance on contract:", {
+        contractAddress: cellarConfig.cellar.address,
+        contractName: "cellarContract (vault shares)",
+        owner: address,
+        spender: spenderAddress,
+        spenderName: cellarConfig.boringQueue ? "BoringQueue" : "WithdrawQueue",
+      })
+
+      allowance = (await cellarContract.read.allowance([
+        address!,
+        spenderAddress,
+      ])) as bigint
+
+      console.log("Approval check in onSubmit:", {
+        userAddress: address,
+        spenderAddress,
+        allowanceRaw: allowance,
+        allowance: allowance.toString(),
+        allowanceType: typeof allowance,
+        needed: withdrawAmtInBaseDenom.toString(),
+        neededType: typeof withdrawAmtInBaseDenom,
+        comparison: `${allowance.toString()} < ${withdrawAmtInBaseDenom.toString()}`,
+        result: allowance < withdrawAmtInBaseDenom,
+      })
+    } catch (e) {
+      const error = e as Error
+      console.error("Failed to check allowance:", error)
+      addToast({
+        heading: "Withdraw Queue",
+        status: "error",
+        body: <Text>Failed to check approval status. Please try again.</Text>,
+        closeHandler: closeAll,
+      })
+      return
+    }
+
+    const needsApproval = allowance < withdrawAmtInBaseDenom
+    console.log("Needs approval:", needsApproval, {
+      allowance: allowance.toString(),
+      needed: withdrawAmtInBaseDenom.toString(),
+      allowanceIsLess: allowance < withdrawAmtInBaseDenom,
+      hasMaxApproval: allowance === MaxUint256,
+    })
+
     if (needsApproval) {
+      console.log("Approval needed, initiating approval transaction")
+      addToast({
+        heading: "ERC20 Approval",
+        status: "default",
+        body: <Text>Requesting approval in wallet...</Text>,
+        isLoading: true,
+        closeHandler: close,
+        duration: null,
+      })
+
       try {
+        console.log("Calling cellarContract.write.approve with:", {
+          spender: spenderAddress,
+          amount: "MaxUint256",
+        })
+
         // @ts-ignore
         const hash = await cellarContract?.write.approve(
-          [
-            getAddress(
-              cellarConfig.boringQueue
-                ? cellarConfig.boringQueue.address
-                : cellarConfig.chain.withdrawQueueAddress
-            ),
-            MaxUint256,
-          ],
+          [spenderAddress, MaxUint256],
           { account: address }
         )
-        addToast({
+
+        console.log("Approval transaction hash:", hash)
+
+        update({
           heading: "ERC20 Approval",
           status: "default",
-          body: <Text>Approving ERC20</Text>,
+          body: <Text>Approving ERC20...</Text>,
           isLoading: true,
           closeHandler: close,
           duration: null,
@@ -760,12 +923,47 @@ export const WithdrawQueueForm = ({
           //   value: depositAmount,
           // })
 
+          console.log("Approval successful, proceeding to withdrawal")
           update({
             heading: "ERC20 Approval",
-            body: <Text>ERC20 Approved</Text>,
+            body: <Text>ERC20 Approved. Proceeding to withdrawal...</Text>,
             status: "success",
-            closeHandler: closeAll,
+            closeHandler: close,
+            duration: 3000,
           })
+
+          // Re-verify allowance after approval
+          try {
+            const newAllowance = (await cellarContract.read.allowance([
+              address!,
+              spenderAddress,
+            ])) as bigint
+            console.log("Allowance after approval:", {
+              newAllowance: newAllowance.toString(),
+              needed: withdrawAmtInBaseDenom.toString(),
+              sufficient: newAllowance >= withdrawAmtInBaseDenom,
+            })
+
+            if (newAllowance < withdrawAmtInBaseDenom) {
+              console.error("Approval succeeded but allowance still insufficient")
+              addToast({
+                heading: "Approval Issue",
+                body: <Text>Approval transaction confirmed but allowance not updated. Please try again.</Text>,
+                status: "error",
+                closeHandler: closeAll,
+              })
+              return
+            }
+          } catch (verifyError) {
+            console.error("Failed to verify allowance after approval:", verifyError)
+            addToast({
+              heading: "Verification Issue",
+              body: <Text>Approval succeeded but unable to verify. Please refresh and try again.</Text>,
+              status: "error",
+              closeHandler: closeAll,
+            })
+            return
+          }
         } else if (result?.error) {
           // analytics.track("deposit.approval-failed", {
           //   ...baseAnalytics,
@@ -779,6 +977,7 @@ export const WithdrawQueueForm = ({
             status: "error",
             closeHandler: closeAll,
           })
+          return
         }
       } catch (e) {
         const error = e as Error
@@ -795,6 +994,7 @@ export const WithdrawQueueForm = ({
           status: "error",
           closeHandler: closeAll,
         })
+        return
       }
     }
 
@@ -809,7 +1009,12 @@ export const WithdrawQueueForm = ({
         isActiveWithdrawRequest,
         boringQueue: !!boringQueue,
         cellarAddress: cellarConfig.cellar.address,
+        secondsToMaturityRequired: contractSecondsToMaturity,
       })
+
+      // Note: contractSecondsToMaturity is the REQUIRED maturity period, not the time remaining.
+      // If shares are actually not matured yet, the transaction will fail with
+      // BoringOnChainQueue__NotMatured error, which is caught below.
 
       // Guard: if boring queue and asset disabled, show UI and stop
       if (boringQueue && isWithdrawAllowed === false) {
@@ -831,10 +1036,16 @@ export const WithdrawQueueForm = ({
         return
       }
 
+      console.log("Starting withdrawal transaction", {
+        hasApproval: !needsApproval || "approval completed",
+      })
+
       let hash = await doWithdrawTx(
         selectedToken,
         withdrawAmtInBaseDenom
       )
+
+      console.log("Withdrawal transaction hash:", hash)
 
       const onSuccess = () => {
         if (onSuccessfulWithdraw) {
@@ -856,10 +1067,40 @@ export const WithdrawQueueForm = ({
       })
     } catch (e) {
       const error = e as Error
-      console.error(error)
+      console.error("Withdrawal transaction error:", error)
+      console.error("Error message:", error.message)
+      console.error("Error cause:", (error as any)?.cause)
+      console.error("Error cause message:", (error as any)?.cause?.message)
 
       if (error.message === "GAS_LIMIT_ERROR") {
         const causeMsg = (error as any)?.cause?.message || ""
+        console.log("GAS_LIMIT_ERROR detected, checking cause message:", causeMsg.substring(0, 200))
+
+        // Check for TRANSFER_FROM_FAILED first as it's the most common issue
+        if (
+          causeMsg.includes("TRANSFER_FROM_FAILED") ||
+          causeMsg.includes("TransferFromFailed")
+        ) {
+          console.error("TRANSFER_FROM_FAILED detected - shares cannot be transferred")
+          addToast({
+            heading: "Unable to Transfer Shares",
+            body: (
+              <Text>
+                Your vault shares cannot be transferred at this time. This is
+                likely because your deposit is still in the maturity period
+                (typically 1 hour). Please wait and try again later.
+              </Text>
+            ),
+            status: "error",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_transfer_from_failed", {
+            assetOut: selectedToken.address,
+            secondsToMaturity: contractSecondsToMaturity,
+          })
+          return
+        }
+
         if (
           causeMsg.includes(
             "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
@@ -886,8 +1127,15 @@ export const WithdrawQueueForm = ({
           const tokenSymbol = (selectedToken?.symbol || "") as string
           const rules: any = (cellarConfig as any)
             ?.withdrawTokenConfig?.[tokenSymbol]
-          const minPct = rules?.minDiscount ?? undefined
-          const maxPct = rules?.maxDiscount ?? undefined
+          // Use on-chain values if available, otherwise fall back to config
+          const minPct =
+            contractMinDiscountBps !== null
+              ? contractMinDiscountBps / 100
+              : rules?.minDiscount ?? undefined
+          const maxPct =
+            contractMaxDiscountBps !== null
+              ? contractMaxDiscountBps / 100
+              : rules?.maxDiscount ?? undefined
           addToast({
             heading: "Withdraw Queue",
             body: (
@@ -906,6 +1154,55 @@ export const WithdrawQueueForm = ({
           })
           return
         }
+        if (causeMsg.includes("BoringOnChainQueue__NotMatured")) {
+          let maturityMsg = `Your deposit is still in the maturity period. Please wait before withdrawing.`
+          if (
+            contractSecondsToMaturity !== null &&
+            contractSecondsToMaturity > 0
+          ) {
+            const hours = Math.floor(contractSecondsToMaturity / 3600)
+            const minutes = Math.floor(
+              (contractSecondsToMaturity % 3600) / 60
+            )
+            if (hours > 24) {
+              const days = Math.floor(hours / 24)
+              const remainingHours = hours % 24
+              maturityMsg = `Your shares are in the maturity period (${contractSecondsToMaturity} seconds required). Please wait at least ${days} day${
+                days !== 1 ? "s" : ""
+              }${
+                remainingHours > 0
+                  ? ` and ${remainingHours} hour${
+                      remainingHours !== 1 ? "s" : ""
+                    }`
+                  : ""
+              } after depositing before withdrawing.`
+            } else if (hours > 0) {
+              maturityMsg = `Your shares are in the maturity period (${contractSecondsToMaturity} seconds required). Please wait at least ${hours} hour${
+                hours !== 1 ? "s" : ""
+              }${
+                minutes > 0
+                  ? ` and ${minutes} minute${minutes !== 1 ? "s" : ""}`
+                  : ""
+              } after depositing before withdrawing.`
+            } else if (minutes > 0) {
+              maturityMsg = `Your shares are in the maturity period (${contractSecondsToMaturity} seconds required). Please wait at least ${minutes} minute${
+                minutes !== 1 ? "s" : ""
+              } after depositing before withdrawing.`
+            }
+          }
+          addToast({
+            heading: "Shares Still Maturing",
+            body: <Text>{maturityMsg}</Text>,
+            status: "info",
+            closeHandler: closeAll,
+          })
+          logTxDebug("withdraw.error_not_matured", {
+            assetOut: selectedToken.address,
+            secondsToMaturity: contractSecondsToMaturity,
+          })
+          return
+        }
+        // TRANSFER_FROM_FAILED is now checked first, above
         addToast({
           heading: "Transaction not submitted",
           body: (
@@ -951,8 +1248,15 @@ export const WithdrawQueueForm = ({
       "") as string
     const configuredRules: any = (cellarConfig as any)
       ?.withdrawTokenConfig?.[tokenSymbolForRules]
-    const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
-    const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
+    // Use on-chain values if available, otherwise fall back to config
+    const minBps =
+      contractMinDiscountBps !== null
+        ? contractMinDiscountBps
+        : Number(configuredRules?.minDiscount ?? 0) * 100
+    const maxBps =
+      contractMaxDiscountBps !== null
+        ? contractMaxDiscountBps
+        : Number(configuredRules?.maxDiscount ?? 0) * 100
     // Our desired default is 25 bps; clamp to per-asset rules if present
     const desiredBps = DISCOUNT_BPS
     // Prefer the pre‑validated/auto‑selected discount if available
@@ -1334,7 +1638,7 @@ export const WithdrawQueueForm = ({
           (boringQueue ? isWithdrawAllowed === false : false) ||
           (boringQueue
             ? isRequestValid === false &&
-              !preflightMessage?.includes("Approval required")
+              !preflightMessage?.includes("approval needed")
             : false) ||
           isValidating
         }
@@ -1345,7 +1649,7 @@ export const WithdrawQueueForm = ({
       >
         {boringQueue &&
         isRequestValid === false &&
-        preflightMessage?.includes("Approval required")
+        preflightMessage?.includes("approval needed")
           ? "Approve & Withdraw"
           : isActiveWithdrawRequest && boringQueue
           ? "Replace Request"
@@ -1371,8 +1675,10 @@ export const WithdrawQueueForm = ({
         isRequestValid === false && (
           <Text
             color={
-              preflightMessage?.includes("Approval required")
+              preflightMessage?.includes("approval needed")
                 ? "blue.300"
+                : preflightMessage?.includes("cooldown period")
+                ? "orange.300"
                 : "yellow.300"
             }
             fontSize="sm"
