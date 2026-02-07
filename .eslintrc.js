@@ -46,6 +46,6 @@ module.exports = {
     "dist/**",
     "build/**",
     ".next/**",
-    "vercel-kv.d..ts"
+    "vercel-kv.d.ts"
   ],
 }

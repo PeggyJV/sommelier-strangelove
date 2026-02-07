@@ -14,7 +14,7 @@
     "<rootDir>/src/__tests__/polyfills.ts",
     "<rootDir>/src/__tests__/mocks/"
   ],
-  "testTimeout": 300000,
+  "testTimeout": 30000,
   "clearMocks": true,
   "restoreMocks": true,
   "transform": {
@@ -40,7 +40,6 @@
     "^queries/(.*)$": "<rootDir>/src/queries/$1",
     "^types/(.*)$": "<rootDir>/src/types/$1",
     "^constants/(.*)$": "<rootDir>/src/constants/$1",
-    "^styles/(.*)$": "<rootDir>/src/styles/$1",
     "^pages/(.*)$": "<rootDir>/src/pages/$1",
     "^api/(.*)$": "<rootDir>/src/pages/api/$1",
     "^src/(.*)$": "<rootDir>/src/$1"

@@ -3,7 +3,7 @@
 Desktop/
 *.csv
 .cache/
-~/Desktop/on-chain-marketing/
+reports/
 
 *.pem
 .DS_Store
@@ -20,6 +20,7 @@ studio/.env.*
 studio/dist
 studio/node_modules
 *.log
+*.tsbuildinfo
 .vscode/
 !.env.example
 .env*.local

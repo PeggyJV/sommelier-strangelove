@@ -11,7 +11,7 @@
     "lint:ci": "mkdir -p reports && eslint . --ext .ts,.tsx --max-warnings 0 -f junit -o reports/eslint-junit.xml",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "typecheck:strict": "tsc --noEmit --project tsconfig.json",
-    "typecheck:scoped": "echo '✅ Typecheck passed - ox library conflicts resolved via skipLibCheck'",
+    "typecheck:scoped": "tsc -p tsconfig.typecheck.json --noEmit",
     "lint:scoped": "eslint --ext .ts,.tsx --quiet src/providers/WagmiClientProvider.tsx src/utils/sortVaults.ts src/utils/wallet/initOnce.ts src/constants/withdraw.ts src/components/_common/Countdown.tsx src/components/_buttons/VaultActionButton.tsx src/components/_vaults/KPIBox.tsx src/components/_sections/TopLaunchBanner.tsx src/components/wallet/NetworkSelector.tsx src/components/_pages/PageHome.tsx src/pages/api/cellar-preview-redeem.ts src/pages/api/coingecko-simple-price.ts src/pages/api/sommelier-api-individual-strat-data.ts src/data/hooks/useCreateContracts.tsx src/data/actions/common/getAllContracts.ts",
     "lint:fix": "next lint --fix",
     "start": "NODE_OPTIONS='--max-old-space-size=4096' next start",

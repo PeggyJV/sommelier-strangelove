@@ -7,9 +7,21 @@
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "paths": {
       "ox": ["src/types/ox/index.d.ts"],
-      "ox/*": ["src/types/ox/wildcard.d.ts"]
+      "ox/*": ["src/types/ox/wildcard.d.ts"],
+      "data/*": ["src/data/*"],
+      "components/*": ["src/components/*"],
+      "context/*": ["src/context/*"],
+      "providers/*": ["src/providers/*"],
+      "hooks/*": ["src/hooks/*"],
+      "pages/*": ["src/pages/*"],
+      "public/*": ["public/*"],
+      "queries/*": ["src/queries/*"],
+      "theme/*": ["src/theme/*"],
+      "types/*": ["src/types/*"],
+      "utils/*": ["src/utils/*"],
+      "i18n/*": ["src/i18n/*"]
     },
-    "moduleResolution": "bundler"
+    "moduleResolution": "node"
   },
   "include": [
     "src/types/**/*.d.ts",
