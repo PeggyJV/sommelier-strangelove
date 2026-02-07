@@ -14,7 +14,7 @@ type MinimalVault = {
 }
 
 // Temporary list of Somm-native slugs. Extend as more in-house vaults are added.
-const SOMM_NATIVE_SLUGS = new Set<string>(["Alpha-stETH"])
+const SOMM_NATIVE_SLUGS = new Set<string>(["Alpha-stETH", "Neutron-BTC-Vault"])
 
 export default async function handler(
   _req: NextApiRequest,

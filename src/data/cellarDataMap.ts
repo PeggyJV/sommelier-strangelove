@@ -38,6 +38,7 @@ import {
   turboezETH,
   realYieldEthScroll,
   alphaSteth,
+  neutronBTCVault,
 } from "./strategies"
 
 let cellarConfig: CellarDataMap
@@ -80,6 +81,7 @@ cellarConfig = {
   [config.CONTRACT.STEADY_ETH.SLUG]: steadyEth,
   [config.CONTRACT.STEADY_BTC.SLUG]: steadyBtc,
   [config.CONTRACT.ALPHA_STETH.SLUG]: alphaSteth,
+  [config.CONTRACT.NEUTRON_BTC_VAULT.SLUG]: neutronBTCVault,
 }
 
 // Create another map of String to CellarData
@@ -140,6 +142,7 @@ cellarAddressConfig = {
   [config.CONTRACT.STEADY_ETH.ADDRESS.toLowerCase()]: steadyEth,
   [config.CONTRACT.STEADY_BTC.ADDRESS.toLowerCase()]: steadyBtc,
   [config.CONTRACT.ALPHA_STETH.ADDRESS.toLowerCase()]: alphaSteth,
+  [config.CONTRACT.NEUTRON_BTC_VAULT.ADDRESS.toLowerCase()]: neutronBTCVault,
 }
 
 export const CellaAddressDataMap = cellarAddressConfig

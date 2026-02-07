@@ -150,8 +150,11 @@ export const PortfolioCard = (props: BoxProps) => {
     ? isFuture(stakingEnd.endDate)
     : false
 
-  const buttonsEnabled =
-    strategyData?.config.chain.wagmiId === wagmiChain?.id
+  // For Neutron BTC Vault, enable buttons based on cellarConfig since strategyData may not load
+  const isNeutronVault = id === utilConfig.CONTRACT.NEUTRON_BTC_VAULT?.SLUG
+  const buttonsEnabled = isNeutronVault
+    ? cellarConfig.chain.wagmiId === wagmiChain?.id
+    : strategyData?.config.chain.wagmiId === wagmiChain?.id
   const isWrongNetwork = Boolean(
     strategyData &&
       strategyData?.config?.chain?.wagmiId !== wagmiChain?.id

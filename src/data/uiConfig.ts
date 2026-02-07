@@ -42,6 +42,9 @@ export const depositAssetDefaultValue = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.ALPHA_STETH) {
     return "WETH"
   }
+  if (config.cellarNameKey === CellarNameKey.NEUTRON_BTC_VAULT) {
+    return "WBTC"
+  }
   return "USDC"
 }
 
@@ -57,7 +60,8 @@ export const isBondedDisabled = (config: ConfigProps) => {
     config.cellarNameKey ===
       CellarNameKey.TURBO_STETH_STETH_DEPOSIT ||
     config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.ALPHA_STETH
+    config.cellarNameKey === CellarNameKey.ALPHA_STETH ||
+    config.cellarNameKey === CellarNameKey.NEUTRON_BTC_VAULT
   )
 }
 

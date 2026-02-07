@@ -216,7 +216,10 @@ export const SommelierTab = ({
   )
 
   const availableAmount = Number(selectedTokenBalance?.formatted ?? 0)
+  // Skip balance check for Neutron BTC Vault (pilot testing)
+  const isNeutronVault = id === config.CONTRACT.NEUTRON_BTC_VAULT?.SLUG
   const insufficientBalance =
+    !isNeutronVault &&
     Number.isFinite(availableAmount) &&
     Number(watchDepositAmount) > availableAmount
   const isDisabled =
@@ -789,9 +792,15 @@ export const SommelierTab = ({
         : String(allowance),
     })
 
+    // Use token decimals from selectedToken config, fallback to selectedTokenBalance, then baseAsset
+    const tokenDecimals =
+      selectedToken?.decimals ??
+      selectedTokenBalance?.decimals ??
+      cellarConfig.baseAsset.decimals ??
+      18
     const amtInWei = parseUnits(
-      depositAmount.toFixed(selectedTokenBalance?.decimals ?? 18),
-      selectedTokenBalance?.decimals ?? 0
+      depositAmount.toFixed(tokenDecimals),
+      tokenDecimals
     )
     logTxDebug("deposit.amountParsed", {
       depositAmount,
