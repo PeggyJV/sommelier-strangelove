@@ -38,9 +38,6 @@
       "public/*": [
         "public/*"
       ],
-      "generated/*": [
-        "src/generated/*"
-      ],
       "queries/*": [
         "src/queries/*"
       ],
@@ -76,6 +73,7 @@
   "include": [
     "env.d.ts",
     "next-env.d.ts",
+    "vercel-kv.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
     "types.d.ts",

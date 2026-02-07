@@ -271,7 +271,7 @@ export const StrategyTable = memo(
                           isSomm && isFirst ? totalColumns : 1
                         return (
                           <BorderTd
-                            {...cell.getCellProps({ colSpan })}
+                            {...cell.getCellProps({ colSpan } as any)}
                             key={indexData}
                             href={href}
                           >
@@ -303,7 +303,7 @@ export const StrategyTable = memo(
                         isSomm && isFirst ? totalColumns : 1
                       return (
                         <BorderTd
-                          {...cell.getCellProps({ colSpan })}
+                          {...cell.getCellProps({ colSpan } as any)}
                           key={indexData}
                           href={href}
                         >
