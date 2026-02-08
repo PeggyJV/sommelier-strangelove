@@ -421,7 +421,7 @@ export const PortfolioCard = (props: BoxProps) => {
                 displaySymbol
               />
             </CardStat>
-            {/* TODO: Verify PNL result */}
+            {/* PNL intentionally hidden until cost-basis data is available. */}
             {/* <CardStat
               label="pnl"
               tooltip={`${

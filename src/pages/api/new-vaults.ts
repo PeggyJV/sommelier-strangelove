@@ -13,6 +13,27 @@ type MinimalVault = {
   apr?: { value: number; formatted: string } | null
 }
 
+type AggregatedCellar = {
+  id?: string
+  tvlTotal?: number | string
+}
+
+type AggregatedResponse = {
+  data?: {
+    cellars?: AggregatedCellar[]
+  }
+}
+
+type CellarMapEntry = {
+  name?: string
+  deprecated?: boolean
+  config?: {
+    chain?: { id?: string }
+    cellar?: { address?: string }
+    lpToken?: { imagePath?: string }
+  }
+}
+
 // Temporary list of Somm-native slugs. Extend as more in-house vaults are added.
 const SOMM_NATIVE_SLUGS = new Set<string>(["Alpha-stETH"])
 
@@ -21,22 +42,25 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const agg = await fetchCellarStrategyData()
+    const agg = (await fetchCellarStrategyData()) as AggregatedResponse
 
     // Map address->tvl from aggregator result (normalize keys to lowercase)
     const tvlByKey: Record<string, number> = {}
-    for (const c of agg?.data?.cellars ?? []) {
+    for (const c of agg.data?.cellars ?? []) {
       // keys in aggregator are address or address-<chain>
       const key = String(c?.id ?? "").toLowerCase()
-      tvlByKey[key] = Number((c as any)?.tvlTotal || 0)
+      tvlByKey[key] = Number(c.tvlTotal || 0)
     }
 
     const result: MinimalVault[] = []
-    for (const [slug, data] of Object.entries(cellarDataMap) as any) {
+    for (const [slug, data] of Object.entries(
+      cellarDataMap as Record<string, CellarMapEntry>
+    )) {
       if (!SOMM_NATIVE_SLUGS.has(slug)) continue
 
       const chainId = data?.config?.chain?.id
       const addr = data?.config?.cellar?.address?.toLowerCase?.()
+      if (!chainId || !addr || !data?.name) continue
       const tvlKey =
         chainId === "ethereum" ? addr : `${addr}-${chainId}`
       const tvlVal = tvlByKey[tvlKey] ?? 0

@@ -136,7 +136,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
         250000,
         address
       )
-      // @ts-ignore
+      // @ts-expect-error -- legacy typing gap
       const hash = await stakerSigner.write.stake(
         [depositAmtInWei, bondPeriod],
         { gas: gasLimitEstimated, account: address }

@@ -189,7 +189,6 @@ export const MerklePoints = ({
               return prefixedProof
             })
         )
-        // @ts-ignore
         const hash = await merkleRewardsContract.write.claim([
           getAddress(userAddress ?? ""),
           rootHashes,
@@ -243,10 +242,10 @@ export const MerklePoints = ({
               duration: null,
             })
           } else {
-            // @ts-ignore
+            // @ts-expect-error -- legacy typing gap
             const code = error.cause.code
             if (code === 4001) {
-              // @ts-ignore
+              // @ts-expect-error -- legacy typing gap
               const message = error.cause.message
               console.error("Claim failed:", error)
 

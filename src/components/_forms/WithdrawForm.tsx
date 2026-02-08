@@ -172,7 +172,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
         address
       )
 
-      // @ts-ignore
+      // @ts-expect-error -- legacy typing gap
       const hash = await cellarSigner?.write.redeem(
         [amtInWei, address, address],
         {

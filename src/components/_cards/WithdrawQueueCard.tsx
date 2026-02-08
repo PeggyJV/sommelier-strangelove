@@ -215,7 +215,7 @@ const WithdrawQueueCard = (props: TableProps) => {
           330000,
           address
         )
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         hash = await boringQueue?.write.cancelOnChainWithdraw(
           [withdrawTouple],
           {

@@ -54,6 +54,22 @@ type RpcEvent = {
   timestampMs: number
 }
 
+type IngestBody = {
+  events?: RpcEvent[]
+  txHash?: string
+  to?: string
+  from?: string
+}
+
+type AttributionCookie = {
+  utm_source?: string
+  utm_medium?: string
+  utm_campaign?: string
+  utm_content?: string
+  referrer?: string
+  session_id?: string
+}
+
 // legacy domain check removed; allowlist below is the single source of truth
 
 function keyEvent(ts: number, id: string) {
@@ -136,18 +152,20 @@ export default async function handler(
     // non-fatal
   }
 
-  const body = req.body
+  const body = req.body as IngestBody | undefined
   if (!body) return res.status(400).end()
 
   // Parse attribution cookie once per request (for UTM/session linking)
-  function getAttrib() {
+  function getAttrib(): AttributionCookie {
     try {
       const cookies = req.headers.cookie || ""
       const m = cookies.match(/somm_attrib=([^;]+)/)
       if (!m) return {}
       const decoded = decodeURIComponent(m[1])
-      const obj = JSON.parse(decoded)
-      return obj && typeof obj === "object" ? obj : {}
+      const obj = JSON.parse(decoded) as unknown
+      return obj && typeof obj === "object"
+        ? (obj as AttributionCookie)
+        : {}
     } catch {
       return {}
     }
@@ -160,24 +178,17 @@ export default async function handler(
       return "none"
     }
   }
-  const attribution = getAttrib() as {
-    utm_source?: string
-    utm_medium?: string
-    utm_campaign?: string
-    utm_content?: string
-    referrer?: string
-    session_id?: string
-  }
+  const attribution = getAttrib()
   let events: RpcEvent[] = []
-  if (Array.isArray((body as any).events)) {
-    events = (body as any).events as RpcEvent[]
-  } else if ((body as any).txHash) {
-    const txHash = String((body as any).txHash)
-    const to = (body as any).to
-      ? String((body as any).to).toLowerCase()
+  if (Array.isArray(body.events)) {
+    events = body.events
+  } else if (body.txHash) {
+    const txHash = String(body.txHash)
+    const to = body.to
+      ? String(body.to).toLowerCase()
       : undefined
-    const wallet = (body as any).from
-      ? String((body as any).from).toLowerCase()
+    const wallet = body.from
+      ? String(body.from).toLowerCase()
       : undefined
     const now = Date.now()
     events = [
@@ -236,7 +247,7 @@ export default async function handler(
 
   // Alpha STETH deposit specialized indexing (by wallet and by block)
   try {
-    const depositWrites: Array<Promise<any>> = []
+    const depositWrites: Array<Promise<unknown>> = []
     for (const evt of events) {
       const isAlphaStethDepositReceipt =
         evt.stage === "receipt" &&

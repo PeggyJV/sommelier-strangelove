@@ -184,7 +184,7 @@ export const Menu = ({
       }}
     >
       <VStack w="100%" spacing={0} align="flex-start">
-        {/* @ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value. */}
+        {/* @ts-expect-error -- legacy typing gap using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value. */}
         <ChMenu offset={["10%", "100%"]} placement="bottom">
           <MenuButton
             as={Box}

@@ -4,6 +4,15 @@ import { CellaAddressDataMap } from "data/cellarDataMap"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
+type SommelierDayData = {
+  unix_seconds: number
+  share_price: number
+}
+
+type SommelierResponse = {
+  Response: SommelierDayData[]
+}
+
 const sommelierAPIAllTimeShareValueData = async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -25,7 +34,7 @@ const sommelierAPIAllTimeShareValueData = async (
       throw new Error("failed to fetch data")
     }
 
-    const fetchedData = await data.json()
+    const fetchedData = (await data.json()) as SommelierResponse
     let chainStr = ''
     if (chain !== "ethereum") {
       chainStr = "-" + chain
@@ -36,7 +45,7 @@ const sommelierAPIAllTimeShareValueData = async (
         .config.cellar.decimals
 
     let transformedData = fetchedData.Response.map(
-      (dayData: any) => ({
+      (dayData: SommelierDayData) => ({
         date: dayData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
@@ -46,7 +55,7 @@ const sommelierAPIAllTimeShareValueData = async (
     )
 
     // Order by descending date
-    transformedData.sort((a: any, b: any) => b.date - a.date)
+    transformedData.sort((a, b) => b.date - a.date)
 
     const formattedResult = {
       result: {

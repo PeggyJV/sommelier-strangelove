@@ -4,6 +4,15 @@ import { CellaAddressDataMap } from "data/cellarDataMap"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
+type SommelierHourData = {
+  unix_seconds: number
+  share_price: number
+}
+
+type SommelierResponse = {
+  Response: SommelierHourData[]
+}
+
 const sommelierAPIHourlyShareValueData = async (
   req: NextApiRequest,
   res: NextApiResponse
@@ -32,13 +41,13 @@ const sommelierAPIHourlyShareValueData = async (
       chainStr = "-" + chain
     }
 
-    const fetchedData = await data.json()
+    const fetchedData = (await data.json()) as SommelierResponse
     let cellarDecimals =
       CellaAddressDataMap[cellarAddress!.toString().toLowerCase() + chainStr]
         .config.cellar.decimals
 
     let transformedData = fetchedData.Response.map(
-      (cellarHourData: any) => ({
+      (cellarHourData: SommelierHourData) => ({
         date: cellarHourData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
@@ -48,7 +57,7 @@ const sommelierAPIHourlyShareValueData = async (
     )
 
     // Order by descending date
-    transformedData.sort((a: any, b: any) => b.date - a.date)
+    transformedData.sort((a, b) => b.date - a.date)
     // Trim off to only be the most recent 7 days
     transformedData = transformedData.splice(0, 7)
 

@@ -774,7 +774,7 @@ export const SommelierTab = ({
       ? Number.MAX_SAFE_INTEGER
       : // For ERC20, check allowance of the selected token to the correct spender
         // BoringVault (Alpha STETH): spender is Teller; Legacy cellar: spender is Cellar
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         await erc20Contract.read.allowance(
           [
             getAddress(address ?? ""),
@@ -985,7 +985,7 @@ export const SommelierTab = ({
         }
         if (isPopUpEnable) {
           props.onClose()
-          //@ts-ignore
+          //@ts-expect-error -- legacy typing gap
           notifyModal?.onOpen()
         }
       } catch (e) {

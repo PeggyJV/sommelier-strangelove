@@ -109,7 +109,7 @@ export const UnstakeForm = ({ onClose }: UnstakeFormProps) => {
     // analytics.track("withdraw.started", analyticsData)
 
     const amtInWei = parseUnits(`${withdrawAmount}`, 18)
-    // @ts-ignore
+    // @ts-expect-error -- legacy typing gap
     const hash = await cellarSigner?.write.redeem(
       [amtInWei, address, address],
       { account: address }

@@ -167,7 +167,7 @@ export const useBridgeEthToSommTx = () => {
       // })
 
       // Check if approval needed
-      // @ts-ignore
+      // @ts-expect-error -- legacy typing gap
       const allowance = await erc20Contract.read.allowance([
         address!,
         getAddress(CONTRACT.BRIDGE.ADDRESS),
@@ -186,7 +186,7 @@ export const useBridgeEthToSommTx = () => {
         })
 
         // ERC20 Approval
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         const erc20Hash = await erc20Contract.write.approve(
           [getAddress(CONTRACT.BRIDGE.ADDRESS), MaxUint256],
           { account: address }
@@ -253,7 +253,7 @@ export const useBridgeEthToSommTx = () => {
       })
       const bytes32asHex = bytesToHex(getBytes32(props.address))
 
-      // @ts-ignore
+      // @ts-expect-error -- legacy typing gap
       const bridgeHash = await bridgeContract?.write.sendToCosmos(
         [
           tokenConfigMap.SOMM_ETHEREUM.address,

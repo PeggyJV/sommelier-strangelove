@@ -1,5 +1,4 @@
 import Analytics from "analytics"
-// @ts-ignore - Missing type definitions for @analytics/mixpanel
 import mixpanel from "@analytics/mixpanel"
 
 const isBrowser = typeof window !== "undefined"
@@ -64,8 +63,11 @@ export class AnalyticsWrapper {
       this.enabled && this.client.track(eventName, payload)
       this.enabled &&
         isSendToGTM &&
-        // @ts-ignore - dataLayer is added by GTM
-        window.dataLayer?.push({ event: eventName, ...payload })
+        (
+          window as Window & {
+            dataLayer?: Array<Record<string, unknown>>
+          }
+        ).dataLayer?.push({ event: eventName, ...payload })
     } catch (error) {
       console.error(error)
     }

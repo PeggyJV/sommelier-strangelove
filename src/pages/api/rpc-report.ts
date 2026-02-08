@@ -1,6 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getJson, zrange } from "src/lib/attribution/kv"
 
+type RpcReportEvent = {
+  timestampMs?: number
+  txHash?: string
+  to?: string
+  wallet?: string
+  domain?: string
+  pagePath?: string
+  method?: string
+  stage?: string
+  amount?: string
+  status?: string
+}
+
 function parseDate(s?: string) {
   if (!s) return null
   const d = new Date(s)
@@ -97,7 +110,7 @@ export default async function handler(
 
   // Collect rows (buffered) to avoid streaming issues on some clients
   const csvRows: string[] = []
-  const jsonRows: any[] = []
+  const jsonRows: RpcReportEvent[] = []
   if (format === "csv") {
     const header = [
       "timestampMs",
@@ -119,12 +132,12 @@ export default async function handler(
     const members = (await zrange(zkey, 0, -1)) as string[]
     if (!members?.length) continue
 
-    const pipeline: Array<Promise<any>> = []
+    const pipeline: Array<Promise<unknown>> = []
     for (const m of members.slice(-limit)) pipeline.push(getJson(m))
     const results = await Promise.all(pipeline)
 
     for (const raw of results) {
-      const evt = raw
+      const evt = raw as RpcReportEvent | null
       if (!evt) continue
       if (domain && evt.domain !== domain) continue
 
@@ -153,4 +166,3 @@ export default async function handler(
     res.json(jsonRows)
   }
 }
-

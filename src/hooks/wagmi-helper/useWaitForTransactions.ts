@@ -70,7 +70,7 @@ export const useWaitForTransaction = ({
 
         let promise: Promise<TransactionReceipt>
         if (config_.wait)
-          { // @ts-ignore
+          { // @ts-expect-error -- legacy typing gap
             promise = config_.wait(config_.confirmations)
           }
         else if (config_.hash)

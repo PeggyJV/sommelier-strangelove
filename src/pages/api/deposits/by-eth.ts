@@ -2,6 +2,26 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { kv } from "@vercel/kv"
 import { getJson } from "src/lib/attribution/kv"
 
+type ZRangeByScoreOptions = {
+  limit: { offset: number; count: number }
+}
+
+type KVSortedClient = {
+  zrange?: (key: string, start: number, stop: number) => Promise<string[]>
+  zrangebyscore?: (
+    key: string,
+    min: string,
+    max: string,
+    opts: ZRangeByScoreOptions
+  ) => Promise<string[]>
+  zrevrangebyscore?: (
+    key: string,
+    max: string,
+    min: string,
+    opts: ZRangeByScoreOptions
+  ) => Promise<string[]>
+}
+
 function normalizeAddress(addr?: string) {
   return (addr || "").toLowerCase()
 }
@@ -30,30 +50,31 @@ export default async function handler(
   // Use Upstash/Vercel KV zrangebyscore to fetch by block range
   let members: string[] = []
   try {
-    const fn: any = (kv as any).zrangebyscore || (kv as any).zrange
+    const kvClient = kv as unknown as KVSortedClient
+    const fn = kvClient.zrangebyscore || kvClient.zrange
     if (!fn) throw new Error("KV client zrangebyscore unavailable")
 
     // If zrangebyscore is unavailable, fall back to full range and filter
-    if ((kv as any).zrangebyscore && order === "asc") {
-      members = (await (kv as any).zrangebyscore(
+    if (kvClient.zrangebyscore && order === "asc") {
+      members = await kvClient.zrangebyscore(
         zkey,
         fromBlockQ,
         toBlockQ,
         {
           limit: { offset: 0, count: limit },
         }
-      )) as string[]
-    } else if ((kv as any).zrevrangebyscore && order === "desc") {
-      members = (await (kv as any).zrevrangebyscore(
+      )
+    } else if (kvClient.zrevrangebyscore && order === "desc") {
+      members = await kvClient.zrevrangebyscore(
         zkey,
         toBlockQ,
         fromBlockQ,
         {
           limit: { offset: 0, count: limit },
         }
-      )) as string[]
+      )
     } else {
-      const all = (await (kv as any).zrange(zkey, 0, -1)) as string[]
+      const all = (await kvClient.zrange?.(zkey, 0, -1)) || []
       // Fallback: if desc, take last N and keep descending order
       members = order === "desc" ? all.slice(-limit).reverse() : all.slice(0, limit)
     }
@@ -69,4 +90,3 @@ export default async function handler(
 
   res.json(records.filter(Boolean))
 }
-

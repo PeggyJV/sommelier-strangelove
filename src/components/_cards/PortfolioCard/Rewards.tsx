@@ -101,7 +101,7 @@ export const Rewards = ({
     }
     // analytics.track("rewards.claim-started")
 
-    // @ts-ignore
+    // @ts-expect-error -- legacy typing gap
     const hash = await stakerSigner?.write.claimAll([], { account: address })
     await doHandleTransaction({
       cellarConfig,

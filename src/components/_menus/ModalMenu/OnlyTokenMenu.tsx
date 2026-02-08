@@ -70,7 +70,6 @@ export const OnlyTokenMenu = ({
         alignItems: "center",
       }}
     >
-      {/* @ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value. */}
       <ChMenu placement="bottom">
         <MenuButton
           as={Box}

@@ -392,6 +392,36 @@ export const isUseBigBacktestingModal = (config: ConfigProps) => {
 // Launch dates and UI toggles
 export const LAUNCH_DATE_ALPHA_STETH = "2025-08-19T00:00:00Z"
 
+const ESTIMATED_APY_KEYS = new Set<CellarNameKey>([
+  CellarNameKey.REAL_YIELD_1INCH,
+  CellarNameKey.REAL_YIELD_ENS,
+  CellarNameKey.REAL_YIELD_SNX,
+  CellarNameKey.REAL_YIELD_UNI,
+  CellarNameKey.TURBO_EETH,
+  CellarNameKey.TURBO_EETHV2,
+  CellarNameKey.TURBO_DIVETH,
+  CellarNameKey.TURBO_ETHX,
+  CellarNameKey.TURBO_RSETH,
+  CellarNameKey.TURBO_EZETH,
+])
+
+const ESTIMATED_APY_CHART_KEYS = new Set<CellarNameKey>([
+  ...ESTIMATED_APY_KEYS,
+  CellarNameKey.TURBO_SOMM,
+  CellarNameKey.REAL_YIELD_ETH_SCROLL,
+  CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT,
+])
+
+const estimatedApyHoverText = (cellarNameKey: CellarNameKey) => {
+  if (cellarNameKey === CellarNameKey.TURBO_SOMM) {
+    return "Estimated Reward APY"
+  }
+  if (ESTIMATED_APY_KEYS.has(cellarNameKey)) {
+    return "Estimated APY"
+  }
+  return "30D MA APY"
+}
+
 export const apyLabel = (config: ConfigProps) => {
   if (
     (config.cellar.key !== CellarKey.CELLAR_V0815 &&
@@ -410,80 +440,25 @@ export const apyLabel = (config: ConfigProps) => {
     : "Net APY"
 }
 
-// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyHoverLabel = (config: ConfigProps) => {
   if (
     config.cellar.key !== CellarKey.CELLAR_V0815 &&
     config.cellar.key !== CellarKey.CELLAR_V0816
   ) {
-    if (
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-      config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-      config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-      config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-      config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
-    ) {
-      return "Estimated APY"
-      // } else if (
-
-      // ) {
-      //   return "7 Day MA APY"
-    } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
-      return "Estimated Reward APY"
-    }
-    return "30D MA APY"
+    return estimatedApyHoverText(config.cellarNameKey)
   }
   return "30D MA APY"
 }
 
-// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const baseApyHoverLabel = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-    config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-    config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI
-  ) {
-    return "Estimated APY"
-    // } else if (
-
-    // ) {
-    //   return "7 Day MA APY"
-  } else if (config.cellarNameKey === CellarNameKey.TURBO_SOMM) {
-    return "Estimated Reward APY"
-  }
-  return "30D MA APY"
+  return estimatedApyHoverText(config.cellarNameKey)
 }
 
-// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const isEstimatedApyEnable = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-    config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-    config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM
-  ) {
-    return true
-  }
-  return false
+  return (
+    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
+    ESTIMATED_APY_KEYS.has(config.cellarNameKey)
+  )
 }
 
 export const isWithdrawQueueEnabled = (config: ConfigProps) => {
@@ -496,30 +471,13 @@ export const isWithdrawQueueEnabled = (config: ConfigProps) => {
   return false
 }
 
-// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const apyChartLabel = (config: ConfigProps) => {
-  if (
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ENS ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_SNX ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_UNI ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETH ||
-    config.cellarNameKey === CellarNameKey.REAL_YIELD_ETH_SCROLL ||
-    config.cellarNameKey === CellarNameKey.TURBO_EETHV2 ||
-    config.cellarNameKey === CellarNameKey.TURBO_SOMM ||
-    config.cellarNameKey === CellarNameKey.TURBO_DIVETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_ETHX ||
-    config.cellarNameKey === CellarNameKey.TURBO_RSETH ||
-    config.cellarNameKey === CellarNameKey.TURBO_EZETH ||
-    config.cellarNameKey ===
-      CellarNameKey.TEST_ARBITRUM_MULTI_ASSET_DEPOSIT
-  ) {
+  if (ESTIMATED_APY_CHART_KEYS.has(config.cellarNameKey)) {
     return "Estimated APY"
   }
   return "Moving Average APY "
 }
 
-// TODO: UPDATE THIS FUNCTION, WEHN THE APY IS AVAILABLE
 export const estimatedApyValue = (config: ConfigProps) => {
   if (config.cellarNameKey === CellarNameKey.REAL_YIELD_1INCH) {
     return {

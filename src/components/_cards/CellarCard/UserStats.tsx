@@ -44,7 +44,7 @@ export const UserStats: React.FC<Props> = ({
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
-      {/* TODO: Verify PNL result */}
+      {/* PNL intentionally hidden until cost-basis data is available. */}
       {/* <Box>
         <Heading
           as="p"

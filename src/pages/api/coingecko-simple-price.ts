@@ -42,7 +42,9 @@ const coinGeckoSimplePrice = async (
       },
     })
     // Safe JSON parse and lookups
-    const result = await data.json().catch(() => null as any)
+    const result = (await data
+      .json()
+      .catch(() => null)) as Record<string, Record<string, unknown>> | null
     const baseObj = result?.[baseId]
     const price =
       baseObj && typeof baseObj === "object" ? baseObj?.[quoteId] : undefined

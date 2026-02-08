@@ -4,13 +4,39 @@ import { CellaAddressDataMap } from "data/cellarDataMap"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
+type SommelierPoint = {
+  unix_seconds: number
+  share_price: number
+  total_assets?: number | string
+  tvl?: number | string
+}
+
+type SommelierSeriesResponse = {
+  Response: SommelierPoint[]
+}
+
+type CellarMapRecord = {
+  config: {
+    cellar: {
+      decimals: number
+    }
+  }
+}
+
+type TransformedPoint = {
+  date: number
+  shareValue: string
+  total_assets?: number | string
+  tvl?: number | string
+}
+
 const fetchData = async (url: string) => {
   try {
     const response = await fetch(url)
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
-    return await response.json()
+    return (await response.json()) as SommelierSeriesResponse
   } catch (error) {
     console.error("Fetch error:", error)
     return null
@@ -69,7 +95,10 @@ export default async function handler(
     }
 
     const key = cellarAddress!.toString().toLowerCase() + chainStr
-    const cellarEntry = (CellaAddressDataMap as any)?.[key]
+    const cellarEntry = (CellaAddressDataMap as Record<
+      string,
+      CellarMapRecord
+    >)?.[key]
     if (!cellarEntry) {
       res.setHeader(
         "Cache-Control",
@@ -89,8 +118,8 @@ export default async function handler(
 
     const cellarDecimals = cellarEntry.config.cellar.decimals
 
-    const transformedDailyData = dailyData.Response.map(
-      (dayData: any) => ({
+    const transformedDailyData: TransformedPoint[] = dailyData.Response.map(
+      (dayData: SommelierPoint) => ({
         date: dayData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
@@ -100,11 +129,11 @@ export default async function handler(
     )
 
     // Order by descending date
-    transformedDailyData.sort((a: any, b: any) => b.date - a.date)
+    transformedDailyData.sort((a, b) => b.date - a.date)
 
     // Do the same for hourly data
-    const transformedHourlyData = hourlyData.Response.map(
-      (hourData: any) => ({
+    const transformedHourlyData: TransformedPoint[] = hourlyData.Response.map(
+      (hourData: SommelierPoint) => ({
         date: hourData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
@@ -116,7 +145,7 @@ export default async function handler(
     )
 
     // Order by descending date
-    transformedHourlyData.sort((a: any, b: any) => b.date - a.date)
+    transformedHourlyData.sort((a, b) => b.date - a.date)
 
     // Guard: if no hourly data, return data_pending instead of 500
     if (

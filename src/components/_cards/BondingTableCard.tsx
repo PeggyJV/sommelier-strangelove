@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import {
   Flex,
   Heading,
@@ -37,7 +37,43 @@ import { FaExternalLinkAlt } from "react-icons/fa"
 import { tokenConfig } from "data/tokenConfig"
 import { useAccount } from "wagmi"
 
-// TODO: This file has incurred substantial tech debt, it just needs to be rewritten from scratch at this point
+type StakeRow = {
+  amount: string | number
+  lock: number
+  unbondTimestamp: number
+}
+
+const updateLoadingSet = (
+  setState: Dispatch<SetStateAction<Set<number>>>,
+  id: number,
+  isLoading: boolean
+) => {
+  setState((oldState) => {
+    const newState = new Set(oldState)
+    if (isLoading) {
+      newState.add(id)
+    } else {
+      newState.delete(id)
+    }
+    return newState
+  })
+}
+
+const formatTimeRemaining = (unbondTimestamp: number): string => {
+  const now = new Date()
+  const unbondTime = new Date(unbondTimestamp * 1000)
+  const differenceDays = differenceInDays(unbondTime, now)
+  const differenceHours = differenceInHours(unbondTime, now) % 24
+  const differenceMinutes = differenceInMinutes(unbondTime, now) % 60
+
+  return `${differenceDays} day${
+    differenceDays !== 1 ? "s" : ""
+  }, ${differenceHours} hour${
+    differenceHours !== 1 ? "s" : ""
+  }, and ${differenceMinutes} minute${
+    differenceMinutes !== 1 ? "s" : ""
+  }`
+}
 
 const formatTrancheNumber = (number: number): string => {
   if (number < 10) {
@@ -89,13 +125,9 @@ const BondingTableCard = (props: TableProps) => {
       return
     }
     try {
-      setUnstakeLoading((oldState) => {
-        const newState = new Set(oldState)
-        newState.add(id)
-        return newState
-      })
+      updateLoadingSet(setUnstakeLoading, id, true)
       // analytics.track("unstake.started")
-      // @ts-ignore
+      // @ts-expect-error -- staker ABI write typing is not yet generated
       const hash = await stakerSigner?.write.unstake([id])
 
       await doHandleTransaction({
@@ -104,18 +136,10 @@ const BondingTableCard = (props: TableProps) => {
         onSuccess: () => analytics.track("unstake.succeeded"),
         onError: () => analytics.track("unstake.failed"),
       })
-      setUnstakeLoading((oldState) => {
-        const newState = new Set(oldState)
-        newState.delete(id)
-        return newState
-      })
+      updateLoadingSet(setUnstakeLoading, id, false)
       refetch()
     } catch (error) {
-      setUnstakeLoading((oldState) => {
-        const newState = new Set(oldState)
-        newState.delete(id)
-        return newState
-      })
+      updateLoadingSet(setUnstakeLoading, id, false)
     }
   }
 
@@ -124,13 +148,9 @@ const BondingTableCard = (props: TableProps) => {
       return
     }
     try {
-      setUnbondLoading((oldState) => {
-        const newState = new Set(oldState)
-        newState.add(id)
-        return newState
-      })
+      updateLoadingSet(setUnbondLoading, id, true)
       // analytics.track("unbond.started")
-      // @ts-ignore
+      // @ts-expect-error -- staker ABI write typing is not yet generated
       const hash = await stakerSigner?.write.unbond([id], {
         account: address
         // gas used around 63000
@@ -143,39 +163,15 @@ const BondingTableCard = (props: TableProps) => {
         onSuccess: () => analytics.track("unbond.succeeded"),
         onError: () => analytics.track("unbond.failed"),
       })
-      setUnbondLoading((oldState) => {
-        const newState = new Set(oldState)
-        newState.delete(id)
-        return newState
-      })
+      updateLoadingSet(setUnbondLoading, id, false)
       refetch()
     } catch (error) {
-      setUnbondLoading((oldState) => {
-        const newState = new Set(oldState)
-        newState.delete(id)
-        return newState
-      })
+      updateLoadingSet(setUnbondLoading, id, false)
     }
   }
 
   const renderBondAction = (unbondTimestamp: number, i: number) => {
-    const now = new Date()
-    const unbondTime = new Date(unbondTimestamp * 1000)
-
-    // Calculate the difference in days, hours, and minutes
-    const differenceDays = differenceInDays(unbondTime, now)
-    const differenceHours = differenceInHours(unbondTime, now) % 24
-    const differenceMinutes =
-      differenceInMinutes(unbondTime, now) % 60
-
-    // Always format the string to display days, hours, and minutes
-    const timeRemaining = `${differenceDays} day${
-      differenceDays !== 1 ? "s" : ""
-    }, ${differenceHours} hour${
-      differenceHours !== 1 ? "s" : ""
-    }, and ${differenceMinutes} minute${
-      differenceMinutes !== 1 ? "s" : ""
-    }`
+    const timeRemaining = formatTimeRemaining(unbondTimestamp)
 
     const canUnstake =
       unbondTimestamp * 1000 < Date.now() &&
@@ -395,7 +391,7 @@ const BondingTableCard = (props: TableProps) => {
           </Thead>
           <Tbody fontWeight="bold">
             {userStakes?.length &&
-              userStakes.map((data: any, i: number) => {
+              userStakes.map((data: StakeRow, i: number) => {
                 const { amount, lock, unbondTimestamp } =
                   data
                 const lockMap = bondingPeriodOptions(cellarConfig)
@@ -443,7 +439,6 @@ const BondingTableCard = (props: TableProps) => {
                     {cellarConfig.customReward?.showBondingRewards ===
                     true ? (
                       <Td>
-                        {/*!!!!!!!! TODO: this needs to be rewritten */}
                         {!cellarConfig.customReward
                           ?.customColumnValue ? (
                           <>
@@ -500,7 +495,6 @@ const BondingTableCard = (props: TableProps) => {
                       </Td>
                     ) : null}
                     <Td>
-                      {/*!!!!!!!! TODO: this needs to be rewritten */}
                       {cellarConfig.customReward?.showSommRewards ||
                       cellarConfig.customReward?.showSommRewards ===
                         undefined ? (

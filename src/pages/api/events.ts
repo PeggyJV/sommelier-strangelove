@@ -15,11 +15,16 @@ const EVENTS_SALT =
   process.env.EVENTS_SALT || "default-salt-change-in-production"
 const PRODUCT_ANALYTICS_WRITE_KEY =
   process.env.PRODUCT_ANALYTICS_WRITE_KEY
+const POSTHOG_HOST = process.env.POSTHOG_HOST || "https://app.posthog.com"
+const POSTHOG_PROJECT_API_KEY = process.env.POSTHOG_PROJECT_API_KEY
+const MIXPANEL_PROJECT_TOKEN = process.env.MIXPANEL_PROJECT_TOKEN
+const GA4_MEASUREMENT_ID = process.env.GA4_MEASUREMENT_ID
+const GA4_API_SECRET = process.env.GA4_API_SECRET
 
 // Event schema validation
 interface AnalyticsEvent {
   event: string
-  properties?: Record<string, any>
+  properties?: Record<string, unknown>
   timestamp?: number
   session_id?: string
   user_id?: string
@@ -42,6 +47,8 @@ interface EnrichedEvent extends AnalyticsEvent {
     session_id?: string
   }
 }
+
+type AttributionData = NonNullable<EnrichedEvent["attribution"]>
 
 // Hash function for privacy-compliant data
 function hashData(data: string, salt: string): string {
@@ -74,7 +81,7 @@ function getClientIP(req: NextApiRequest): string {
 }
 
 // Extract attribution from cookies
-function getAttribution(req: NextApiRequest) {
+function getAttribution(req: NextApiRequest): AttributionData {
   const cookies = req.headers.cookie
   if (!cookies) return {}
 
@@ -83,7 +90,10 @@ function getAttribution(req: NextApiRequest) {
 
   try {
     const decoded = decodeURIComponent(sommAttribMatch[1])
-    return JSON.parse(decoded)
+    const parsed = JSON.parse(decoded) as unknown
+    return parsed && typeof parsed === "object"
+      ? (parsed as AttributionData)
+      : {}
   } catch {
     return {}
   }
@@ -109,14 +119,23 @@ function safeSegment(input?: string): string {
 }
 
 // Validate event schema
-function validateEvent(event: any): event is AnalyticsEvent {
+function validateEvent(event: unknown): event is AnalyticsEvent {
   if (!event || typeof event !== "object") return false
-  if (!event.event || typeof event.event !== "string") return false
-  if (event.properties && typeof event.properties !== "object")
+  const candidate = event as Partial<AnalyticsEvent>
+  if (!candidate.event || typeof candidate.event !== "string") return false
+  if (candidate.properties && typeof candidate.properties !== "object")
     return false
-  if (event.timestamp && typeof event.timestamp !== "number")
+  if (candidate.timestamp && typeof candidate.timestamp !== "number")
     return false
   return true
+}
+
+function readStringProperty(
+  properties: Record<string, unknown> | undefined,
+  key: string
+): string | undefined {
+  const value = properties?.[key]
+  return typeof value === "string" ? value : undefined
 }
 
 // Enrich event with server-side data
@@ -143,9 +162,13 @@ function enrichEvent(
   }
 
   // Hash wallet address if present
-  if (event.properties?.wallet_address) {
+  const walletAddress = readStringProperty(
+    event.properties,
+    "wallet_address"
+  )
+  if (walletAddress) {
     enriched.wallet_hash = hashData(
-      event.properties.wallet_address,
+      walletAddress,
       EVENTS_SALT
     )
     // Remove plaintext wallet address
@@ -158,7 +181,12 @@ function enrichEvent(
 // Optional external forwarding (PostHog/Mixpanel/GA4).
 // Note: Primary persistence is handled via KV in persistAnalyticsEvent().
 async function forwardEvent(event: EnrichedEvent) {
-  if (!PRODUCT_ANALYTICS_WRITE_KEY) {
+  if (
+    !PRODUCT_ANALYTICS_WRITE_KEY &&
+    !POSTHOG_PROJECT_API_KEY &&
+    !MIXPANEL_PROJECT_TOKEN &&
+    !(GA4_MEASUREMENT_ID && GA4_API_SECRET)
+  ) {
     console.log(
       "Analytics: external forwarding disabled; event persisted to KV:",
       event.event
@@ -166,13 +194,86 @@ async function forwardEvent(event: EnrichedEvent) {
     return
   }
 
-  // TODO: Implement forwarding to PostHog, Mixpanel, or GA4
-  // This is a placeholder for the actual implementation
-  console.log(
-    "Analytics: Event would be forwarded:",
-    event.event,
-    event.properties
-  )
+  const distinctId =
+    event.wallet_hash ||
+    event.user_id ||
+    event.session_id ||
+    event.attribution?.session_id ||
+    "anonymous"
+
+  if (POSTHOG_PROJECT_API_KEY || PRODUCT_ANALYTICS_WRITE_KEY) {
+    await fetch(`${POSTHOG_HOST.replace(/\/$/, "")}/capture/`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        api_key: POSTHOG_PROJECT_API_KEY || PRODUCT_ANALYTICS_WRITE_KEY,
+        event: event.event,
+        distinct_id: distinctId,
+        properties: {
+          ...event.properties,
+          ...event.attribution,
+          server_timestamp: event.server_timestamp,
+          build_id: event.build_id,
+          ip_hash: event.ip_hash,
+          user_agent_hash: event.user_agent_hash,
+          wallet_hash: event.wallet_hash,
+        },
+        timestamp: new Date(event.server_timestamp).toISOString(),
+      }),
+    })
+    return
+  }
+
+  if (MIXPANEL_PROJECT_TOKEN) {
+    await fetch("https://api.mixpanel.com/track?verbose=1", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify([
+        {
+          event: event.event,
+          properties: {
+            token: MIXPANEL_PROJECT_TOKEN,
+            distinct_id: distinctId,
+            time: Math.floor(event.server_timestamp / 1000),
+            ...event.properties,
+            ...event.attribution,
+            build_id: event.build_id,
+            ip_hash: event.ip_hash,
+            user_agent_hash: event.user_agent_hash,
+            wallet_hash: event.wallet_hash,
+          },
+        },
+      ]),
+    })
+    return
+  }
+
+  if (GA4_MEASUREMENT_ID && GA4_API_SECRET) {
+    await fetch(
+      `https://www.google-analytics.com/mp/collect?measurement_id=${GA4_MEASUREMENT_ID}&api_secret=${GA4_API_SECRET}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          client_id: distinctId,
+          timestamp_micros: String(event.server_timestamp * 1000),
+          events: [
+            {
+              name: event.event,
+              params: {
+                ...event.properties,
+                ...event.attribution,
+                build_id: event.build_id,
+                ip_hash: event.ip_hash,
+                user_agent_hash: event.user_agent_hash,
+                wallet_hash: event.wallet_hash,
+              },
+            },
+          ],
+        }),
+      }
+    )
+  }
 }
 
 // Persist analytics event and add indices for marketing analytics
@@ -209,8 +310,8 @@ async function persistAnalyticsEvent(event: EnrichedEvent) {
 
   // 4) By page path (if provided in properties)
   const page = safeSegment(
-    (event.properties?.page as string) ||
-      (event.properties?.pagePath as string)
+    readStringProperty(event.properties, "page") ||
+      readStringProperty(event.properties, "pagePath")
   )
   if (page !== "none") {
     await zadd(`analytics:index:page:${page}:${day}`, ts, key)

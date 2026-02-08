@@ -731,7 +731,7 @@ export const WithdrawQueueForm = ({
 
     if (needsApproval) {
       try {
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         const hash = await cellarContract?.write.approve(
           [
             getAddress(
@@ -1006,7 +1006,7 @@ export const WithdrawQueueForm = ({
           address
         )
 
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         hash = await boringQueue?.write.replaceOnChainWithdraw(
           [oldRequestTouple, discount, deadlineSeconds],
           {
@@ -1029,7 +1029,7 @@ export const WithdrawQueueForm = ({
           address
         )
 
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         hash = await boringQueue?.write.requestOnChainWithdraw(
           [
             selectedToken?.address,
@@ -1072,7 +1072,7 @@ export const WithdrawQueueForm = ({
         330000,
         address
       )
-      // @ts-ignore
+      // @ts-expect-error -- legacy typing gap
       hash = await withdrawQueueContract?.write.updateWithdrawRequest(
         [cellarConfig.cellar.address, withdrawTouple],
         {
