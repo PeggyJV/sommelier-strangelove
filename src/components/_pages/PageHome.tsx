@@ -43,7 +43,10 @@ import { useAccount } from "wagmi"
 import { StrategyData } from "data/actions/types"
 import { useUserBalances } from "data/hooks/useUserBalances"
 import { useUserDataAllStrategies } from "data/hooks/useUserDataAllStrategies"
-import { useSommNativeVaults } from "data/hooks/useSommNativeVaults"
+import {
+  useSommNativeVaults,
+  SommNativeListItem,
+} from "data/hooks/useSommNativeVaults"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { config as utilConfig } from "utils/config"
 import TopLaunchBanner from "components/_sections/TopLaunchBanner"
@@ -241,7 +244,7 @@ export const PageHome = () => {
       Object.values(uniqueAssetsMap)
 
     return { uniqueAssetsMap, constantAllUniqueAssetsArray }
-  }, [cellarDataMap])
+  }, [])
 
   // Always float up "WETH", "USDC", "WBTC", "SOMM", "stETH" to the top of the list in that order for the inital render
   const _constantOrderedAllUniqueAssetsArray = useMemo(() => {
@@ -323,6 +326,10 @@ export const PageHome = () => {
     selectedDepositAssets,
     showDeprecated,
     showIncentivised,
+    initialChainIds,
+    initialDepositAssets,
+    initialShowDeprecated,
+    initialShowIncentivised,
   ])
 
   const _resetFilters = useCallback(() => {
@@ -344,7 +351,12 @@ export const PageHome = () => {
         stateSetFunction: setShowDeprecated,
       },
     ])
-  }, [])
+  }, [
+    initialChainIds,
+    initialDepositAssets,
+    initialShowDeprecated,
+    initialShowIncentivised,
+  ])
 
   const strategyData = useMemo(() => {
     const filteredData = data || []
@@ -417,7 +429,7 @@ export const PageHome = () => {
         parseFloat(a?.tvm?.value ?? "")
       )
     })
-  }, [data?.length, userBalances.data, isConnected])
+  }, [data, userBalances.data, isConnected])
 
   const bannerTargetDate: Date =
     alphaSteth.launchDate ??
@@ -429,7 +441,7 @@ export const PageHome = () => {
     const legacy = list.filter((v) => !v?.isSommNative)
 
     // Normalize to util input shape and sort deterministically
-    const mapToSortable = (arr: any[]) =>
+    const mapToSortable = (arr: StrategyData[]) =>
       arr.map((v) => {
         // Find matching user data for this vault
         const userData = userDataAllStrategies?.strategies?.find(
@@ -483,18 +495,17 @@ export const PageHome = () => {
     const preferredSomm =
       Array.isArray(sommNativeMin) && sommNativeMin.length
         ? sortedSomm.map((full) => {
-            const min = (sommNativeMin as any[]).find(
+            const min = (sommNativeMin as SommNativeListItem[]).find(
               (m) => m.slug === full.slug
             )
             return min ? { ...full, tvm: min.tvm } : full
           })
         : sortedSomm
 
-    return { sommNative: preferredSomm as any, legacy: sortedLegacy }
+    return { sommNative: preferredSomm, legacy: sortedLegacy }
   }, [
     strategyData,
     isConnected,
-    userBalances?.data,
     userDataAllStrategies?.strategies,
     sommNativeMin,
   ])

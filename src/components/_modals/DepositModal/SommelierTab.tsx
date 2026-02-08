@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react"
 
 import { useEffect, useState, type JSX } from "react"
-import { FormProvider, useForm } from "react-hook-form"
+import { FieldErrors, FormProvider, useForm } from "react-hook-form"
 import { AiOutlineInfo } from "react-icons/ai"
 import { ModalMenu } from "components/_menus/ModalMenu"
 import {
@@ -35,6 +35,7 @@ import {
   parseUnits,
   getAddress,
   PublicClient,
+  TransactionReceipt,
   zeroAddress,
 } from "viem"
 
@@ -81,6 +82,22 @@ interface DepositModalProps
   extends Pick<ModalProps, "isOpen" | "onClose"> {
   notifyModal?: UseDisclosureProps
 }
+
+type IngestEvent = Record<string, unknown>
+type AlternativeAssetDataTuple = [boolean, unknown, unknown]
+type WriteParams = {
+  address: `0x${string}`
+  abi: readonly unknown[]
+  functionName: string
+  args?: readonly unknown[]
+  value?: bigint
+}
+type WriteDebugParams = Partial<{
+  address: `0x${string}`
+  functionName: string
+  args: readonly unknown[]
+  value: bigint
+}>
 
 //! This handles all deposits, not just the tab
 export const SommelierTab = ({
@@ -143,7 +160,7 @@ export const SommelierTab = ({
   const geo = useGeo()
 
   // Attribution (deposit started/receipt/error): send to ingestion API using Vercel KV backend
-  const sendIngest = async (evt: any) => {
+  const sendIngest = async (evt: IngestEvent) => {
     try {
       if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true")
         return
@@ -284,25 +301,28 @@ export const SommelierTab = ({
     ])
     if (!result) return 0
 
-    const [isSupported, _holdingPosition, depositFeeResult] = result as [boolean, any, any]
+    const [isSupported, _holdingPosition, depositFeeResult] =
+      result as AlternativeAssetDataTuple
 
     return isSupported ? Number(depositFeeResult) : 0
   }
 
   // Helper: wrap writeContractAsync and swallow user-rejected with toast, returning undefined
   const safeWriteContract = async (
-    params: Parameters<typeof writeContractAsync>[0],
+    params: WriteParams,
     context: TransactionErrorContext
   ): Promise<string | undefined> => {
     try {
       logTxDebug("write.request", {
-        to: (params as any)?.address,
-        fn: (params as any)?.functionName,
-        args: (params as any)?.args,
-        value: (params as any)?.value,
+        to: (params as WriteDebugParams)?.address,
+        fn: (params as WriteDebugParams)?.functionName,
+        args: (params as WriteDebugParams)?.args,
+        value: (params as WriteDebugParams)?.value,
         context,
       })
-      const hash = await writeContractAsync(params)
+      const hash = await writeContractAsync(
+        params as Parameters<typeof writeContractAsync>[0]
+      )
       logTxDebug("write.submitted", { hash })
       return hash
     } catch (e) {
@@ -347,9 +367,9 @@ export const SommelierTab = ({
     nativeDeposit: boolean,
     amtInWei: bigint,
     assetAddress: string
-  ): Promise<any> => {
+  ): Promise<(TransactionReceipt | undefined)[]> => {
     let fnName: string
-    let args: any[]
+    let args: readonly unknown[]
     let value: bigint
 
     if (cellarConfig.boringVault) {
@@ -386,9 +406,10 @@ export const SommelierTab = ({
     }
 
     try {
-      const contractParams: any = {
+      const contractParams: WriteParams = {
         address: cellarSigner?.address as `0x${string}`,
-        abi: cellarSigner?.abi ?? cellarConfig.cellar.abi,
+        abi: (cellarSigner?.abi ??
+          cellarConfig.cellar.abi) as readonly unknown[],
         functionName: fnName,
         args: args,
       }
@@ -438,6 +459,7 @@ export const SommelierTab = ({
           throw new Error("Deposit failed")
         }
       }
+      return []
     } catch (error) {
       console.error("Deposit error:", error)
       throw error
@@ -552,7 +574,7 @@ export const SommelierTab = ({
     approval: boolean,
     canDoBatchCall: boolean,
     isNativeDeposit: boolean
-  ): Promise<any[]> => {
+  ): Promise<(TransactionReceipt | undefined)[]> => {
     try {
       let hash: string
 
@@ -565,9 +587,9 @@ export const SommelierTab = ({
 
         if (isNativeDeposit) {
           // Native ETH deposit
-          const tellerParams: any = {
+          const tellerParams: WriteParams = {
             address: cellarConfig.teller.address as `0x${string}`,
-            abi: cellarConfig.teller.abi,
+            abi: cellarConfig.teller.abi as readonly unknown[],
             functionName: "deposit",
             args: [
               tokenAddress,
@@ -590,12 +612,12 @@ export const SommelierTab = ({
         } else {
           // ERC20 token deposit
           hash = (await safeWriteContract(
-            {
-              address: cellarConfig.teller.address as `0x${string}`,
-              abi: cellarConfig.teller.abi,
-              functionName: "deposit",
-              args: [
-                tokenAddress,
+              {
+                address: cellarConfig.teller.address as `0x${string}`,
+                abi: cellarConfig.teller.abi as readonly unknown[],
+                functionName: "deposit",
+                args: [
+                  tokenAddress,
                 amtInWei,
                 minimumMint,
                 referredAddress,
@@ -613,9 +635,9 @@ export const SommelierTab = ({
         // Standard cellar deposit
         if (isNativeDeposit) {
           // Native ETH deposit
-          const cellarParams: any = {
+          const cellarParams: WriteParams = {
             address: cellarConfig.cellar.address as `0x${string}`,
-            abi: cellarConfig.cellar.abi,
+            abi: cellarConfig.cellar.abi as readonly unknown[],
             functionName: "deposit",
             args: [amtInWei, address],
           }
@@ -633,12 +655,12 @@ export const SommelierTab = ({
         } else {
           // ERC20 token deposit
           hash = (await safeWriteContract(
-            {
-              address: cellarConfig.cellar.address as `0x${string}`,
-              abi: cellarConfig.cellar.abi,
-              functionName: "deposit",
-              args: [amtInWei, address],
-            },
+              {
+                address: cellarConfig.cellar.address as `0x${string}`,
+                abi: cellarConfig.cellar.abi as readonly unknown[],
+                functionName: "deposit",
+                args: [amtInWei, address],
+              },
             {
               vaultName: cellarName,
               tokenSymbol: selectedToken?.symbol,
@@ -757,7 +779,7 @@ export const SommelierTab = ({
     }
   }
 
-  const onSubmit = async (data: any, _e: any) => {
+  const onSubmit = async (data: FormValues, _e: unknown) => {
     if (geo?.isRestrictedAndOpenModal()) {
       return
     }
@@ -901,10 +923,8 @@ export const SommelierTab = ({
                   selectedTokenBalance?.decimals ?? 0
                 )
               ),
-              blockNumber: Number(
-                (receipts![0] as any)?.blockNumber ?? 0
-              ),
-              blockHash: (receipts![0] as any)?.blockHash,
+              blockNumber: Number(receipts?.[0]?.blockNumber ?? 0),
+              blockHash: receipts?.[0]?.blockHash,
               status: "success",
               token:
                 tokenSymbol ||
@@ -1072,7 +1092,10 @@ export const SommelierTab = ({
     }
   }
 
-  const onError = async (_errors: any, _e: any) => {
+  const onError = async (
+    _errors: FieldErrors<FormValues>,
+    _e: unknown
+  ) => {
     // try and handle basic cases
     // gasFailure
     // onChain assert

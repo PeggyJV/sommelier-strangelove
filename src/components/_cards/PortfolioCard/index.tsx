@@ -60,6 +60,17 @@ import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 import { WrongNetworkBanner } from "components/_banners/WrongNetworkBanner"
 
+type UserStakesView = Partial<{
+  totalBondedAmount: Partial<{
+    formatted: string
+    value: string | number | bigint
+  }>
+  userStakes: unknown[]
+}>
+
+type NetValueInAssetView = Partial<{ value: number }>
+type StrategyTokenView = Partial<{ token: Partial<{ value: unknown }> }>
+
 export const PortfolioCard = (props: BoxProps) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
@@ -90,7 +101,7 @@ export const PortfolioCard = (props: BoxProps) => {
     lpToken: { address: ZERO_ADDR, imagePath: "" },
     cellar: {
       address: ZERO_ADDR,
-      abi: [] as any,
+      abi: [] as ConfigProps["cellar"]["abi"],
       key: CellarKey.CELLAR_V0816,
       decimals: 18,
     },
@@ -159,9 +170,10 @@ export const PortfolioCard = (props: BoxProps) => {
 
   const netValue = userData?.userStrategyData.userData?.netValue
   const userStakes = userData?.userStakes
+  const userStakesView = userStakes as UserStakesView | undefined
 
   // Calculate combined Net Value (free LP + bonded LP) for legacy vaults
-  const bondedAmount = (userStakes as any)?.totalBondedAmount
+  const bondedAmount = userStakesView?.totalBondedAmount
   const tokenPrice =
     parseFloat((strategyData?.tokenPrice || "0").replace("$", "")) ||
     0
@@ -195,18 +207,20 @@ export const PortfolioCard = (props: BoxProps) => {
     userData?.userStrategyData.userData?.netValueInAsset?.formatted
 
   const baseAssetValueRaw = (
-    userData?.userStrategyData.userData?.netValueInAsset as any
+    userData?.userStrategyData.userData
+      ?.netValueInAsset as NetValueInAssetView | undefined
   )?.value as number | undefined
 
   // Compute fallback ETH amount directly from shares × per-share base-asset value
   const perShareBase = (() => {
-    const raw = (strategyData as any)?.token?.value as unknown
+    const raw = (strategyData as StrategyTokenView | undefined)?.token
+      ?.value
     if (typeof raw === "number") return raw
     const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
     return Number.isFinite(parsed) ? parsed : 0
   })()
   const sharesTokens = (() => {
-    const raw = (lpTokenData as any)?.formatted as unknown
+    const raw = lpTokenData?.formatted as unknown
     const parsed = parseFloat(String(raw ?? "0").replace(/,/g, ""))
     return Number.isFinite(parsed) ? parsed : 0
   })()
@@ -655,7 +669,7 @@ export const PortfolioCard = (props: BoxProps) => {
                       >
                         {isMounted &&
                           (isConnected
-                            ? (userStakes as any)?.totalBondedAmount
+                            ? userStakesView?.totalBondedAmount
                                 ?.formatted || "..."
                             : "--")}
                       </CardStat>
@@ -736,8 +750,8 @@ export const PortfolioCard = (props: BoxProps) => {
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
           <>
-            {(userStakes as any) &&
-              !(userStakes as any).userStakes?.length &&
+            {userStakesView &&
+              !userStakesView.userStakes?.length &&
               stakingEnd?.endDate &&
               isFuture(stakingEnd?.endDate) && (
                 <>
@@ -856,8 +870,8 @@ export const PortfolioCard = (props: BoxProps) => {
               >
                 {isConnected &&
                   Boolean(
-                    (userStakes as any) &&
-                      (userStakes as any).userStakes?.length
+                    userStakesView &&
+                      userStakesView.userStakes?.length
                   ) && <BondingTableCard />}
               </LighterSkeleton>
             )}

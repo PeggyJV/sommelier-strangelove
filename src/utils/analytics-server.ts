@@ -5,7 +5,7 @@
 
 interface AnalyticsEvent {
   event: string
-  properties?: Record<string, any>
+  properties?: Record<string, unknown>
   timestamp?: number
   session_id?: string
   user_id?: string
@@ -92,7 +92,7 @@ class ServerAnalytics {
   }
 
   // Public methods for tracking events
-  async track(event: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async track(event: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.sendEvent({
       event,
       properties: {
@@ -103,7 +103,7 @@ class ServerAnalytics {
     })
   }
 
-  async pageView(page?: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async pageView(page?: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     const pageName = page || (typeof window !== 'undefined' ? window.location.pathname : 'unknown')
     
     return this.track('page_view', {
@@ -112,7 +112,7 @@ class ServerAnalytics {
     })
   }
 
-  async walletConnected(address: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async walletConnected(address: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     this.userId = address
     
     return this.track('wallet_connected', {
@@ -121,27 +121,27 @@ class ServerAnalytics {
     })
   }
 
-  async walletDisconnected(properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async walletDisconnected(properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     this.userId = undefined
     
     return this.track('wallet_disconnected', properties)
   }
 
-  async chainSwitchAttempted(chainId: number, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async chainSwitchAttempted(chainId: number, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('chain_switch_attempted', {
       ...properties,
       chain_id: chainId,
     })
   }
 
-  async chainSwitchSucceeded(chainId: number, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async chainSwitchSucceeded(chainId: number, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('chain_switch_succeeded', {
       ...properties,
       chain_id: chainId,
     })
   }
 
-  async chainSwitchFailed(chainId: number, error: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async chainSwitchFailed(chainId: number, error: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('chain_switch_failed', {
       ...properties,
       chain_id: chainId,
@@ -149,14 +149,14 @@ class ServerAnalytics {
     })
   }
 
-  async tokenSelected(symbol: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async tokenSelected(symbol: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('token_selected', {
       ...properties,
       token_symbol: symbol,
     })
   }
 
-  async amountChanged(amount: string, symbol: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async amountChanged(amount: string, symbol: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('amount_changed', {
       ...properties,
       amount: amount,
@@ -164,51 +164,51 @@ class ServerAnalytics {
     })
   }
 
-  async approveClicked(properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async approveClicked(properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('approve_clicked', properties)
   }
 
-  async approveSubmitted(properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async approveSubmitted(properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('approve_submitted', properties)
   }
 
-  async approveSucceeded(txHash: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async approveSucceeded(txHash: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('approve_succeeded', {
       ...properties,
       tx_hash: txHash,
     })
   }
 
-  async approveRejected(error: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async approveRejected(error: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('approve_rejected', {
       ...properties,
       error: error,
     })
   }
 
-  async depositClicked(properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async depositClicked(properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('deposit_clicked', properties)
   }
 
-  async depositSubmitted(properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async depositSubmitted(properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('deposit_submitted', properties)
   }
 
-  async depositSucceeded(txHash: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async depositSucceeded(txHash: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('deposit_succeeded', {
       ...properties,
       tx_hash: txHash,
     })
   }
 
-  async depositRejected(error: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async depositRejected(error: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('deposit_rejected', {
       ...properties,
       error: error,
     })
   }
 
-  async errorShown(error: string, code?: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async errorShown(error: string, code?: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('error_shown', {
       ...properties,
       error: error,
@@ -216,7 +216,7 @@ class ServerAnalytics {
     })
   }
 
-  async tooltipOpened(tooltipId: string, properties?: Record<string, any>): Promise<AnalyticsResponse> {
+  async tooltipOpened(tooltipId: string, properties?: Record<string, unknown>): Promise<AnalyticsResponse> {
     return this.track('tooltip_opened', {
       ...properties,
       tooltip_id: tooltipId,

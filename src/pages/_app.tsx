@@ -37,6 +37,19 @@ const ReactQueryDevtools = dynamic(
   }
 )
 
+type WalletErrorLike = {
+  message?: string
+  shortMessage?: string
+}
+
+type SommWindow = Window & {
+  __somm_unhandledrejection_handler__?: (
+    event: PromiseRejectionEvent
+  ) => void
+  __somm_error_handler__?: (event: ErrorEvent) => void
+  __somm_console_error__?: typeof console.error
+}
+
 const App = ({ Component, pageProps }: AppProps) => {
   // Create QueryClient inside component to avoid SSR issues
   const [queryClient] = React.useState(
@@ -54,12 +67,14 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   // Suppress unhandled promise rejections for user-rejected wallet actions to avoid dev overlay
   if (typeof window !== "undefined") {
+    const sommWindow = window as SommWindow
     const handler = (event: PromiseRejectionEvent) => {
       try {
-        const reason: any = event?.reason
-        const msg = String(
-          reason?.message || reason?.shortMessage || reason || ""
-        )
+        const reason = event?.reason as WalletErrorLike | string | undefined
+        const msg =
+          typeof reason === "string"
+            ? reason
+            : String(reason?.message || reason?.shortMessage || "")
         if (
           msg.includes("User rejected") ||
           msg.includes("User denied") ||
@@ -71,7 +86,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     }
     const errorHandler = (event: ErrorEvent) => {
       try {
-        const err: any = event?.error
+        const err = event?.error as WalletErrorLike | undefined
         const msg = String(err?.message || event?.message || "")
         if (
           msg.includes("ContractFunctionExecutionError") &&
@@ -84,24 +99,24 @@ const App = ({ Component, pageProps }: AppProps) => {
       } catch {}
     }
     // Ensure we don't add multiple listeners on HMR
-    ;(window as any).__somm_unhandledrejection_handler__ &&
+    sommWindow.__somm_unhandledrejection_handler__ &&
       window.removeEventListener(
         "unhandledrejection",
-        (window as any).__somm_unhandledrejection_handler__
+        sommWindow.__somm_unhandledrejection_handler__
       )
     window.addEventListener("unhandledrejection", handler)
-    ;(window as any).__somm_unhandledrejection_handler__ = handler
-    ;(window as any).__somm_error_handler__ &&
+    sommWindow.__somm_unhandledrejection_handler__ = handler
+    sommWindow.__somm_error_handler__ &&
       window.removeEventListener(
         "error",
-        (window as any).__somm_error_handler__ as any
+        sommWindow.__somm_error_handler__
       )
     window.addEventListener("error", errorHandler)
-    ;(window as any).__somm_error_handler__ = errorHandler
+    sommWindow.__somm_error_handler__ = errorHandler
 
     // Patch console.error to suppress known benign user-rejected messages in dev
     const originalConsoleError = console.error.bind(console)
-    const patched = (...args: any[]) => {
+    const patched: typeof console.error = (...args: unknown[]) => {
       try {
         const text = args
           .map((a) => (a instanceof Error ? a.message : String(a)))
@@ -117,9 +132,9 @@ const App = ({ Component, pageProps }: AppProps) => {
       } catch {}
       originalConsoleError(...args)
     }
-    ;(window as any).__somm_console_error__ &&
-      (console.error = (window as any).__somm_console_error__)
-    ;(window as any).__somm_console_error__ = patched
+    sommWindow.__somm_console_error__ &&
+      (console.error = sommWindow.__somm_console_error__)
+    sommWindow.__somm_console_error__ = patched
     console.error = patched
   }
 

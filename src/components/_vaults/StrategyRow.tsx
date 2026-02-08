@@ -21,6 +21,7 @@ import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
 
 type Vault = {
   name?: string
+  logo?: string
   isSommNative?: boolean
   provider?: { title?: string } | string
   builtWith?: string[]
@@ -29,18 +30,26 @@ type Vault = {
   tvm?: { formatted?: string }
   baseApySumRewards?: { value?: number | string; formatted?: string }
   config?: {
-    chain?: { displayName?: string; id?: string }
+    chain?: { displayName?: string; id?: string; logoPath?: string }
     cellar?: { address?: string }
   }
   slug?: string
 }
 
+type UserStrategyDataView = Partial<{
+  userStrategyData: Partial<{
+    userData: Partial<{
+      netValue: Partial<{ formatted: string }>
+    }>
+  }>
+}>
+
 export default function StrategyRow({ vault }: { vault: Vault }) {
   const { setIsOpen } = useDepositModalStore()
   const providerText =
-    (vault?.provider as any)?.title ||
-    (vault?.provider as string) ||
-    ""
+    typeof vault?.provider === "string"
+      ? vault.provider
+      : vault?.provider?.title || ""
   const _built = Array.isArray(vault?.builtWith)
     ? vault?.builtWith
     : []
@@ -57,14 +66,15 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     return formatAlphaStethNetApyNoApprox(raw)
   })()
   const chainLabel = vault?.config?.chain?.displayName ?? "—"
-  const chainLogo = (vault as any)?.config?.chain?.logoPath
+  const chainLogo = vault?.config?.chain?.logoPath
   const launchDate = vault?.launchDate
     ? new Date(vault.launchDate)
     : undefined
+  const launchDateMs = launchDate?.getTime()
 
   const isPreLaunch = useMemo(() => {
-    return !!launchDate && Date.now() < launchDate.getTime()
-  }, [launchDate?.getTime?.()])
+    return typeof launchDateMs === "number" && Date.now() < launchDateMs
+  }, [launchDateMs])
 
   // User net value (reuse manage page logic via hook)
   const strategyAddress = vault?.config?.cellar?.address
@@ -81,8 +91,9 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     // Gate by connection status implicitly via hook (enabled flag)
     !!strategyAddress && !!strategyChainId
   )
-  const netValueFmt: string | undefined = (userStratData as any)
-    ?.userStrategyData?.userData?.netValue?.formatted
+  const netValueFmt =
+    (userStratData as UserStrategyDataView | undefined)
+      ?.userStrategyData?.userData?.netValue?.formatted
 
   const safeValue = (v?: string | number | null) =>
     v === undefined || v === null || v === "" ? "–" : v
@@ -90,9 +101,9 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
   // Helper text countdown (compact). Updates every second, rendered once below button
   const [remaining, setRemaining] = useState<string>("")
   useEffect(() => {
-    if (!launchDate) return
+    if (typeof launchDateMs !== "number") return
     const tick = () => {
-      const ms = launchDate.getTime() - Date.now()
+      const ms = launchDateMs - Date.now()
       if (ms <= 0) {
         setRemaining("")
         return
@@ -111,7 +122,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
     tick()
     const id = setInterval(tick, 1000)
     return () => clearInterval(id)
-  }, [launchDate?.getTime?.()])
+  }, [launchDateMs])
 
   const oneLineDesc = vault?.description?.length
     ? vault.description
@@ -149,7 +160,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             src={
               vault?.isSommNative
                 ? "/assets/icons/alpha-steth.png"
-                : (vault as any)?.logo
+                : vault?.logo
             }
             alt={vault?.name || "Vault"}
             boxSize={{ base: "32px", md: "40px" }}
@@ -269,7 +280,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
             <ConnectGate
               fallbackLabel="Connect wallet to deposit"
               fullWidth
-              overrideChainId={(vault as any)?.config?.chain?.id}
+              overrideChainId={vault?.config?.chain?.id}
             >
               {isPreLaunch ? (
                 <ActionButton
