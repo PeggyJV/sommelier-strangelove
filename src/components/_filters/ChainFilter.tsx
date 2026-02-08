@@ -72,7 +72,11 @@ export const ChainFilter = memo((props: ChainFilterProps) => {
     setCheckedStates(newCheckedStates)
   }, [props.selectedChainIds])
 
-  const ChainAvatar = memo(({ chainStr }: { chainStr: string }) => {
+  const ChainAvatar = memo(function ChainAvatar({
+    chainStr,
+  }: {
+    chainStr: string
+  }) {
     const chain = chainConfigMap[chainStr]
     return (
       <Avatar
@@ -87,26 +91,30 @@ export const ChainFilter = memo((props: ChainFilterProps) => {
       />
     )
   })
+  ChainAvatar.displayName = "ChainAvatar"
 
-  const NetworkDisplay = memo(() => (
-    <HStack spacing={2}>
-      <Text fontSize={"1.25em"}>Networks</Text>
-      <HStack justifyContent={"center"}>
-        <AvatarGroup size="sm" dir="reverse" max={5}>
-          {props.selectedChainIds
-            .slice(0, 5)
-            .map((chainStr: string) => (
-              <ChainAvatar key={chainStr} chainStr={chainStr} />
-            ))}
-        </AvatarGroup>
-        {props.selectedChainIds.length > 5 && (
-          <Text fontWeight={600}>
-            +{props.selectedChainIds.length - 5}
-          </Text>
-        )}
+  const NetworkDisplay = memo(function NetworkDisplay() {
+    return (
+      <HStack spacing={2}>
+        <Text fontSize={"1.25em"}>Networks</Text>
+        <HStack justifyContent={"center"}>
+          <AvatarGroup size="sm" dir="reverse" max={5}>
+            {props.selectedChainIds
+              .slice(0, 5)
+              .map((chainStr: string) => (
+                <ChainAvatar key={chainStr} chainStr={chainStr} />
+              ))}
+          </AvatarGroup>
+          {props.selectedChainIds.length > 5 && (
+            <Text fontWeight={600}>
+              +{props.selectedChainIds.length - 5}
+            </Text>
+          )}
+        </HStack>
       </HStack>
-    </HStack>
-  ))
+    )
+  })
+  NetworkDisplay.displayName = "NetworkDisplay"
 
   return (
     <Popover placement="bottom" isLazy>
@@ -200,5 +208,5 @@ export const ChainFilter = memo((props: ChainFilterProps) => {
       </PopoverContent>
     </Popover>
   )
-}
-)
+})
+ChainFilter.displayName = "ChainFilter"

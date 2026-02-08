@@ -11,7 +11,7 @@ const normName = (s?: string) => (s ?? "").toLowerCase()
 export function sortVaultsForMainPage(
   vaults: any[],
   opts: { connected: boolean }
-) {
+){
   const byTVL = (v: any) => parseMoneyString(v.tvl)
   const byNV = (v: any) => coerceNetValue(v.netValue)
 

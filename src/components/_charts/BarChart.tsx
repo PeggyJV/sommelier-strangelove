@@ -1,13 +1,13 @@
 import { FC } from "react"
-import { BarSvgProps, ResponsiveBar } from "@nivo/bar"
+import { BarDatum, BarSvgProps, ResponsiveBar } from "@nivo/bar"
 import { ToolTip } from "./BarToolTip"
 
-const BarChart: FC<BarSvgProps<any>> = ({ data, ...rest }) => {
+const BarChart: FC<BarSvgProps<BarDatum>> = ({ data, ...rest }) => {
   return (
     <ResponsiveBar
       data={data}
       enableLabel={false}
-      tooltip={ToolTip as any}
+      tooltip={ToolTip}
       {...rest}
     />
   )

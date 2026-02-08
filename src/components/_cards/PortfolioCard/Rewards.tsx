@@ -17,6 +17,13 @@ import { useImportToken } from "hooks/web3/useImportToken"
 import { analytics } from "utils/analytics"
 import { useAccount } from "wagmi"
 
+type UserStakesView = Partial<{
+  totalClaimAllRewards: Partial<{
+    value: bigint | number | string
+    formatted: string
+  }>
+}>
+
 export const Rewards = ({
   cellarConfig,
 }: {
@@ -32,11 +39,10 @@ export const Rewards = ({
   const { stakerSigner } = useCreateContracts(cellarConfig)
   const { addToast, close } = useBrandedToast()
   const { address } = useAccount()
+  const userStakesView = userStakes as UserStakesView | undefined
 
-  let buttonsEnabled = true
-  if (cellarConfig.chain.wagmiId !== wagmiChain?.id!) {
-    buttonsEnabled = false
-  }
+  const buttonsEnabled =
+    cellarConfig.chain.wagmiId === wagmiChain?.id
 
   const importToken = useImportToken({
     onSuccess: (data) => {
@@ -60,7 +66,7 @@ export const Rewards = ({
   })
 
   const userRewards =
-    (userStakes as any)?.totalClaimAllRewards?.value.toString()
+    userStakesView?.totalClaimAllRewards?.value?.toString()
 
   const claimAllDisabled =
     !isConnected ||
@@ -189,7 +195,7 @@ export const Rewards = ({
                   {isMounted &&
                     (cellarConfig.customReward?.customRewardMessage ??
                       (isConnected
-                        ? (userStakes as any)?.totalClaimAllRewards
+                        ? userStakesView?.totalClaimAllRewards
                             ?.formatted || "..."
                         : "--"))}
                 </Text>
@@ -214,7 +220,7 @@ export const Rewards = ({
                 <Text textAlign="center">
                   {isMounted &&
                     (isConnected
-                      ? (userStakes as any)?.totalClaimAllRewards?.formatted ||
+                      ? userStakesView?.totalClaimAllRewards?.formatted ||
                         "..."
                       : "--")}
                 </Text>

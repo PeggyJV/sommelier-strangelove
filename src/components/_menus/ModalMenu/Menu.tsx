@@ -34,7 +34,7 @@ import {
 export interface MenuProps
   extends Omit<ModalMenuProps, "setSelectedToken"> {
   value: Token
-  onChange: (...events: any[]) => void
+  onChange: (value: Token) => void
 }
 
 export const Menu = ({
@@ -150,7 +150,7 @@ export const Menu = ({
     }
 
     fetchAndUpdateBalance()
-  }, [rawDepositAmount])
+  }, [rawDepositAmount, selectedToken])
 
   const [searchTerm, setSearchTerm] = useState("")
 

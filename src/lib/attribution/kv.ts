@@ -80,7 +80,14 @@ export async function zrange(
   start: number,
   end: number
 ) {
-  const client: any = kv as any
+  const client = kv as unknown as {
+    zrange?: (key: string, start: number, end: number) => Promise<string[]>
+    zrangebyscore?: (
+      key: string,
+      min: string,
+      max: string
+    ) => Promise<string[]>
+  }
   if (typeof client.zrange === "function") {
     return (await client.zrange(key, start, end)) as string[]
   }

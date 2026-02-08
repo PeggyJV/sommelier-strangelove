@@ -31,6 +31,11 @@ export const YourPortofolio = () => {
       formatted: formatted ?? "0",
     }
   }
+  const getBondedTokenValue = (strategy: {
+    userStakes?:
+      | { totalBondedAmount?: { value?: bigint | number | string } }
+      | null
+  }) => Number(strategy.userStakes?.totalBondedAmount?.value ?? 0)
 
   return (
     <VStack spacing="32px" w="full" mt={16}>
@@ -97,8 +102,7 @@ export const YourPortofolio = () => {
                           ""
                         }
                         bondedToken={Number(
-                          (strategy?.userStakes as any)?.totalBondedAmount
-                            ?.value ?? 0
+                          getBondedTokenValue(strategy)
                         )}
                         key={
                           strategy.userStrategyData.strategyData?.name

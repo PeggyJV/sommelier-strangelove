@@ -103,7 +103,9 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
 
   if (!data) return null
 
-  const handleChange = (val: number | number[]) => {
+  const handleChange: NonNullable<AccordionProps["onChange"]> = (
+    val
+  ) => {
     if (Array.isArray(val)) setExpandedIndex(val)
     else setExpandedIndex([val])
   }
@@ -113,7 +115,7 @@ export const FAQAccordion: React.FC<Props> = ({ data, ...rest }) => {
       allowMultiple
       borderColor="purple.dark"
       index={expandedIndex}
-      onChange={handleChange as any}
+      onChange={handleChange}
       {...rest}
     >
       {data.map((item, index) => {

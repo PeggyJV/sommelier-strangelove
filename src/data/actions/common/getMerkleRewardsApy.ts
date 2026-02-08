@@ -11,7 +11,7 @@ const OP_TOKENS_IN_PERIOD = 5000
 const PERIOD_DAYS = 7
 
 export const getMerkleRewardsApy = async (
-  cellarContract: any,
+  cellarContract: unknown,
   cellarConfig: ConfigProps
 ) => {
   let tokenPrice;
@@ -41,10 +41,13 @@ export const getMerkleRewardsApy = async (
     100
 }
 const fetchTotalValueStaked = async (
-  cellarContract: any
+  cellarContract: unknown
 ) => {
   try {
-    const totalAssets = await cellarContract.read.totalAssets()
+    const contract = cellarContract as {
+      read: { totalAssets: () => Promise<bigint> }
+    }
+    const totalAssets = await contract.read.totalAssets()
     return totalAssets
   } catch (error) {
     console.error("Failed to fetch total value staked:", error)

@@ -17,9 +17,23 @@ import { useAccount } from "wagmi"
 import { BaseButton } from "./BaseButton"
 import { SecondaryButton } from "./SecondaryButton"
 import { useState } from "react"
+import { coerceNetValue, parseMoneyString } from "utils/money"
+
+type DepositAndWithdrawRowOriginal = {
+  slug?: string
+  deprecated?: boolean
+  isContractNotReady?: boolean
+  launchDate?: string | number
+  name?: string
+  tvm?: { value?: string | number | null }
+  netValue?: string | number | null
+  userStrategyData?: {
+    userData?: { netValue?: string | number | null }
+  }
+}
 
 type DepositAndWithdrawButtonProps = {
-  row: any
+  row: unknown
   onDepositModalOpen: (arg: {
     id: string
     type: DepositModalType
@@ -35,11 +49,9 @@ const checkLPtokenDisabled = (lpTokenData: LPDataType | undefined) =>
   !lpTokenData ||
   Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <= 0
 
-import { coerceNetValue, parseMoneyString } from "utils/money"
-
 const checkHasValueInVault = (
-  lpTokenData: LPDataType | undefined,
-  netValue: any
+  _lpTokenData: LPDataType | undefined,
+  netValue: string | number | null | undefined
 ) => {
   // For main page: Only enable withdrawal if Net Value > 0
   const nv = coerceNetValue(netValue)
@@ -49,7 +61,9 @@ const checkHasValueInVault = (
   return hasNetValue
 }
 
-const checkIsBeforeLaunch = (launchDate: string | undefined) => {
+const checkIsBeforeLaunch = (
+  launchDate: string | number | undefined
+) => {
   const date = new Date(launchDate as string)
   return isBefore(date, new Date())
 }
@@ -95,7 +109,9 @@ const checkButtonDisabled = (
 const getButtonText = (
   isDeprecated: boolean,
   lpTokenDisabled: boolean,
-  cellarConfig: any,
+  cellarConfig:
+    | (typeof cellarDataMap)[string]["config"]
+    | undefined,
   id: string
 ) => {
   if (isDeprecated) {
@@ -111,12 +127,17 @@ const getButtonText = (
 }
 
 const getButtonType = (
-  cellarConfig: any,
+  cellarConfig:
+    | (typeof cellarDataMap)[string]["config"]
+    | undefined,
   id: string,
   isDeprecated: boolean
 ): "withdraw" | "deposit" | "migrate" => {
   // Legacy vaults should never show deposit buttons
   if (isDeprecated) {
+    return "withdraw"
+  }
+  if (!cellarConfig) {
     return "withdraw"
   }
 
@@ -137,32 +158,37 @@ export function DepositAndWithdrawButton({
   row,
   onDepositModalOpen,
 }: DepositAndWithdrawButtonProps) {
-  const id = row?.original?.slug
+  const rowOriginal = (
+    row as { original?: DepositAndWithdrawRowOriginal }
+  )?.original
+  const id = rowOriginal?.slug
   const cellarConfig = id ? cellarDataMap[id]?.config : undefined
-  const { lpToken } = useUserBalance(cellarConfig as any)
+  const { lpToken } = useUserBalance(
+    cellarConfig as Parameters<typeof useUserBalance>[0]
+  )
   const { data: lpTokenData } = lpToken
 
   // Get net value from row data (main page data structure)
   // The main page data doesn't include userStrategyData, so we need to check differently
   const netValue =
-    row.original?.netValue ||
-    row.original?.userStrategyData?.userData?.netValue
+    rowOriginal?.netValue ||
+    rowOriginal?.userStrategyData?.userData?.netValue
 
   const lpTokenDisabled = checkLPtokenDisabled(lpTokenData)
   const hasValueInVault = checkHasValueInVault(lpTokenData, netValue)
 
   const { isConnected, chain } = useAccount()
   const isBeforeLaunch = checkIsBeforeLaunch(
-    row?.original?.launchDate
+    rowOriginal?.launchDate
   )
   const [isOracleModalOpen, setOracleModalOpen] = useState(false)
   const closeOracleModal = () => setOracleModalOpen(false)
 
   const buttonText = getButtonText(
-    Boolean(row?.original?.deprecated),
+    Boolean(rowOriginal?.deprecated),
     lpTokenDisabled,
     cellarConfig,
-    id as string
+    id ?? ""
   )
 
   const isWithdrawButton = buttonText === "Withdraw"
@@ -170,14 +196,14 @@ export function DepositAndWithdrawButton({
   // Debug logging for withdrawal button logic
   if (
     process.env.NEXT_PUBLIC_DEBUG_SORT === "1" &&
-    row.original?.name?.includes("Real Yield ETH")
+    rowOriginal?.name?.includes("Real Yield ETH")
   ) {
     console.log("Withdrawal button debug:", {
-      name: row.original?.name,
+      name: rowOriginal?.name,
       netValue: netValue,
       coerceNetValue: coerceNetValue(netValue),
       hasValueInVault: hasValueInVault,
-      isDeprecated: row.original?.deprecated,
+      isDeprecated: rowOriginal?.deprecated,
       buttonText: buttonText,
       isWithdrawButton: buttonText === "Withdraw",
     })
@@ -189,7 +215,7 @@ export function DepositAndWithdrawButton({
       {process.env.NEXT_PUBLIC_DEBUG_SORT === "1" && (
         <div className="text-xs opacity-60">
           nv={coerceNetValue(netValue)} tvl=
-          {parseMoneyString(row.original?.tvm?.value)} connected=
+          {parseMoneyString(rowOriginal?.tvm?.value)} connected=
           {String(Boolean(isConnected))}
         </div>
       )}
@@ -198,13 +224,13 @@ export function DepositAndWithdrawButton({
         bg="surface.bg"
         color="neutral.300"
         label={
-          row.original.deprecated
+          rowOriginal?.deprecated
             ? "Vault Deprecated"
             : "Connect your wallet first"
         }
         shouldWrapChildren
         display={checkDisplay(
-          row.original.deprecated,
+          Boolean(rowOriginal?.deprecated),
           lpTokenDisabled,
           isConnected,
           isBeforeLaunch
@@ -213,8 +239,8 @@ export function DepositAndWithdrawButton({
         {isWithdrawButton ? (
           <SecondaryButton
             disabled={checkButtonDisabled(
-              row.original?.isContractNotReady,
-              row.original.deprecated,
+              rowOriginal?.isContractNotReady,
+              Boolean(rowOriginal?.deprecated),
               lpTokenDisabled,
               hasValueInVault,
               isConnected,
@@ -240,21 +266,22 @@ export function DepositAndWithdrawButton({
               //  return
               //}
 
-              if (row.original.deprecated) {
+              if (rowOriginal?.deprecated && rowOriginal?.slug) {
                 onDepositModalOpen({
-                  id: row.original.slug,
+                  id: rowOriginal.slug,
                   type: "withdraw",
                 })
                 return
               }
+              if (!rowOriginal?.slug) return
               onDepositModalOpen({
-                id: row.original.slug,
+                id: rowOriginal.slug,
                 type: getButtonType(
                   cellarConfig,
-                  id as string,
-                  Boolean(row?.original?.deprecated)
-                ),
-              })
+                  id ?? "",
+                  Boolean(rowOriginal?.deprecated)
+                  ),
+                })
             }}
             data-testid="withdraw-btn"
           >
@@ -263,8 +290,8 @@ export function DepositAndWithdrawButton({
         ) : (
           <BaseButton
             disabled={checkButtonDisabled(
-              row.original?.isContractNotReady,
-              row.original.deprecated,
+              rowOriginal?.isContractNotReady,
+              Boolean(rowOriginal?.deprecated),
               lpTokenDisabled,
               hasValueInVault,
               isConnected,
@@ -291,21 +318,22 @@ export function DepositAndWithdrawButton({
               //  return
               //}
 
-              if (row.original.deprecated) {
+              if (rowOriginal?.deprecated && rowOriginal?.slug) {
                 onDepositModalOpen({
-                  id: row.original.slug,
+                  id: rowOriginal.slug,
                   type: "withdraw",
                 })
                 return
               }
+              if (!rowOriginal?.slug) return
               onDepositModalOpen({
-                id: row.original.slug,
+                id: rowOriginal.slug,
                 type: getButtonType(
                   cellarConfig,
-                  id as string,
-                  Boolean(row?.original?.deprecated)
-                ),
-              })
+                  id ?? "",
+                  Boolean(rowOriginal?.deprecated)
+                  ),
+                })
             }}
             data-testid="deposit-btn"
           >

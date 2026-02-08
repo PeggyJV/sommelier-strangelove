@@ -1,5 +1,6 @@
 // src/lib/wagmi.ts
 import { http, createConfig } from "wagmi"
+import type { Connector } from "wagmi"
 import { mainnet, arbitrum, base, optimism } from "wagmi/chains"
 import {
   coinbaseWallet,
@@ -34,7 +35,9 @@ let connectors = connectorsForWallets(
 )
 
 if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true") {
-  connectors = (connectors as any).map((c: any) => wrapConnector(c))
+  connectors = connectors.map((c) =>
+    wrapConnector(c as unknown as Connector) as unknown as typeof c
+  )
 }
 
 function getContext() {

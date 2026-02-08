@@ -16,7 +16,7 @@ import {
 } from "utils/wallet/initOnce"
 
 export const WalletDebugInfo: React.FC = () => {
-  const [debugInfo, setDebugInfo] = useState<any>(null)
+  const [debugInfo, setDebugInfo] = useState<unknown>(null)
   const { isOpen, onToggle } = useDisclosure()
 
   const refreshDebugInfo = () => {
@@ -61,7 +61,7 @@ export const WalletDebugInfo: React.FC = () => {
             </Button>
           </HStack>
 
-          {debugInfo && (
+          {Boolean(debugInfo) && (
             <Box p={2} bg="gray.50" borderRadius="md">
               <Code fontSize="xs" whiteSpace="pre-wrap">
                 {JSON.stringify(debugInfo, null, 2)}

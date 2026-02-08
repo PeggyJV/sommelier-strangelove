@@ -5,7 +5,7 @@ import {
 } from "@tanstack/react-query"
 
 // Deprecated: server-side Wagmi configuration moved to client-only provider to avoid ESM crashes
-export const wagmiConfig = undefined as any
+export const wagmiConfig: undefined = undefined
 
 export const QueryProvider = ({
   children,

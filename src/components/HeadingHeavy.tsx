@@ -1,8 +1,8 @@
 import { Heading, HeadingProps } from "@chakra-ui/react"
-import { ReactElement } from "react"
+import { ReactNode } from "react"
 
 interface Props extends HeadingProps {
-  children: string | ReactElement<any> | ReactElement<any>[] | undefined
+  children: ReactNode
 }
 
 export const HeadingHeavy: React.FC<Props> = ({

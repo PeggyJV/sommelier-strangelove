@@ -641,7 +641,7 @@ let acceptedARBDepositTokens = [
 // --- OPTIMISM ACCEPTED TOKENS ---
 let acceptedOPTDepositTokens = ["WETH", "wstETH", "rETH", "ETH"]
 
-const acceptedDepositTokensByChain: { [key: string]: any } = {
+const acceptedDepositTokensByChain: Record<string, string[]> = {
   ethereum: acceptedETHDepositTokens,
   arbitrum: acceptedARBDepositTokens,
   optimism: acceptedOPTDepositTokens,

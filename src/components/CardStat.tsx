@@ -14,7 +14,7 @@ interface CardStatProps extends StackProps {
   label?: ReactNode
   labelProps?: TextProps
   tooltip?: ReactNode
-  statIcon?: any
+  statIcon?: unknown
 }
 
 export const CardStat: FC<CardStatProps> = ({

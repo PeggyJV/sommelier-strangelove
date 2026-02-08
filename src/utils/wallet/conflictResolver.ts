@@ -106,7 +106,7 @@ export function getConflictResolutionInstructions(): string[] {
 }
 
 // Get debug information about wallet providers
-export function getProviderDebugInfo(): any {
+export function getProviderDebugInfo(): unknown {
   if (typeof window === "undefined") return { error: "Not in browser" }
 
   try {

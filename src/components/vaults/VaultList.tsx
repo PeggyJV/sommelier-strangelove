@@ -1,11 +1,20 @@
 import { useMemo } from "react"
 import { VStack } from "@chakra-ui/react"
-import { sortVaults } from "utils/sortVaults"
+import { sortVaults, Vault } from "utils/sortVaults"
 import LegacyVaultCard from "components/_vaults/LegacyVaultCard"
 import StrategyRow from "components/_vaults/StrategyRow"
 import { useAccount } from "wagmi"
 
-export default function VaultList({ vaults }: { vaults: any[] }) {
+type VaultListItem = Vault & {
+  isSommNative?: boolean
+  slug?: string
+  tvm?: { value?: number | string; formatted?: string }
+  userStrategyData?: {
+    userData?: { netValue?: { value?: number | string } }
+  }
+}
+
+export default function VaultList({ vaults }: { vaults: VaultListItem[] }) {
   const { isConnected } = useAccount()
   const sorted = useMemo(
     () =>

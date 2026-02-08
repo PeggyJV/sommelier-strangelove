@@ -222,3 +222,5 @@ export const Nav = memo((props: FlexProps) => {
     </Flex>
   )
 })
+
+Nav.displayName = "Nav"

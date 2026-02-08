@@ -22,10 +22,11 @@ export default function ActionAccessGate({
           Wallet not connected
         </VisuallyHidden>
         <ConnectButton
-          children={"Connect wallet to withdraw"}
           size="lg"
           w={fullWidth ? "100%" : undefined}
-        />
+        >
+          Connect wallet to withdraw
+        </ConnectButton>
       </Box>
     )
   }

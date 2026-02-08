@@ -317,4 +317,7 @@ export interface HomeWithImages
   sectionStrategies: SectionStrategiesWithImages
 }
 
-type Code = any
+type Code = {
+  _type: "code"
+  [key: string]: unknown
+}

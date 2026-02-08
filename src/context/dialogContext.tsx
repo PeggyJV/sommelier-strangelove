@@ -2,15 +2,15 @@ import { createContext, FC, ReactNode, useContext, useState } from "react"
 
 export interface DialogContext {
   title?: string
-  body?: any
+  body?: ReactNode
   isOpen?: boolean
-  openDialog: (title?: string, body?: any) => void
+  openDialog: (title?: string, body?: ReactNode) => void
   onClose: () => void
 }
 
 const defaultContext: DialogContext = {
   title: '',
-  body: '',
+  body: null,
   onClose: () => {},
   openDialog: () => {}
 }
@@ -20,12 +20,12 @@ export const dialogContext = createContext<DialogContext>(defaultContext)
 export const DialogProvider: FC<{ children: ReactNode; }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [title, setTitle] = useState<string>()
-  const [body, setBody] = useState<string>()
+  const [body, setBody] = useState<ReactNode>()
 
-  const openDialog = (title?: string, body?: any) => {
+  const openDialog = (title?: string, body?: ReactNode) => {
     setIsOpen(true)
     setTitle(title)
-    if (body) setBody(body)
+    if (body !== undefined) setBody(body)
   }
 
   const onClose = () => setIsOpen(false)

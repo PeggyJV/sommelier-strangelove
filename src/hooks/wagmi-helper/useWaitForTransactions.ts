@@ -22,7 +22,7 @@ export type Config = {
    */
   timeout?: number
   /** Function resolving to transaction receipt */
-  wait?: Object
+  wait?: (confirmations?: number) => Promise<TransactionReceipt>
 }
 
 type State = {
@@ -70,9 +70,7 @@ export const useWaitForTransaction = ({
 
         let promise: Promise<TransactionReceipt>
         if (config_.wait)
-          { // @ts-expect-error -- legacy typing gap
-            promise = config_.wait(config_.confirmations)
-          }
+          promise = config_.wait(config_.confirmations)
         else if (config_.hash)
           promise = publicClient!.waitForTransactionReceipt({
               confirmations: config_.confirmations,

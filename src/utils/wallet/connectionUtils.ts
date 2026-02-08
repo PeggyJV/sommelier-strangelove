@@ -48,9 +48,9 @@ export function waitForWalletReady(): Promise<void> {
 
 // Safe wallet connection with retry logic
 export async function safeWalletConnect(
-  connectFn: () => Promise<any>,
+  connectFn: () => Promise<unknown>,
   maxRetries: number = 3
-): Promise<any> {
+): Promise<unknown> {
   let lastError: Error | null = null
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {

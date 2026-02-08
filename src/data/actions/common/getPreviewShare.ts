@@ -2,12 +2,15 @@ export const getPreviewRedeem = async ({
   cellarContract,
   value,
 }: {
-  cellarContract: any
+  cellarContract: unknown
   value?: string
 }) => {
   if (!value) return
   try {
-    const shares = await cellarContract.read.previewRedeem([value])
+    const contract = cellarContract as {
+      read: { previewRedeem: (args: [string]) => Promise<bigint> }
+    }
+    const shares = await contract.read.previewRedeem([value])
     return {
       value: shares,
     }

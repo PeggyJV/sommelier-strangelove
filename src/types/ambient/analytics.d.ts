@@ -1,3 +1,4 @@
 declare module "@vercel/analytics/react" {
-  export const Analytics: any
+  import { FC } from "react"
+  export const Analytics: FC
 }

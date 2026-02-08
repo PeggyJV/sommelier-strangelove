@@ -49,7 +49,8 @@ export const ApyRewardsSection: FC<ApyRewardsSectionProps> = (
 
   if (stackingEndDate === undefined) {
     endDate =
-      cellarConfig.customReward?.stakingDurationOverride?.getTime()!
+      cellarConfig.customReward?.stakingDurationOverride?.getTime() ??
+      endDate
   }
 
   const startDate = subDays(endDate, 30).getTime()

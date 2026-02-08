@@ -18,11 +18,11 @@ import {
 } from "data/hooks/useDepositModalStore"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useUserBalance } from "data/hooks/useUserBalance"
+import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { toEther } from "utils/formatCurrency"
 import { useAccount, useSwitchChain } from "wagmi"
 import { useRouter } from "next/router"
 import ConnectGate from "components/wallet/ConnectGate"
-import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import ChainSwitcherInline from "components/network/ChainSwitcherInline"
 import ActionButton from "components/ui/ActionButton"
 import { coerceNetValue, parseMoneyString } from "utils/money"
@@ -34,10 +34,26 @@ type StrategyLike = {
   provider?: { title?: string } | string
   tvm?: { value?: number | string; formatted?: string }
   baseApySumRewards?: { value?: number | string; formatted?: string }
-  config?: { chain?: { displayName?: string; id?: string } }
+  config?: {
+    chain?: { displayName?: string; id?: string; logoPath?: string }
+  }
   status?: "active" | "paused" | "withdrawals-only"
   deprecated?: boolean
 }
+
+type UserStrategyDataView = Partial<{
+  userStrategyData: Partial<{
+    userData: Partial<{
+      netValue: Partial<{ formatted: string }>
+    }>
+    strategyData: Partial<{
+      tokenPrice: string
+    }>
+  }>
+  userStakes: Partial<{
+    totalBondedAmount: Partial<{ formatted: string }>
+  }>
+}>
 
 export default function LegacyVaultCard({
   vault,
@@ -49,9 +65,9 @@ export default function LegacyVaultCard({
   const router = useRouter()
   const { setIsOpen } = useDepositModalStore()
   const providerText =
-    (vault?.provider as any)?.title ||
-    (vault?.provider as string) ||
-    ""
+    typeof vault?.provider === "string"
+      ? vault.provider
+      : vault?.provider?.title || ""
   const tvl = vault?.tvm?.formatted ?? "–"
   const netValueNum =
     typeof vault?.baseApySumRewards?.value === "string"
@@ -59,7 +75,7 @@ export default function LegacyVaultCard({
       : (vault?.baseApySumRewards?.value as number | undefined)
   const netFormatted = vault?.baseApySumRewards?.formatted ?? "–"
   const chainName = vault?.config?.chain?.displayName ?? "Ethereum"
-  const chainLogo = (vault as any)?.config?.chain?.logoPath
+  const chainLogo = vault?.config?.chain?.logoPath
   const _status: "active" | "paused" | "withdrawals-only" =
     vault?.status ?? (vault?.deprecated ? "paused" : "paused")
 
@@ -68,7 +84,10 @@ export default function LegacyVaultCard({
   const cellarConfig = vault?.slug
     ? cellarDataMap[vault.slug]?.config
     : undefined
-  const { lpToken } = useUserBalance(cellarConfig as any, enabled)
+  const { lpToken } = useUserBalance(
+    cellarConfig as Parameters<typeof useUserBalance>[0],
+    enabled
+  )
   const { data: lpTokenData } = lpToken
   const { switchChainAsync } = useSwitchChain()
   const desiredChainId = cellarConfig?.chain?.wagmiId
@@ -84,23 +103,26 @@ export default function LegacyVaultCard({
   )
 
   // Use user's actual net value for withdrawal logic, not the display net value
+  const userStratDataView = userStratData as UserStrategyDataView
   const userNetValue =
-    userStratData?.userStrategyData?.userData?.netValue?.formatted
+    userStratDataView?.userStrategyData?.userData?.netValue?.formatted
   const nv = coerceNetValue(userNetValue)
   const canWithdraw = Number.isFinite(nv) && nv > 0
   const lpTokenDisabled =
     !lpTokenData ||
     Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
       0
-  const userNetValueFmt: string | undefined = (userStratData as any)
-    ?.userStrategyData?.userData?.netValue?.formatted
+  const userNetValueFmt =
+    userStratDataView?.userStrategyData?.userData?.netValue
+      ?.formatted
 
   // Combine free LP net value + bonded LP value for legacy vaults
-  const bondedAmtStr: string | undefined = (userStratData as any)
-    ?.userStakes?.totalBondedAmount?.formatted
+  const bondedAmtStr =
+    userStratDataView?.userStakes?.totalBondedAmount?.formatted
   const bondedAmt = bondedAmtStr ? parseFloat(bondedAmtStr) : 0
-  const tokenPriceStr: string = ((userStratData as any)
-    ?.userStrategyData?.strategyData?.tokenPrice || "0") as string
+  const tokenPriceStr =
+    userStratDataView?.userStrategyData?.strategyData?.tokenPrice ||
+    "0"
   const tokenPrice = parseFloat(tokenPriceStr.replace("$", "")) || 0
   const bondedValue = bondedAmt * tokenPrice
   const combinedNetValue =

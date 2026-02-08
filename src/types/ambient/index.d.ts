@@ -1,1 +1,1 @@
-/// <reference path="analytics.d.ts" />
+import "./analytics"

@@ -1,11 +1,42 @@
 import { usePublicClient } from "wagmi"
 import { useQuery } from "@tanstack/react-query"
+import { StrategyData } from "data/actions/types"
+
+type LegacyUserDataFallback = {
+  shares: bigint
+  stakedShares: bigint
+  strategyData: null
+  allStrategiesData: null
+  netValue: number
+}
+
+type UserDataWithContractsFallback = {
+  userStrategyData: {
+    userData: {
+      netValue: { formatted: string; value: number }
+      shares: { formatted: string; value: bigint }
+      stakedShares: { formatted: string; value: bigint }
+    }
+    strategyData:
+      | (StrategyData & {
+          symbol?: string
+          token?: { value?: string | number; formatted?: string }
+          description?: string
+          logo?: string
+          slug?: string
+          name?: string
+        })
+      | null
+      | undefined
+  }
+  userStakes: null
+}
 
 export const getUserData = async (
   _address: string,
-  _publicClient: any,
+  _publicClient: unknown,
   _chainId: number
-) => {
+): Promise<LegacyUserDataFallback> => {
   try {
     // This legacy function isn't used for critical paths anymore.
     // Return a safe minimal object to prevent runtime errors.
@@ -15,7 +46,7 @@ export const getUserData = async (
       strategyData: null,
       allStrategiesData: null,
       netValue: 0,
-    } as any
+    }
   } catch {
     return {
       shares: 0n,
@@ -23,7 +54,7 @@ export const getUserData = async (
       strategyData: null,
       allStrategiesData: null,
       netValue: 0,
-    } as any
+    }
   }
 }
 
@@ -36,14 +67,24 @@ export const getUserDataWithContracts = async ({
   baseAssetPrice: _baseAssetPrice,
   chain: _chain,
 }: {
-  contracts: any
+  contracts: unknown
   address: string
-  strategyData: any
+  strategyData:
+    | (StrategyData & {
+        symbol?: string
+        token?: { value?: string | number; formatted?: string }
+        description?: string
+        logo?: string
+        slug?: string
+        name?: string
+      })
+    | null
+    | undefined
   userAddress: string
   sommPrice: string
   baseAssetPrice: string
   chain: string
-}) => {
+}): Promise<UserDataWithContractsFallback> => {
   try {
     // For now, return a safe default since the contract approach is problematic
     // The actual user data should come from useUserBalance hook which is already

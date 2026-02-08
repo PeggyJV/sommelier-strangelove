@@ -27,7 +27,13 @@ export const formatUSD = (value?: string, maximumDigit?: number) => {
 }
 
 export const toEther = (
-  val: any | undefined,
+  val:
+    | string
+    | number
+    | bigint
+    | { toString(): string }
+    | null
+    | undefined,
   decimals = 18,
   format?: boolean | number,
   precision = 2
@@ -35,7 +41,7 @@ export const toEther = (
   if (val != 0n && (!val || val === "--")) return "--"
   try {
     if (typeof val === 'bigint') val = formatUnits(val, decimals)
-    const result = parseFloat(val)
+    const result = parseFloat(String(val))
     if (format) {
       format = typeof format === "boolean" ? 2 : format
       return result.toLocaleString("en-US", { minimumFractionDigits: format, maximumFractionDigits: format });

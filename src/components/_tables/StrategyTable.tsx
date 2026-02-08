@@ -11,10 +11,9 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react"
-import { memo, FC } from "react"
+import { memo, FC, type ReactNode } from "react"
 import { useTable, useSortBy } from "react-table"
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
-import { AllStrategiesData } from "data/actions/types"
 import { isComingSoon } from "utils/isComingSoon"
 import { useRouter } from "next/router"
 
@@ -130,16 +129,28 @@ export const BorderTd: FC<TableCellProps & { href: string }> = ({
 }
 
 export interface StrategyTableProps {
-  data: AllStrategiesData
-  columns: any
+  data: unknown[]
+  columns: unknown[]
   showHeader?: boolean
+}
+
+type TableRowShape = {
+  slug?: string
+  name?: string
+  launchDate?: string | number
+  deprecated?: boolean
+  isHero?: boolean
+  isSommNative?: boolean
+  [key: string]: unknown
 }
 
 export const StrategyTable = memo(
   ({ columns, data, showHeader = true }: StrategyTableProps) => {
     StrategyTable.displayName = "StrategyTable"
 
-    const safeData = data && Array.isArray(data) ? data : []
+    const safeData = (
+      data && Array.isArray(data) ? data : []
+    ).filter(Boolean) as Record<string, unknown>[]
 
     const {
       getTableProps,
@@ -147,9 +158,9 @@ export const StrategyTable = memo(
       headerGroups,
       rows,
       prepareRow,
-    } = useTable<any>(
+    } = useTable<Record<string, unknown>>(
       {
-        columns,
+        columns: columns as never,
         data: safeData,
       },
       useSortBy
@@ -198,11 +209,19 @@ export const StrategyTable = memo(
                   borderBottom="1px solid"
                   borderColor="surface.secondary"
                 >
-                  {headerGroup.headers.map((column: any, index) => {
-                    return column.canSort ? (
+                  {headerGroup.headers.map((column, index) => {
+                    const sortableColumn = column as unknown as {
+                      canSort?: boolean
+                      getHeaderProps: (
+                        props?: unknown
+                      ) => Record<string, unknown>
+                      getSortByToggleProps: () => unknown
+                      render: (type: "Header" | "Cell") => ReactNode
+                    }
+                    return sortableColumn.canSort ? (
                       <Th
-                        {...column.getHeaderProps(
-                          column.getSortByToggleProps()
+                        {...sortableColumn.getHeaderProps(
+                          sortableColumn.getSortByToggleProps()
                         )}
                         userSelect="none"
                         textTransform="unset"
@@ -213,7 +232,7 @@ export const StrategyTable = memo(
                           gap={2}
                           justifyContent="end"
                         >
-                          {column.render("Header")}
+                          {sortableColumn.render("Header")}
                           <Icon
                             as={SortingArrowIcon}
                             boxSize={3}
@@ -224,13 +243,13 @@ export const StrategyTable = memo(
                       </Th>
                     ) : (
                       <Th
-                        {...column.getHeaderProps()}
+                        {...sortableColumn.getHeaderProps()}
                         userSelect="none"
                         textTransform="unset"
                         key={index}
                         maxW={1}
                       >
-                        {column.render("Header")}
+                        {sortableColumn.render("Header")}
                       </Th>
                     )
                   })}
@@ -244,17 +263,21 @@ export const StrategyTable = memo(
           >
             {rows.map((row, indexRow) => {
               prepareRow(row)
+              const rowOriginal = row.original as unknown as TableRowShape
 
-              const countdown = isComingSoon(row.original.launchDate)
+              const launchDate = rowOriginal.launchDate
+                ? new Date(rowOriginal.launchDate)
+                : undefined
+              const countdown = isComingSoon(launchDate)
               const href = countdown
-                ? "strategies/" + row.original.slug
-                : "strategies/" + row.original.slug + "/manage"
+                ? "strategies/" + rowOriginal.slug
+                : "strategies/" + rowOriginal.slug + "/manage"
 
-              if (row.original.isHero) {
+              if (rowOriginal.isHero) {
                 return (
                   <HeroTr
                     slug={href}
-                    name={row.original.name}
+                    name={rowOriginal.name ?? "Vault"}
                     key={indexRow}
                   >
                     {(() => {
@@ -262,7 +285,7 @@ export const StrategyTable = memo(
                         headerGroups?.[0]?.headers?.length ??
                         row.cells.length
                       const isSomm = Boolean(
-                        row.original?.isSommNative
+                        rowOriginal?.isSommNative
                       )
                       return row.cells.map((cell, indexData) => {
                         const isFirst = cell.column.id === "name"
@@ -271,7 +294,9 @@ export const StrategyTable = memo(
                           isSomm && isFirst ? totalColumns : 1
                         return (
                           <BorderTd
-                            {...cell.getCellProps({ colSpan } as any)}
+                            {...cell.getCellProps({
+                              colSpan,
+                            } as Record<string, unknown>)}
                             key={indexData}
                             href={href}
                           >
@@ -285,17 +310,17 @@ export const StrategyTable = memo(
               }
               return (
                 <BorderTr
-                  opacity={row.original.deprecated ? 0.5 : 1}
+                  opacity={rowOriginal.deprecated ? 0.5 : 1}
                   {...row.getRowProps()}
                   key={indexRow}
                   slug={href}
-                  name={row.original.name}
+                  name={rowOriginal.name ?? "Vault"}
                 >
                   {(() => {
                     const totalColumns =
                       headerGroups?.[0]?.headers?.length ??
                       row.cells.length
-                    const isSomm = Boolean(row.original?.isSommNative)
+                    const isSomm = Boolean(rowOriginal?.isSommNative)
                     return row.cells.map((cell, indexData) => {
                       const isFirst = cell.column.id === "name"
                       if (isSomm && !isFirst) return null
@@ -303,7 +328,9 @@ export const StrategyTable = memo(
                         isSomm && isFirst ? totalColumns : 1
                       return (
                         <BorderTd
-                          {...cell.getCellProps({ colSpan } as any)}
+                          {...cell.getCellProps({
+                            colSpan,
+                          } as Record<string, unknown>)}
                           key={indexData}
                           href={href}
                         >

@@ -3,9 +3,18 @@ import { StakerUserData, UserStake } from "../types"
 import { ConfigProps } from "data/types"
 import { formatUnits } from "viem"
 
+type StakeItem = {
+  amount: bigint
+  amountWithBoost: bigint
+  unbondTimestamp: number
+  rewardPerTokenPaid: bigint
+  rewards: bigint
+  lock: number
+}
+
 export const getUserStakes = async (
   address: string,
-  stakerContract: any,
+  stakerContract: unknown,
   sommelierPrice: string,
   strategyConfig: ConfigProps
 ) => {
@@ -15,9 +24,17 @@ export const getUserStakes = async (
       throw new Error("provider is undefined")
     }
 
-    const userStakes = await stakerContract.read.getUserStakes([address])
+    const contract = stakerContract as {
+      read: { getUserStakes: (args: [string]) => Promise<StakeItem[]> }
+      simulate: {
+        claimAll: (
+          args: { account: string }
+        ) => Promise<{ result: bigint[] }>
+      }
+    }
+    const userStakes = await contract.read.getUserStakes([address])
 
-    const claimAllRewards = await stakerContract.simulate.claimAll({account: address})
+    const claimAllRewards = await contract.simulate.claimAll({account: address})
 
 
     let totalClaimAllRewards = BigInt(0)
@@ -31,7 +48,7 @@ export const getUserStakes = async (
     let totalBondedAmount = BigInt(0)
 
 
-    userStakes.forEach((item: any) => {
+    userStakes.forEach((item) => {
       const {
         amount,
         amountWithBoost,

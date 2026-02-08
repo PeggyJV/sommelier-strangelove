@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
   Table,
   Thead,
@@ -127,7 +127,7 @@ const WithdrawQueueCard = (props: TableProps) => {
     useState(0)
 
   // Check if a user has an active withdraw request
-  const setWithdrawRequestData = async () => {
+  const setWithdrawRequestData = useCallback(async () => {
     try {
       if (
         walletClient &&
@@ -176,11 +176,22 @@ const WithdrawQueueCard = (props: TableProps) => {
       setPendingWithdrawSharePrice(0)
       setPendingWithdrawDeadline(0)
     }
-  }
+  }, [
+    walletClient,
+    withdrawQueueContract,
+    address,
+    cellarConfig,
+    boringQueueWithdrawals,
+  ])
 
   useEffect(() => {
     setWithdrawRequestData()
-  }, [address, cellarConfig, boringQueueWithdrawals])
+  }, [
+    address,
+    cellarConfig,
+    boringQueueWithdrawals,
+    setWithdrawRequestData,
+  ])
 
   const { doHandleTransaction } = useHandleTransaction()
 

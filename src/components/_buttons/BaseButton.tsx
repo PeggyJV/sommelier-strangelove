@@ -5,9 +5,10 @@ import {
   Icon,
   IconProps,
 } from "@chakra-ui/react"
+import { ElementType } from "react"
 
 export interface BaseButtonProps extends Omit<ButtonProps, "icon"> {
-  icon?: any
+  icon?: ElementType
   iconProps?: IconProps
 }
 

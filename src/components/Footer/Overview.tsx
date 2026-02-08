@@ -27,7 +27,7 @@ export const Overview = () => {
       })
   }, [])
 
-  const totalTVM: Number = tvlData?.total_tvl ?? 0
+  const totalTVM: number = tvlData?.total_tvl ?? 0
 
   // Just length of map cellarDataMap
   const totalLaunchedStrategies = Object.keys(cellarDataMap).length

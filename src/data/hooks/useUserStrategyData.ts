@@ -16,6 +16,14 @@ export const useUserStrategyData = (
   chain: string,
   enabled: boolean = true
 ) => {
+  type UserStakesResult = {
+    userStakes?: Array<{
+      amount: string | number
+      lock: number
+      unbondTimestamp: number
+    }>
+    claimAllRewards?: unknown[]
+  }
   const { address: userAddress } = useAccount()
   const { data: _allContracts } = useAllContracts()
   const strategyData = useStrategyData(strategyAddress, chain)
@@ -60,15 +68,33 @@ export const useUserStrategyData = (
     ],
     queryFn: async () => {
       // Attempt to read legacy staking positions regardless of LP token availability
-      let userStakesResult: any = null
+      let userStakesResult: UserStakesResult | null = null
       try {
         if (config.staker && stakerContract && userAddress) {
-          userStakesResult = await fetchUserStakes(
+          const stakingData = (await fetchUserStakes(
             userAddress,
             stakerContract,
             (sommPrice.data as string) || "0",
             config
-          )
+          )) as unknown as {
+            userStakes?: Array<{
+              amount: bigint | string | number
+              lock: number
+              unbondTimestamp: number
+            }>
+            claimAllRewards?: unknown[]
+          }
+          userStakesResult = {
+            claimAllRewards: stakingData.claimAllRewards ?? [],
+            userStakes: stakingData.userStakes?.map((stake) => ({
+              amount:
+                typeof stake.amount === "bigint"
+                  ? stake.amount.toString()
+                  : stake.amount,
+              lock: stake.lock,
+              unbondTimestamp: stake.unbondTimestamp,
+            })),
+          }
         }
       } catch (e) {
         // Non-fatal; keep staking data null on failure

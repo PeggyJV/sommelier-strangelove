@@ -62,7 +62,7 @@ export interface DepositAndSwapPayload {
 }
 
 export interface DepositAndSwapParams {
-  provider: any
+  provider: unknown
   senderAddress: string
   payload: DepositAndSwapPayload
 }

@@ -1,11 +1,17 @@
 import { zonedTimeToUtc } from "date-fns-tz"
 
 export const getStakingEnd = async (
-  stakerContract: any
+  stakerContract: unknown
 ) => {
   try {
-    const ended = await stakerContract.read.ended()
-    const endTimestamp = await stakerContract.read.endTimestamp()
+    const contract = stakerContract as {
+      read: {
+        ended: () => Promise<boolean>
+        endTimestamp: () => Promise<bigint>
+      }
+    }
+    const ended = await contract.read.ended()
+    const endTimestamp = await contract.read.endTimestamp()
     const endDate =
       Number(endTimestamp) === 0
         ? undefined

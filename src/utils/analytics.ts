@@ -22,12 +22,15 @@ try {
 const appName =
   process.env.NEXT_PUBLIC_APP_NAME ?? "Sommelier <Local>"
 
+type AnalyticsConfig = Parameters<typeof Analytics>[0]
+type AnalyticsPlugins = NonNullable<AnalyticsConfig["plugins"]>
+
 // Google Tag Manager
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 const isSendToGTM =
   isBrowser && gtmId && gtmId !== null && gtmId.length > 0
 
-const plugins: any[] = []
+const plugins: AnalyticsPlugins = []
 
 const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
 if (isBrowser && mixpanelToken && mixpanelToken.length > 0) {
@@ -45,7 +48,7 @@ export class AnalyticsWrapper {
   client: ReturnType<typeof Analytics>
   enabled: boolean
 
-  constructor(appName: string, plugins: any[]) {
+  constructor(appName: string, plugins: AnalyticsPlugins) {
     this.client = Analytics({
       app: appName,
       plugins,

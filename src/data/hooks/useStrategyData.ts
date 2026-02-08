@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { getStrategyData } from "data/actions/common/getStrategyData"
 import { cellarDataMap } from "data/cellarDataMap"
 import { GetStrategyDataQuery } from "src/data/actions/types"
+import { StrategyContracts } from "src/data/actions/types"
 import { usePublicClient } from "wagmi"
 import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
@@ -48,7 +49,7 @@ export const useStrategyData = (
         }
       })
       .catch((error) => setError(error))
-  }, [])
+  }, [address, cellarData.config.chain.id])
 
   const config = Object.values(cellarDataMap).find(
     (item) =>
@@ -76,7 +77,7 @@ export const useStrategyData = (
       }
       const result = await getStrategyData({
         address,
-        contracts: contractsForKey as any,
+        contracts: contractsForKey as StrategyContracts,
         sommPrice: sommPrice ?? "0",
         stratData: structuredClone(stratData?.cellar),
         baseAssetPrice: baseAssetPrice ?? "0",

@@ -55,7 +55,7 @@ export const InputAmount: React.FC = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient])
+  }, [blockNumber, queryClient, queryKey])
 
   const { isConnecting: isGrazConnecting } = useGrazAccount()
   const {

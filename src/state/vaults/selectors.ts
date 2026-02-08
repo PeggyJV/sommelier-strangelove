@@ -52,9 +52,14 @@ export function getSortedVaults(
 
   // Normalize and preserve stability via index
   const normalized = vaultsRaw.map((v, index) => {
-    const tvl = toNum(v?.tvm?.value ?? v?.tvl?.value ?? v?.tvl)
+    const tvl = toNum(
+      v?.tvm?.value ??
+        (v?.tvl as { value?: unknown } | undefined)?.value ??
+        v?.tvl
+    )
     const netValue = toNum(
-      v?.userStrategyData?.userData?.netValue?.value ?? v?.netValue
+      v?.userStrategyData?.userData?.netValue?.value ??
+        v?.netValue
     )
     return {
       ...v,

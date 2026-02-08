@@ -8,19 +8,21 @@ type Props = {
 }
 
 export function KpiLabelWithInfo({ label, onInfo, ...a11y }: Props) {
+  const ariaLabel = a11y["aria-label"]
+
   return (
     <HStack spacing="1" align="center">
       <Text fontSize="xs" color="neutral.400">
         {label}
       </Text>
       <IconButton
-        aria-label={(a11y as any)["aria-label"] ?? `About ${label}`}
+        aria-label={ariaLabel ?? `About ${label}`}
         size="xs"
         variant="ghost"
         icon={<InformationIcon />}
         onClick={(e) => onInfo?.(e)}
         onKeyDown={(e) => {
-          if ((e as any).key === "Enter" || (e as any).key === " ")
+          if (e.key === "Enter" || e.key === " ")
             onInfo?.(e)
         }}
       />

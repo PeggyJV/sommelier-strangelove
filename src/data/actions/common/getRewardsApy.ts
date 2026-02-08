@@ -7,26 +7,33 @@ export const getRewardsApy = async ({
   assetPrice,
   cellarConfig,
 }: {
-  stakerContract: any
+  stakerContract: unknown
   sommPrice: string
   assetPrice: string
   cellarConfig: ConfigProps
 }) => {
   try {
+    const contract = stakerContract as {
+      read: {
+        endTimestamp: () => Promise<bigint>
+        rewardRate: () => Promise<bigint>
+        totalDepositsWithBoost: () => Promise<bigint>
+      }
+    }
 
-    const stakingEnd = await stakerContract.read.endTimestamp()
+    const stakingEnd = await contract.read.endTimestamp()
     const isStakingOngoing = BigInt(Date.now()) < stakingEnd * 1000n;
 
     let potentialStakingApy = 0
     if (isStakingOngoing) {
-      const rewardRateRes = await stakerContract.read.rewardRate()
+      const rewardRateRes = await contract.read.rewardRate()
       const rewardRate = formatUnits(rewardRateRes, 6)
 
 
       const totalDepositWithBoostRes =
-        await stakerContract.read.totalDepositsWithBoost()
+        await contract.read.totalDepositsWithBoost()
       const totalDepositWithBoost =
-        formatUnits(totalDepositWithBoostRes.toString(), cellarConfig.cellar.decimals)
+        formatUnits(totalDepositWithBoostRes, cellarConfig.cellar.decimals)
 
       // Assuming a user deposits 10k worth of the asset
       const userDeposit = 10000 / Number(assetPrice)
