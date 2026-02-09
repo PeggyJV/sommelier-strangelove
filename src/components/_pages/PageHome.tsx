@@ -441,8 +441,17 @@ export const PageHome = () => {
     const legacy = list.filter((v) => !v?.isSommNative)
 
     // Normalize to util input shape and sort deterministically
-    const mapToSortable = (arr: StrategyData[]) =>
-      arr.map((v) => {
+    type SortableStrategy = {
+      ref: NonNullable<StrategyData>
+      name?: string
+      tvl?: string | number | null
+      netValue?: string | number | null
+    }
+
+    const mapToSortable = (arr: StrategyData[]): SortableStrategy[] =>
+      arr
+        .filter((v): v is NonNullable<StrategyData> => v !== null)
+        .map((v) => {
         // Find matching user data for this vault
         const userData = userDataAllStrategies?.strategies?.find(
           (userStrategy) => {
@@ -470,7 +479,7 @@ export const PageHome = () => {
           ...v,
           netValue: userData?.userStrategyData?.userData?.netValue,
           userStrategyData: userData?.userStrategyData,
-        }
+        } as NonNullable<StrategyData>
 
         return {
           ref: enrichedVault,

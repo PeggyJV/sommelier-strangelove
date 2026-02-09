@@ -5,7 +5,17 @@
 // - Net Value and TVL are normalized to numbers; undefined/NaN treated as 0
 // - Equality checks use 1e-9 tolerance to avoid jitter
 
-export type AnyVault = Record<string, any>
+export type AnyVault = {
+  name?: string
+  tvl?: unknown
+  netValue?: unknown
+  tvm?: { value?: unknown }
+  userStrategyData?: {
+    userData?: {
+      netValue?: { value?: unknown }
+    }
+  }
+} & Record<string, unknown>
 
 const toNum = (v: unknown): number => {
   if (typeof v === "number") return Number.isFinite(v) ? v : 0
@@ -24,11 +34,14 @@ const cmpByNameAsc = (a: { name?: string }, b: { name?: string }) =>
 const cmpDesc = (x: number, y: number) => y - x
 
 function comparator(walletConnected: boolean) {
-  return (a: AnyVault, b: AnyVault) => {
-    const na = Number.isFinite(a.netValue) ? a.netValue : 0
-    const nb = Number.isFinite(b.netValue) ? b.netValue : 0
-    const ta = Number.isFinite(a.tvl) ? a.tvl : 0
-    const tb = Number.isFinite(b.tvl) ? b.tvl : 0
+  return (
+    a: { name?: string; tvl: number; netValue: number },
+    b: { name?: string; tvl: number; netValue: number }
+  ) => {
+    const na = a.netValue
+    const nb = b.netValue
+    const ta = a.tvl
+    const tb = b.tvl
 
     if (walletConnected) {
       const nvDelta = cmpDesc(na, nb)
