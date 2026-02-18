@@ -15,6 +15,20 @@ import { createCapturingTransport } from "src/lib/attribution/capture"
 import { wrapConnector } from "src/lib/attribution/wallet"
 
 const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
+const alchemyKey = process.env.NEXT_PUBLIC_ALCHEMY_KEY
+
+// Build RPC URLs: prefer explicit env vars, fall back to Alchemy key
+const mainnetRpc =
+  process.env.NEXT_PUBLIC_MAINNET_RPC ||
+  (alchemyKey && `https://eth-mainnet.g.alchemy.com/v2/${alchemyKey}`)
+const arbitrumRpc =
+  process.env.NEXT_PUBLIC_ARBITRUM_RPC ||
+  (alchemyKey && `https://arb-mainnet.g.alchemy.com/v2/${alchemyKey}`)
+const optimismRpc =
+  process.env.NEXT_PUBLIC_OPTIMISM_RPC ||
+  (alchemyKey && `https://opt-mainnet.g.alchemy.com/v2/${alchemyKey}`) ||
+  "https://mainnet.optimism.io"
+const baseRpc = process.env.NEXT_PUBLIC_BASE_RPC
 
 let connectors = connectorsForWallets(
   [
@@ -60,36 +74,31 @@ export const config = createConfig({
     [mainnet.id]:
       process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true"
         ? createCapturingTransport({
-            url: process.env.NEXT_PUBLIC_MAINNET_RPC!,
+            url: mainnetRpc!,
             getContext,
           })
-        : http(process.env.NEXT_PUBLIC_MAINNET_RPC),
+        : http(mainnetRpc),
     [arbitrum.id]:
       process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true"
         ? createCapturingTransport({
-            url: process.env.NEXT_PUBLIC_ARBITRUM_RPC!,
+            url: arbitrumRpc!,
             getContext,
           })
-        : http(process.env.NEXT_PUBLIC_ARBITRUM_RPC),
+        : http(arbitrumRpc),
     [optimism.id]:
       process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true"
         ? createCapturingTransport({
-            url:
-              process.env.NEXT_PUBLIC_OPTIMISM_RPC ||
-              "https://mainnet.optimism.io",
+            url: optimismRpc,
             getContext,
           })
-        : http(
-            process.env.NEXT_PUBLIC_OPTIMISM_RPC ||
-              "https://mainnet.optimism.io"
-          ),
+        : http(optimismRpc),
     [base.id]:
       process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED === "true"
         ? createCapturingTransport({
-            url: process.env.NEXT_PUBLIC_BASE_RPC!,
+            url: baseRpc!,
             getContext,
           })
-        : http(process.env.NEXT_PUBLIC_BASE_RPC),
+        : http(baseRpc),
   },
   ssr: true,
 })
