@@ -7,6 +7,7 @@ import {
   injectedWallet,
   metaMaskWallet,
   rainbowWallet,
+  safeWallet,
   walletConnectWallet,
 } from "@rainbow-me/rainbowkit/wallets"
 import { connectorsForWallets } from "@rainbow-me/rainbowkit"
@@ -20,6 +21,7 @@ let connectors = connectorsForWallets(
     {
       groupName: "Recommended",
       wallets: [
+        safeWallet,
         injectedWallet,
         metaMaskWallet,
         rainbowWallet,
