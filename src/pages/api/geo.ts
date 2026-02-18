@@ -23,7 +23,6 @@ const testGeo = (req: NextApiRequest, res: NextApiResponse) => {
     // https://orpa.princeton.edu/export-controls/sanctioned-countries
     // Updated as of March 10, 2022
     const restricted: { [key: string]: string[] } = {
-      US: ["*"], // USA
       CU: ["*"], // Cuba
       IR: ["*"], // Iran
       KP: ["*"], // North Korea
