@@ -95,7 +95,7 @@ export async function GET(req: Request) {
   }
 
   const liveArgs = [...args, "--post-telegram"]
-  const { code, stdout, stderr } = await run(
+  const { code, stdout: _stdout, stderr } = await run(
     process.execPath,
     liveArgs,
     { TELEGRAM_MODE: "strict", ARTIFACTS_DISABLED: "1" }

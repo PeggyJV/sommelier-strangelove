@@ -8,9 +8,11 @@ import { sommelierChain } from "utils/grazChains"
 
 const chain: GrazChain = sommelierChain
 
-configureGraz({
-  defaultChain: chain,
-})
+if (typeof window !== "undefined") {
+  configureGraz({
+    defaultChain: chain,
+  })
+}
 
 const Snapshot: NextPage = () => {
   const { asPath } = useRouter()

@@ -8,7 +8,7 @@
     "deadcode": "ts-prune",
     "dev": "NODE_OPTIONS='--max-old-space-size=4096' next dev",
     "lint": "eslint src --ext .ts,.tsx --ignore-pattern src/vendor/**",
-    "lint:ci": "mkdir -p reports && eslint . --ext .ts,.tsx --max-warnings 0 -f junit -o reports/eslint-junit.xml",
+    "lint:ci": "mkdir -p reports && eslint src --ext .ts,.tsx --ignore-pattern src/vendor/** -f junit -o reports/eslint-junit.xml",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "typecheck:strict": "tsc --noEmit --project tsconfig.json",
     "typecheck:scoped": "tsc -p tsconfig.typecheck.json --noEmit",

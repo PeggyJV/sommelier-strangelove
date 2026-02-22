@@ -12,8 +12,8 @@ const { withSentryConfig } = require("@sentry/nextjs")
     process.env.ATTRIB_KV_KV_REST_API_TOKEN ||
     process.env.KV_REST_API_TOKEN
   if (!reqUrl || !reqTok) {
-    throw new Error(
-      "[attrib-kv] Missing KV REST credentials. Provide ATTRIB_* or KV_* envs"
+    console.warn(
+      "[attrib-kv] Missing KV REST credentials. Provide ATTRIB_* or KV_* envs. Attribution features will be unavailable."
     )
   }
 })()

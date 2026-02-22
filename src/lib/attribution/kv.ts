@@ -12,12 +12,35 @@ const TOKEN =
   ""
 
 if (!URL || !TOKEN) {
-  throw new Error(
-    "[attrib-kv] Missing KV REST credentials. Provide ATTRIB_KV_KV_REST_API_URL/TOKEN or KV_REST_API_URL/TOKEN"
+  console.warn(
+    "[attrib-kv] Missing KV REST credentials. Attribution features will be unavailable at runtime."
   )
 }
 
-export const kv = new Redis({ url: URL, token: TOKEN })
+let _kv: Redis | null = null
+
+function getKv(): Redis {
+  if (!_kv) {
+    if (!URL || !TOKEN) {
+      throw new Error(
+        "[attrib-kv] Missing KV REST credentials. Provide ATTRIB_KV_KV_REST_API_URL/TOKEN or KV_REST_API_URL/TOKEN"
+      )
+    }
+    _kv = new Redis({ url: URL, token: TOKEN })
+  }
+  return _kv
+}
+
+export const kv = new Proxy({} as Redis, {
+  get(_target, prop, receiver) {
+    const client = getKv()
+    const value = Reflect.get(client, prop, receiver)
+    if (typeof value === "function") {
+      return value.bind(client)
+    }
+    return value
+  },
+})
 
 /** Set JSON value at key (stringify). */
 export async function setJson(key: string, value: unknown) {

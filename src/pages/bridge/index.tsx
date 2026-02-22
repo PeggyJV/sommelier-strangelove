@@ -9,9 +9,11 @@ import { BRIDGE_PAGE_ENABLED } from "utils/constants"
 import { origin } from "utils/origin"
 const chain: GrazChain = sommelierChain
 
-configureGraz({
-  defaultChain: chain,
-})
+if (typeof window !== "undefined") {
+  configureGraz({
+    defaultChain: chain,
+  })
+}
 
 const Bridge: NextPage = () => {
   const { asPath } = useRouter()
