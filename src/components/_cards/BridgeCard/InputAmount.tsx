@@ -55,7 +55,7 @@ export const InputAmount: React.FC = () => {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey })
-  }, [blockNumber, queryClient])
+  }, [blockNumber, queryClient, queryKey])
 
   const { isConnecting: isGrazConnecting } = useGrazAccount()
   const {
@@ -206,7 +206,7 @@ export const InputAmount: React.FC = () => {
           <InformationIcon color="red.base" boxSize="12px" />
           <Text fontSize="xs" fontWeight="semibold" color="red.light">
             {(toEth && error?.message) ||
-              // @ts-expect-error
+              // @ts-expect-error -- grazError does not expose a typed message field
               (toSomm && grazError?.message)}
           </Text>
         </HStack>

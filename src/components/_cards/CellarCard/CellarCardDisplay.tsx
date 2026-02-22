@@ -48,8 +48,8 @@ export const CellarCardDisplay: React.FC<CellarCardProps> = ({
     cellarConfig.cellar.address, cellarConfig.chain.id
   )
   const launchDate = strategyData?.launchDate
-  const protocols = strategyData?.protocols!
-  const isManyProtocols = typeof protocols === "object"
+  const protocols = strategyData?.protocols ?? []
+  const isManyProtocols = Array.isArray(protocols)
   const protocolData = isManyProtocols
     ? protocols.map((v: string) => {
         return {

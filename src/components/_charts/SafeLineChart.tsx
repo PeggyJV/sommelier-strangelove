@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react"
 import { LineSvgProps, LineSeries } from "@nivo/line"
 
+type ResponsiveLineComponent = (
+  props: Omit<LineSvgProps<LineSeries>, "width" | "height">
+) => React.JSX.Element
+
 // Define a comprehensive default theme for nivo charts
 const defaultNivoTheme = {
   background: "transparent",
@@ -143,7 +147,8 @@ const SafeLineChart = ({
   ...rest
 }: LineSvgProps<LineSeries>) => {
   const [mounted, setMounted] = useState(false)
-  const [ResponsiveLine, setResponsiveLine] = useState<any>(null)
+  const [ResponsiveLine, setResponsiveLine] =
+    useState<ResponsiveLineComponent | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -197,7 +202,7 @@ const SafeLineChart = ({
     return (
       <ResponsiveLine
         data={data}
-        theme={chartTheme}
+        theme={chartTheme as LineSvgProps<LineSeries>["theme"]}
         useMesh
         enableGridX={false}
         enableGridY={false}

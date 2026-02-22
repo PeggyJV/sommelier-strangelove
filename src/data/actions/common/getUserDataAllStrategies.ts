@@ -19,6 +19,41 @@ export const getUserDataAllStrategies = async ({
   sommPrice: string
   chain: string
 }) => {
+  type Data = Awaited<ReturnType<typeof getUserDataWithContracts>>
+  const getNetValue = (item: Data | undefined): number => {
+    const value = item?.userStrategyData?.userData?.netValue?.value
+    return typeof value === "number" ? value : 0
+  }
+  const getRewardsValue = (item: Data | undefined): bigint => {
+    const rewards = (
+      item as unknown as {
+        userStakes?: { totalClaimAllRewards?: { value?: bigint } }
+      }
+    )?.userStakes?.totalClaimAllRewards?.value
+    return typeof rewards === "bigint" ? rewards : 0n
+  }
+  const getRewardsUsd = (item: Data | undefined): number => {
+    const rewardsUsd = (
+      item as unknown as {
+        userStakes?: { claimAllRewardsUSD?: number | string }
+      }
+    )?.userStakes?.claimAllRewardsUSD
+    return Number(rewardsUsd ?? 0)
+  }
+  const fallbackUserData = (
+    strategyData: Parameters<typeof getUserDataWithContracts>[0]["strategyData"]
+  ): Data => ({
+    userStrategyData: {
+      userData: {
+        netValue: { formatted: "0", value: 0 },
+        shares: { formatted: "0", value: 0n },
+        stakedShares: { formatted: "0", value: 0n },
+      },
+      strategyData,
+    },
+    userStakes: null,
+  })
+
   const userDataRes = await Promise.all(
     Object.entries(allContracts)?.map(async ([key, contracts]) => {
       // Only get data for the current chain
@@ -69,14 +104,7 @@ export const getUserDataAllStrategies = async ({
           } catch (error) {
             console.log("error", error)
             // Return a safe fallback to keep the query defined
-            return {
-              shares: 0n,
-              stakedShares: 0n,
-              strategyData: null,
-              allStrategiesData: null,
-              netValue: 0,
-              userStakes: null,
-            } as any
+            return fallbackUserData(strategyData)
           }
         },
       })
@@ -89,35 +117,22 @@ export const getUserDataAllStrategies = async ({
   const totalNetValue = (() => {
     let total = 0
     userData.forEach((item) => {
-      total += Number(item?.netValue)
+      total += getNetValue(item)
     })
     return total
   })()
 
   const totalSommRewards = userData.reduce((total, item) => {
-    return (
-      total +
-      (item
-        ? item.userStakes
-          ? item.userStakes.totalClaimAllRewards.value
-          : 0n
-        : 0n)
-    )
+    return total + getRewardsValue(item)
   }, 0n)
 
   const totalSommRewardsInUsd = userData.reduce((total, item) => {
-    return (
-      total +
-      (item
-        ? item.userStakes
-          ? Number(item.userStakes.claimAllRewardsUSD)
-          : 0
-        : 0)
-    )
+    return total + getRewardsUsd(item)
   }, 0)
-  type Data = Awaited<ReturnType<typeof getUserDataWithContracts>>
   const isData = (item: Data | undefined): item is Data => {
-    return Boolean(item && typeof (item as any).netValue === 'number' && (item as any).netValue > 0)
+    if (!item) return false
+    const netValue = item.userStrategyData?.userData?.netValue?.value
+    return typeof netValue === "number" && netValue > 0
   }
   const cleanData = userData.filter(isData)
 

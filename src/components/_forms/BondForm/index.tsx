@@ -15,6 +15,7 @@ import {
   Link,
 } from "@chakra-ui/react"
 import { FormProvider, useForm } from "react-hook-form"
+import { FieldErrors } from "react-hook-form"
 import { BaseButton } from "components/_buttons/BaseButton"
 import { AiOutlineInfo } from "react-icons/ai"
 import { CardHeading } from "components/_typography/CardHeading"
@@ -69,10 +70,11 @@ export const BondForm = ({ onClose }: BondFormProps) => {
     formState: { errors, isSubmitting },
   } = methods
   const { addToast, closeAll } = useBrandedToast()
+  const stakerAddress = cellarConfig.staker?.address
 
   const { doApprove } = useApproveERC20({
     tokenAddress: cellarConfig.cellar.address,
-    spender: cellarConfig.staker?.address!,
+    spender: stakerAddress ?? cellarConfig.cellar.address,
   })
 
   const { doHandleTransaction } = useHandleTransaction()
@@ -136,7 +138,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
         250000,
         address
       )
-      // @ts-ignore
+      // @ts-expect-error -- legacy typing gap
       const hash = await stakerSigner.write.stake(
         [depositAmtInWei, bondPeriod],
         { gas: gasLimitEstimated, account: address }
@@ -190,7 +192,7 @@ export const BondForm = ({ onClose }: BondFormProps) => {
     }
   }
 
-  const onError = (_errors: any, _e: any) => {
+  const onError = (_errors: FieldErrors<FormValues>) => {
     addToast({
       heading: "Bonding LP Token",
       body: <Text>Bonding Failed</Text>,

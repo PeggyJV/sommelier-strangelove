@@ -1,9 +1,19 @@
 import { Text } from "@chakra-ui/react"
 import { StrategySection } from "components/_tables/StrategySection"
 import StrategyRow from "components/_vaults/StrategyRow"
+import { Badge } from "data/types"
 
 type RowData = {
   original: {
+    isSommNative?: boolean
+    logo?: string
+    name?: string
+    provider?: { title?: string } | string
+    type?: number
+    launchDate?: number | string
+    description?: string
+    deprecated?: boolean
+    config?: { badges?: Badge[] }
     baseApySumRewards?: {
       formatted?: string
     }
@@ -22,21 +32,36 @@ export const StrategyMobileColumn = () => {
         </span>
       ),
       accessor: "name",
-      Cell: ({ row }: any) => {
-        if (row.original?.isSommNative) {
-          return <StrategyRow vault={row.original} />
+      Cell: ({ row }: { row: RowData }) => {
+        const original = row.original
+        if (original?.isSommNative) {
+          return (
+            <StrategyRow
+              vault={
+                original as Parameters<typeof StrategyRow>[0]["vault"]
+              }
+            />
+          )
         }
         return (
           <StrategySection
-            icon={row.original.logo}
-            title={row.original.name}
-            provider={row.original.provider.title}
-            type={row.original.type}
-            date={row.original.launchDate}
-            description={row.original.description}
-            isDeprecated={row.original.deprecated}
-            badges={row.original.config.badges}
-            isSommNative={row.original.isSommNative}
+            icon={original.logo ?? ""}
+            title={original.name ?? ""}
+            provider={
+              typeof original.provider === "string"
+                ? original.provider
+                : original.provider?.title ?? ""
+            }
+            type={original.type}
+            date={
+              original.launchDate
+                ? String(original.launchDate)
+                : undefined
+            }
+            description={original.description ?? ""}
+            isDeprecated={original.deprecated}
+            badges={original.config?.badges}
+            isSommNative={original.isSommNative}
           />
         )
       },
@@ -81,10 +106,10 @@ export const StrategyMobileColumn = () => {
     {
       Header: () => <Text>Net Rewards</Text>,
       accessor: "baseApy",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: RowData }) => {
         const value = row.original.baseApySumRewards?.formatted
-        const launchDate = row.original.launchDate
-        if (launchDate && launchDate > Date.now()) {
+        const launchDate = Number(row.original.launchDate ?? 0)
+        if (launchDate > Date.now()) {
           return (
             <Text fontWeight={550} fontSize="16px" textAlign="right">
               --

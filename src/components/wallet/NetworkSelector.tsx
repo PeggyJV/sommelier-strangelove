@@ -36,11 +36,13 @@ export default function NetworkSelector({
     try {
       await requestSwitchWithAdd(requiredChain.wagmiId as 1 | 42161 | 8453)
       onSwitched?.(requiredChain.wagmiId)
-    } catch (e: any) {
+    } catch (e: unknown) {
+      const message =
+        e instanceof Error ? e.message : "Unable to switch network"
       addToast({
         heading: "Network switch failed",
         status: "error",
-        body: <Text>{e?.message ?? "Unable to switch network"}</Text>,
+        body: <Text>{message}</Text>,
       })
     }
   }

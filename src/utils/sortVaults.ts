@@ -6,14 +6,20 @@ export type Vault = {
   user?: { netValue?: number | null }
 }
 
+type MainPageSortableVault = {
+  name?: string
+  tvl?: string | number | null
+  netValue?: string | number | null
+}
+
 const normName = (s?: string) => (s ?? "").toLowerCase()
 
-export function sortVaultsForMainPage(
-  vaults: any[],
+export function sortVaultsForMainPage<T extends MainPageSortableVault>(
+  vaults: T[],
   opts: { connected: boolean }
-) {
-  const byTVL = (v: any) => parseMoneyString(v.tvl)
-  const byNV = (v: any) => coerceNetValue(v.netValue)
+): T[] {
+  const byTVL = (v: T) => parseMoneyString(v.tvl)
+  const byNV = (v: T) => coerceNetValue(v.netValue)
 
   // Debug logging for sorting
   if (process.env.NEXT_PUBLIC_DEBUG_SORT === "1") {

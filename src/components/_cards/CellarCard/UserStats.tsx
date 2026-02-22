@@ -24,6 +24,11 @@ export const UserStats: React.FC<Props> = ({
   )
   const netValue = userData?.userStrategyData.userData.netValue
   const userStakes = userData?.userStakes
+  const rewardsFormatted = (
+    userStakes as
+      | { totalClaimAllRewards?: { formatted?: string } }
+      | undefined
+  )?.totalClaimAllRewards?.formatted
   const isMounted = useIsMounted()
 
   return (
@@ -44,7 +49,7 @@ export const UserStats: React.FC<Props> = ({
         </Heading>
         <Label color="neutral.300">Your Portfolio</Label>
       </Box>
-      {/* TODO: Verify PNL result */}
+      {/* PNL intentionally hidden until cost-basis data is available. */}
       {/* <Box>
         <Heading
           as="p"
@@ -86,7 +91,7 @@ export const UserStats: React.FC<Props> = ({
               boxSize={3}
             />
             {isMounted && isConnected
-              ? (userStakes as any)?.totalClaimAllRewards?.formatted || "..."
+              ? rewardsFormatted || "..."
               : "--"}
           </Heading>
           <Label color="neutral.300">Rewards</Label>

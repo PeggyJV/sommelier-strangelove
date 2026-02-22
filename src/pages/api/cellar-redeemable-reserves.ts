@@ -5,6 +5,11 @@ import { queryContract } from "context/rpc_context"
 const baseUrl =
   process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
 
+type WithdrawableAssetsContract = {
+  read: {
+    totalAssetsWithdrawable: () => Promise<bigint | string>
+  }
+}
 
 const cellarRedeemableAssets = async (
   req: NextApiRequest,
@@ -22,17 +27,16 @@ const cellarRedeemableAssets = async (
       return
     }
 
-    const cellar = await queryContract(
+    const cellar = (await queryContract(
       cellarDataMap[cellarId]?.config.id,
       cellarDataMap[cellarId]?.config.cellar.abi,
       cellarDataMap[cellarId]?.config.chain
-    )
+    )) as WithdrawableAssetsContract | null
 
     let totalAssets: string = "";
 
     if (cellar) {
-      // @ts-ignore
-      totalAssets = await cellar.read.totalAssetsWithdrawable()
+      totalAssets = String(await cellar.read.totalAssetsWithdrawable())
     } else {
       throw new Error("failed to load contract")
     }

@@ -1,6 +1,12 @@
 import { Stack, Text } from "@chakra-ui/react"
 import { linearGradientDef } from "@nivo/core"
-import { LineSeries, Point, PointTooltipProps } from "@nivo/line"
+import {
+  AllowedValue,
+  LineSeries,
+  Point,
+  PointTooltipProps,
+  SliceData,
+} from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
 import {
@@ -31,6 +37,12 @@ interface TokenPriceChartProps {
     SetStateAction<Point<LineSeries> | undefined>
   >
 }
+
+type AxisTick = {
+  x: number
+  y: number
+  value: string | number
+}
 export const TokenPriceChart = ({
   timeline,
   name: strategyTokenName,
@@ -39,8 +51,10 @@ export const TokenPriceChart = ({
 }: TokenPriceChartProps) => {
   const { data } = useTokenPriceChart()
   const { chartTheme } = useNivoThemes()
-  const onMouseMove = (point: Point<LineSeries>) => {
-    setPointActive(point)
+  const onMouseMove = (
+    datum: Readonly<Point<LineSeries>> | Readonly<SliceData<LineSeries>>
+  ) => {
+    if ("data" in datum) setPointActive(datum)
   }
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
@@ -101,7 +115,7 @@ export const TokenPriceChart = ({
     datum,
   }: {
     color: string
-    datum: { x: Date; y: string }
+    datum: { x: AllowedValue; y: AllowedValue }
   }) => {
     const active =
       timeline === "1D"
@@ -119,7 +133,9 @@ export const TokenPriceChart = ({
     return null
   }
 
-  const hourlyAxisBottom = useMemo<any>(() => {
+  const hourlyAxisBottom = useMemo<
+    { axisBottom: { format: string; tickValues: string } } | undefined
+  >(() => {
     if (timeline === "1D") {
       return {
         axisBottom: {
@@ -212,7 +228,7 @@ export const TokenPriceChart = ({
       axisLeft={{
         tickRotation: 0,
         legendPosition: "middle",
-        renderTick: (tick) => {
+        renderTick: (tick: AxisTick) => {
           return (
             <g
               transform={`translate(${tick.x + 3},${tick.y})`}

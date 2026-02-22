@@ -171,6 +171,7 @@ export const TokenPriceChartProvider: FC<{
       item.config.cellar.address === address &&
       item.config.chain.id === chain
   )!
+  const chainId = cellarData.config.chain.id
   const [hourlyDataRaw, setHourlyDataRaw] = useState<
     GetHourlyShareValueQuery | undefined
   >(undefined)
@@ -189,7 +190,7 @@ export const TokenPriceChartProvider: FC<{
     fetchHourlyShareValueData(
       prev24Hours,
       address,
-      cellarData.config.chain.id
+      chainId
     )
       .then((data) => {
         setHourlyDataRaw(data)
@@ -199,7 +200,7 @@ export const TokenPriceChartProvider: FC<{
         setHourlyError(error)
         setHourlyIsFetching(false)
       })
-  }, [prev24Hours, address, reexecuteHourlyTrigger]) // re-execute the effect when 'prev24Hours' or 'address' changes
+  }, [address, reexecuteHourlyTrigger, chainId]) // re-execute the effect when 'address' changes
 
   const [weeklyDataRaw, setWeeklyDataRaw] = useState<
     GetWeeklyShareValueQuery | undefined
@@ -219,7 +220,7 @@ export const TokenPriceChartProvider: FC<{
     fetchWeeklyShareValueData(
       prevWeek,
       address,
-      cellarData.config.chain.id
+      chainId
     )
       .then((data) => {
         setWeeklyDataRaw(data)
@@ -229,7 +230,7 @@ export const TokenPriceChartProvider: FC<{
         setWeeklyError(error)
         setWeeklyIsFetching(false)
       })
-  }, [prevWeek, address, reexecuteWeeklyTrigger]) // re-execute the effect when 'prevWeek' or 'address' changes
+  }, [address, reexecuteWeeklyTrigger, chainId]) // re-execute the effect when 'address' changes
 
   const [monthlyDataRaw, setMonthlyDataRaw] = useState<
     GetMonthlyShareValueQuery | undefined
@@ -249,7 +250,7 @@ export const TokenPriceChartProvider: FC<{
     fetchMonthlyShareValueData(
       prevMonth,
       address,
-      cellarData.config.chain.id
+      chainId
     )
       .then((data) => {
         setMonthlyDataRaw(data)
@@ -259,7 +260,7 @@ export const TokenPriceChartProvider: FC<{
         setMonthlyError(error)
         setMonthlyIsFetching(false)
       })
-  }, [prevMonth, address, reexecuteMonthlyTrigger]) // re-execute the effect when 'prevMonth' or 'address' changes
+  }, [address, reexecuteMonthlyTrigger, chainId]) // re-execute the effect when 'address' changes
 
   const [allTimeDataRaw, setAllTimeDataRaw] = useState<
     GetAllTimeShareValueQuery | undefined
@@ -276,7 +277,7 @@ export const TokenPriceChartProvider: FC<{
 
   useEffect(() => {
     setAllTimeIsFetching(true)
-    fetchAllTimeShareValueData(address, cellarData.config.chain.id)
+    fetchAllTimeShareValueData(address, chainId)
       .then((data) => {
         setAllTimeDataRaw(data)
         setAllTimeIsFetching(false)
@@ -285,7 +286,7 @@ export const TokenPriceChartProvider: FC<{
         setAllTimeError(error)
         setAllTimeIsFetching(false)
       })
-  }, [address, reexecuteAllTimeTrigger])
+  }, [address, reexecuteAllTimeTrigger, chainId])
 
   const hourlyData = hourlyDataRaw?.cellarHourDatas
   const weeklyData = weeklyDataRaw?.cellar?.dayDatas

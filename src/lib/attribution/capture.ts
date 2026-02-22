@@ -25,6 +25,33 @@ export type RpcEvent = {
   timestampMs: number
 }
 
+const getTxHash = (result: unknown): string | undefined => {
+  if (typeof result === "string") return result
+  if (
+    result &&
+    typeof result === "object" &&
+    "hash" in result &&
+    typeof (result as { hash?: unknown }).hash === "string"
+  ) {
+    return (result as { hash: string }).hash
+  }
+  return undefined
+}
+
+const getToAddress = (params: unknown): string | undefined => {
+  if (!Array.isArray(params)) return undefined
+  const first = params[0]
+  if (
+    first &&
+    typeof first === "object" &&
+    "to" in first &&
+    typeof (first as { to?: unknown }).to === "string"
+  ) {
+    return (first as { to: string }).to
+  }
+  return undefined
+}
+
 function redactParams(method: string, params: unknown): unknown {
   try {
     if (method === "eth_sendRawTransaction") return undefined
@@ -59,14 +86,59 @@ export function createCapturingTransport(args: {
 
   return ({ chain }) => {
     const inner = base({ chain })
-    return {
-      ...inner,
-      async request({ method, params }) {
-        const { domain, pagePath, sessionId, wallet } =
-          args.getContext()
-        const timestampMs = Date.now()
-        const requestEvent: RpcEvent = {
-          stage: "request",
+    const wrappedRequest = (async (
+      payload: Parameters<typeof inner.request>[0]
+    ) => {
+      const { method, params } = payload
+      const { domain, pagePath, sessionId, wallet } =
+        args.getContext()
+      const timestampMs = Date.now()
+      const requestEvent: RpcEvent = {
+        stage: "request",
+        domain,
+        pagePath,
+        sessionId,
+        wallet,
+        chainId: chain?.id,
+        method,
+        paramsRedacted: redactParams(method, params),
+        timestampMs,
+      }
+      sendToIngest([requestEvent])
+
+      try {
+        const result = await inner.request({
+          method,
+          params,
+        })
+
+        if (
+          method === "eth_sendTransaction" ||
+          method === "eth_sendRawTransaction"
+        ) {
+          const txHash = getTxHash(result)
+          const to = getToAddress(params)
+          const evt: RpcEvent = {
+            stage: "submitted",
+            domain,
+            pagePath,
+            sessionId,
+            wallet,
+            chainId: chain?.id,
+            method,
+            txHash,
+            to,
+            contractMatch: isAttributedAddress(registry, to),
+            strategyKey: "ALPHA_STETH",
+            timestampMs: Date.now(),
+          }
+          sendToIngest([evt])
+        }
+
+        return result
+      } catch (err: unknown) {
+        const evt: RpcEvent = {
+          stage: "error",
           domain,
           pagePath,
           sessionId,
@@ -74,55 +146,16 @@ export function createCapturingTransport(args: {
           chainId: chain?.id,
           method,
           paramsRedacted: redactParams(method, params),
-          timestampMs,
+          timestampMs: Date.now(),
         }
-        sendToIngest([requestEvent])
+        sendToIngest([evt])
+        throw err
+      }
+    }) as typeof inner.request
 
-        try {
-          const result: any = await inner.request({ method, params })
-
-          if (
-            method === "eth_sendTransaction" ||
-            method === "eth_sendRawTransaction"
-          ) {
-            const txHash: string =
-              typeof result === "string" ? result : result?.hash
-            const to: string | undefined =
-              Array.isArray(params) && (params[0] as any)?.to
-            const evt: RpcEvent = {
-              stage: "submitted",
-              domain,
-              pagePath,
-              sessionId,
-              wallet,
-              chainId: chain?.id,
-              method,
-              txHash,
-              to,
-              contractMatch: isAttributedAddress(registry, to),
-              strategyKey: "ALPHA_STETH",
-              timestampMs: Date.now(),
-            }
-            sendToIngest([evt])
-          }
-
-          return result
-        } catch (err: any) {
-          const evt: RpcEvent = {
-            stage: "error",
-            domain,
-            pagePath,
-            sessionId,
-            wallet,
-            chainId: chain?.id,
-            method,
-            paramsRedacted: redactParams(method, params),
-            timestampMs: Date.now(),
-          }
-          sendToIngest([evt])
-          throw err
-        }
-      },
+    return {
+      ...inner,
+      request: wrappedRequest,
     }
   }
 }

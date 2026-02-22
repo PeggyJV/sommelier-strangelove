@@ -43,6 +43,19 @@ type RowData = {
   }
 }
 
+type StrategyRowOriginal = {
+  isSommNative?: boolean
+  status?: "active" | "paused" | "withdrawals-only"
+  onAction?: () => void
+  name?: string
+  shortDescription?: string
+  provider?: { title?: string } | string
+  launchDate?: number
+  tvm?: { value?: number; formatted?: string }
+  baseApySumRewards?: { formatted?: string }
+  config: { chain: Chain }
+}
+
 const _AssetAvatarGroup = memo(({ assets }: { assets: Token[] }) => {
   return (
     <AvatarGroup size="sm">
@@ -56,6 +69,7 @@ const _AssetAvatarGroup = memo(({ assets }: { assets: Token[] }) => {
     </AvatarGroup>
   )
 })
+_AssetAvatarGroup.displayName = "AssetAvatarGroup"
 
 const ChainAvatar = memo(({ chain }: { chain: Chain }) => (
   <AvatarGroup>
@@ -72,6 +86,7 @@ const ChainAvatar = memo(({ chain }: { chain: Chain }) => (
     />
   </AvatarGroup>
 ))
+ChainAvatar.displayName = "ChainAvatar"
 
 export const StrategyDesktopColumn = ({
   onDepositModalOpen: _onDepositModalOpen,
@@ -84,13 +99,15 @@ export const StrategyDesktopColumn = ({
         </span>
       ),
       accessor: "name",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyRowOriginal } }) => {
         if (row.original?.isSommNative) {
           return <StrategyRow vault={row.original} />
         }
         const shortDesc = row.original?.shortDescription
         const providerText =
-          row.original?.provider?.title || row.original?.provider
+          typeof row.original?.provider === "string"
+            ? row.original.provider
+            : row.original?.provider?.title
         return (
           <Box>
             <HStack spacing={2}>
@@ -174,7 +191,7 @@ export const StrategyDesktopColumn = ({
         </Tooltip>
       ),
       accessor: "baseApy",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyRowOriginal } }) => {
         if (row.original?.isSommNative) return null
         const launchDate = row.original.launchDate
         const value = row.original.baseApySumRewards?.formatted
@@ -224,8 +241,11 @@ export const StrategyDesktopColumn = ({
       ),
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
+        const typedRow = row as {
+          original?: StrategyRowOriginal
+        }
         const [isHover, setIsHover] = useState(false)
-        if ((row as any)?.original?.isSommNative) return null
+        if (typedRow?.original?.isSommNative) return null
         const handleMouseOver = () => {
           setIsHover(true)
         }
@@ -240,17 +260,21 @@ export const StrategyDesktopColumn = ({
           )
         return (
           <Box
-            aria-label={`Chain: ${row.original.config.chain.displayName}`}
+            aria-label={`Chain: ${typedRow.original?.config.chain.displayName}`}
             onMouseLeave={handleMouseLeave}
             onMouseOver={handleMouseOver}
             w={"80%"}
           >
             <HStack justifyContent={"right"}>
-              <ChainAvatar chain={row.original.config.chain} />
+              {typedRow.original?.config.chain && (
+                <ChainAvatar chain={typedRow.original.config.chain} />
+              )}
             </HStack>
             <Flex alignItems="center" direction="column">
-              {isHover && (
-                <AvatarTooltip chains={[row.original.config.chain]} />
+              {isHover && typedRow.original?.config.chain && (
+                <AvatarTooltip
+                  chains={[typedRow.original.config.chain]}
+                />
               )}
             </Flex>
           </Box>
@@ -271,7 +295,7 @@ export const StrategyDesktopColumn = ({
     {
       Header: () => <Text>Action</Text>,
       id: "deposit",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyRowOriginal } }) => {
         if (row.original?.isSommNative) return null
         return <VaultActionButton vault={row.original} />
       },

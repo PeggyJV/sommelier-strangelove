@@ -4,6 +4,8 @@ import { StrategySection } from "components/_tables/StrategySection"
 import StrategyRow from "components/_vaults/StrategyRow"
 import { DepositModalType } from "data/hooks/useDepositModalStore"
 import { InformationIcon } from "components/_icons"
+import { Chain } from "data/chainConfig"
+import { Badge as StrategyBadge } from "data/types"
 import { Avatar, AvatarGroup } from "@chakra-ui/react"
 import { AvatarTooltip } from "components/_tooltip/AvatarTooltip"
 import { useState } from "react"
@@ -35,6 +37,24 @@ type RowData = {
   }
 }
 
+type StrategyTabOriginal = {
+  isSommNative?: boolean
+  isHero?: boolean
+  logo?: string
+  name?: string
+  type?: string
+  launchDate?: number
+  description?: string
+  deprecated?: boolean
+  provider?: { title?: string } | string
+  tvm?: { value?: number; formatted?: string }
+  baseApySumRewards?: { formatted?: string }
+  config: {
+    badges?: StrategyBadge[]
+    chain: { displayName: string; logoPath?: string; id?: string }
+  }
+}
+
 export const StrategyTabColumn = ({
   onDepositModalOpen,
 }: StrategyTabColumnProps) => {
@@ -46,18 +66,30 @@ export const StrategyTabColumn = ({
         </span>
       ),
       accessor: "name",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyTabOriginal } }) => {
         if (row.original?.isSommNative) {
           return <StrategyRow vault={row.original} />
         }
+        const provider =
+          typeof row.original.provider === "string"
+            ? row.original.provider
+            : row.original.provider?.title
         return (
           <StrategySection
-            icon={row.original.logo}
-            title={row.original.name}
-            provider={row.original.provider.title}
-            type={row.original.type}
-            date={row.original.launchDate}
-            description={row.original.description}
+            icon={row.original.logo ?? ""}
+            title={row.original.name ?? "Vault"}
+            provider={provider}
+            type={
+              typeof row.original.type === "number"
+                ? row.original.type
+                : undefined
+            }
+            date={
+              row.original.launchDate !== undefined
+                ? String(row.original.launchDate)
+                : undefined
+            }
+            description={row.original.description ?? ""}
             isDeprecated={row.original.deprecated}
             badges={row.original.config.badges}
             isHero={row.original.isHero}
@@ -100,8 +132,11 @@ export const StrategyTabColumn = ({
 
       accessor: "chain",
       Cell: ({ cell: { row } }: CellValue) => {
+        const typedRow = row as {
+          original?: StrategyTabOriginal
+        }
         const [isHover, setIsHover] = useState(false)
-        if ((row as any)?.original?.isSommNative) return null
+        if (typedRow?.original?.isSommNative) return null
         const handleMouseOver = () => {
           setIsHover(true)
         }
@@ -123,13 +158,13 @@ export const StrategyTabColumn = ({
             <HStack justifyContent={"center"}>
               <AvatarGroup>
                 <Avatar
-                  name={row.original.config.chain.displayName}
-                  src={row.original.config.chain.logoPath}
-                  key={row.original.config.chain.id}
+                  name={typedRow.original?.config.chain.displayName}
+                  src={typedRow.original?.config.chain.logoPath}
+                  key={typedRow.original?.config.chain.id}
                   background={"transparent"}
                   border={"none"}
                   boxShadow={
-                    row.original.isHero
+                    typedRow.original?.isHero
                       ? "0 0 15px 5px rgba(147, 51, 234, 0.3)"
                       : "none"
                   }
@@ -141,8 +176,12 @@ export const StrategyTabColumn = ({
               </AvatarGroup>
             </HStack>
             <Flex alignItems="center" direction="column">
-              {isHover && (
-                <AvatarTooltip chains={[row.original.config.chain]} />
+              {isHover && typedRow.original?.config.chain && (
+                <AvatarTooltip
+                  chains={[
+                    typedRow.original.config.chain as unknown as Chain,
+                  ]}
+                />
               )}
             </Flex>
           </Box>
@@ -167,7 +206,7 @@ export const StrategyTabColumn = ({
     {
       Header: "TVL",
       accessor: "tvm.value",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyTabOriginal } }) => {
         if (row.original?.isSommNative) return null
         return (
           <Text
@@ -199,7 +238,7 @@ export const StrategyTabColumn = ({
         </Tooltip>
       ),
       accessor: "baseApy",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyTabOriginal } }) => {
         if (row.original?.isSommNative) return null
         const value = row.original.baseApySumRewards?.formatted
         const launchDate = row.original.launchDate
@@ -229,11 +268,11 @@ export const StrategyTabColumn = ({
     {
       Header: () => <Text>Deposit</Text>,
       id: "deposit",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyTabOriginal } }) => {
         if (row.original?.isSommNative) return null
         return (
           <DepositAndWithdrawButton
-            row={row}
+            row={row as unknown}
             onDepositModalOpen={onDepositModalOpen}
           />
         )

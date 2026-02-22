@@ -7,9 +7,10 @@ import {
   OrderedList,
   ListItem,
   Icon,
+  IconProps,
 } from "@chakra-ui/react"
 
-function WarningIcon(props: any) {
+function WarningIcon(props: IconProps) {
   return (
     <Icon viewBox="0 0 24 24" {...props}>
       <path fill="currentColor" d="M1 21h22L12 2 1 21z" />

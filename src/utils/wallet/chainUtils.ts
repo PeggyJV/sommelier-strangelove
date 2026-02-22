@@ -7,14 +7,53 @@ import {
   QUICKNODE_API_KEY,
 } from "src/context/rpc_context"
 
+type SwitchError = {
+  code?: number
+  message?: string
+}
+
+type EthereumRequestPayload = {
+  method: string
+  params?: readonly unknown[]
+}
+
+type EthereumProvider = {
+  request: (payload: EthereumRequestPayload) => Promise<unknown>
+}
+
+const getSwitchError = (error: unknown): SwitchError => {
+  if (!error || typeof error !== "object") return {}
+  const candidate = error as { code?: unknown; message?: unknown }
+  return {
+    code:
+      typeof candidate.code === "number"
+        ? candidate.code
+        : undefined,
+    message:
+      typeof candidate.message === "string"
+        ? candidate.message
+        : undefined,
+  }
+}
+
+const getEthereumProvider = (): EthereumProvider | undefined => {
+  if (typeof window === "undefined") return undefined
+  return (
+    window as Window & { ethereum?: EthereumProvider }
+  ).ethereum
+}
+
 export async function requestSwitch(chainId: 1 | 42161 | 8453) {
   try {
     await switchChain(config, { chainId })
     return true
-  } catch (e: any) {
-    if (e?.code === 4001)
+  } catch (e: unknown) {
+    const switchError = getSwitchError(e)
+    if (switchError.code === 4001)
       throw new Error("User canceled chain switch")
-    if (e?.message?.includes("Unrecognized chain ID")) {
+    if (
+      switchError.message?.includes("Unrecognized chain ID")
+    ) {
       throw new Error("Unsupported chain in wallet")
     }
     throw e
@@ -27,13 +66,11 @@ export async function requestSwitchWithAdd(
   try {
     await switchChain(config, { chainId })
     return true
-  } catch (e: any) {
+  } catch (e: unknown) {
+    const switchError = getSwitchError(e)
+    const ethereum = getEthereumProvider()
     // If chain not added in wallet, try wallet_addEthereumChain
-    if (
-      e?.code === 4902 &&
-      typeof window !== "undefined" &&
-      (window as any)?.ethereum
-    ) {
+    if (switchError.code === 4902 && ethereum) {
       const chain = chainConfig.find((c) => c.wagmiId === chainId)
       if (!chain) {
         throw new Error("Chain configuration not found")
@@ -42,14 +79,14 @@ export async function requestSwitchWithAdd(
       try {
         // Build provider URLs with API keys when available
         const keyedUrls = [
-          (chain as any).infuraRpcUrl && INFURA_API_KEY
-            ? `${(chain as any).infuraRpcUrl}/${INFURA_API_KEY}`
+          chain.infuraRpcUrl && INFURA_API_KEY
+            ? `${chain.infuraRpcUrl}/${INFURA_API_KEY}`
             : undefined,
-          (chain as any).alchemyRpcUrl && ALCHEMY_API_KEY
-            ? `${(chain as any).alchemyRpcUrl}/${ALCHEMY_API_KEY}`
+          chain.alchemyRpcUrl && ALCHEMY_API_KEY
+            ? `${chain.alchemyRpcUrl}/${ALCHEMY_API_KEY}`
             : undefined,
-          (chain as any).quicknodeRpcUrl && QUICKNODE_API_KEY
-            ? `${(chain as any).quicknodeRpcUrl}/${QUICKNODE_API_KEY}`
+          chain.quicknodeRpcUrl && QUICKNODE_API_KEY
+            ? `${chain.quicknodeRpcUrl}/${QUICKNODE_API_KEY}`
             : undefined,
         ].filter(Boolean) as string[]
 
@@ -67,7 +104,7 @@ export async function requestSwitchWithAdd(
           ? keyedUrls
           : publicFallbacks[chainId] || []
 
-        await (window as any).ethereum.request({
+        await ethereum.request({
           method: "wallet_addEthereumChain",
           params: [
             {
@@ -89,19 +126,21 @@ export async function requestSwitchWithAdd(
         // Try switching again after adding
         await switchChain(config, { chainId })
         return true
-      } catch (addErr: any) {
+      } catch (addErr: unknown) {
+        const addMessage =
+          getSwitchError(addErr).message ?? "Unknown error"
         throw new Error(
-          `Failed to add network: ${
-            addErr?.message ?? "Unknown error"
-          }`
+          `Failed to add network: ${addMessage}`
         )
       }
     }
 
     // Handle other errors
-    if (e?.code === 4001)
+    if (switchError.code === 4001)
       throw new Error("User canceled chain switch")
-    if (e?.message?.includes("Unrecognized chain ID")) {
+    if (
+      switchError.message?.includes("Unrecognized chain ID")
+    ) {
       throw new Error("Unsupported chain in wallet")
     }
     throw e

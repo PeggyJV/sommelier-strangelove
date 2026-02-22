@@ -54,6 +54,40 @@ interface WithdrawQueueFormProps {
   onSuccessfulWithdraw?: () => void
 }
 
+type WithdrawTokenRule = Partial<{
+  minDiscount: number
+  maxDiscount: number
+  minimumSecondsToDeadline: number
+}>
+
+type WithdrawConfigShape = {
+  withdrawTokenConfig?: Record<string, WithdrawTokenRule>
+}
+
+const getMessageFromUnknown = (value: unknown): string => {
+  if (typeof value === "string") return value
+  if (value instanceof Error) return value.message
+  if (
+    value &&
+    typeof value === "object" &&
+    "message" in value &&
+    typeof (value as { message?: unknown }).message === "string"
+  ) {
+    return (value as { message: string }).message
+  }
+  return ""
+}
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    const causeMessage = getMessageFromUnknown(
+      (error as Error & { cause?: unknown }).cause
+    )
+    return causeMessage || error.message || ""
+  }
+  return getMessageFromUnknown(error)
+}
+
 // Use global withdraw deadline (14 days) and express discount in basis points
 // 0.25% => 25 bps
 const DISCOUNT_BPS = 25
@@ -283,6 +317,13 @@ export const WithdrawQueueForm = ({
   }
 
   const geo = useGeo()
+  const getWithdrawTokenRules = (
+    tokenSymbol: string
+  ): WithdrawTokenRule | undefined => {
+    return (cellarConfig as WithdrawConfigShape).withdrawTokenConfig?.[
+      tokenSymbol
+    ]
+  }
 
   // Create stable validation key to prevent unnecessary re-runs
   const validationKey = useMemo(() => {
@@ -385,8 +426,9 @@ export const WithdrawQueueForm = ({
 
         const tokenSymbolForRules = (selectedToken?.symbol ||
           "") as string
-        const configuredRules: any = (cellarConfig as any)
-          ?.withdrawTokenConfig?.[tokenSymbolForRules]
+        const configuredRules = getWithdrawTokenRules(
+          tokenSymbolForRules
+        )
 
         // Use on-chain values if available, otherwise fall back to config
         const minBps =
@@ -417,8 +459,8 @@ export const WithdrawQueueForm = ({
         const step = 25
         const upper = maxBps && maxBps > 0 ? maxBps : startBps
         let found: number | null = null
-        let lastError: any = null
-        let firstError: any = null
+        let lastError: unknown = null
+        let firstError: unknown = null
         console.log("Starting discount simulation loop:", {
           startBps,
           upper,
@@ -473,11 +515,7 @@ export const WithdrawQueueForm = ({
           } catch (err) {
             if (!firstError) firstError = err
             lastError = err
-            const errMsg = (
-              (err as any)?.cause?.message ||
-              (err as Error).message ||
-              ""
-            ).toString()
+            const errMsg = getErrorMessage(err).toString()
             console.log(
               `Discount ${bps} BPS failed:`,
               errMsg.slice(0, 200)
@@ -504,11 +542,7 @@ export const WithdrawQueueForm = ({
             // Analyze the first error to provide a helpful message (most informative)
             const errorToAnalyze = firstError || lastError
             if (errorToAnalyze) {
-              const errorMsg = (
-                (errorToAnalyze as any)?.cause?.message ||
-                (errorToAnalyze as Error).message ||
-                ""
-              ).toString()
+              const errorMsg = getErrorMessage(errorToAnalyze).toString()
               console.error(
                 "All withdraw simulations failed. First error:",
                 errorMsg,
@@ -618,11 +652,7 @@ export const WithdrawQueueForm = ({
         }
       } catch (e) {
         if (cancelled) return
-        const msg = (
-          (e as any)?.cause?.message ||
-          (e as Error).message ||
-          ""
-        ).toString()
+        const msg = getErrorMessage(e).toString()
         setIsRequestValid(false)
         if (
           msg.includes(
@@ -633,10 +663,9 @@ export const WithdrawQueueForm = ({
             `Withdraw queue is currently not available for ${selectedToken.symbol}.`
           )
         } else if (msg.includes("BoringOnChainQueue__BadDiscount")) {
-          const rules: any = (cellarConfig as any)
-            ?.withdrawTokenConfig?.[
+          const rules = getWithdrawTokenRules(
             (selectedToken?.symbol || "") as string
-          ]
+          )
           const minPct = rules?.minDiscount
           const maxPct = rules?.maxDiscount
           setPreflightMessage(
@@ -665,8 +694,7 @@ export const WithdrawQueueForm = ({
     return () => {
       cancelled = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // Intentionally only watching validationKey changes to prevent excessive re-validation loops
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- validation key intentionally gates the effect to avoid revalidation loops.
   }, [validationKey, lastValidationKey])
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) {
@@ -731,7 +759,7 @@ export const WithdrawQueueForm = ({
 
     if (needsApproval) {
       try {
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         const hash = await cellarContract?.write.approve(
           [
             getAddress(
@@ -859,7 +887,7 @@ export const WithdrawQueueForm = ({
       console.error(error)
 
       if (error.message === "GAS_LIMIT_ERROR") {
-        const causeMsg = (error as any)?.cause?.message || ""
+        const causeMsg = getErrorMessage(error)
         if (
           causeMsg.includes(
             "BoringOnChainQueue__WithdrawsNotAllowedForAsset"
@@ -884,8 +912,7 @@ export const WithdrawQueueForm = ({
         }
         if (causeMsg.includes("BoringOnChainQueue__BadDiscount")) {
           const tokenSymbol = (selectedToken?.symbol || "") as string
-          const rules: any = (cellarConfig as any)
-            ?.withdrawTokenConfig?.[tokenSymbol]
+          const rules = getWithdrawTokenRules(tokenSymbol)
           const minPct = rules?.minDiscount ?? undefined
           const maxPct = rules?.maxDiscount ?? undefined
           addToast({
@@ -949,8 +976,9 @@ export const WithdrawQueueForm = ({
     const currentTime = Math.floor(Date.now() / 1000)
     const tokenSymbolForRules = (selectedToken?.symbol ||
       "") as string
-    const configuredRules: any = (cellarConfig as any)
-      ?.withdrawTokenConfig?.[tokenSymbolForRules]
+    const configuredRules = getWithdrawTokenRules(
+      tokenSymbolForRules
+    )
     const minBps = Number(configuredRules?.minDiscount ?? 0) * 100
     const maxBps = Number(configuredRules?.maxDiscount ?? 0) * 100
     // Our desired default is 25 bps; clamp to per-asset rules if present
@@ -1006,7 +1034,7 @@ export const WithdrawQueueForm = ({
           address
         )
 
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         hash = await boringQueue?.write.replaceOnChainWithdraw(
           [oldRequestTouple, discount, deadlineSeconds],
           {
@@ -1029,7 +1057,7 @@ export const WithdrawQueueForm = ({
           address
         )
 
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         hash = await boringQueue?.write.requestOnChainWithdraw(
           [
             selectedToken?.address,
@@ -1072,7 +1100,7 @@ export const WithdrawQueueForm = ({
         330000,
         address
       )
-      // @ts-ignore
+      // @ts-expect-error -- legacy typing gap
       hash = await withdrawQueueContract?.write.updateWithdrawRequest(
         [cellarConfig.cellar.address, withdrawTouple],
         {

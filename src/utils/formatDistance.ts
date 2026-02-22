@@ -21,7 +21,7 @@ export const formatDistance = (
   token: keyof typeof formatDistanceLocale,
   count: string
 ) => {
-  const result = (formatDistanceLocale[token] as any).replace(
+  const result = formatDistanceLocale[token].replace(
     "{{count}}",
     count
   )

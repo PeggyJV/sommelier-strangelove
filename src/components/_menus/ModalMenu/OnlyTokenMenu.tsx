@@ -21,7 +21,7 @@ import { useDepositModalStore } from "data/hooks/useDepositModalStore"
 
 export interface ModalOnlyTokenMenuProps {
   depositTokens: string[]
-  setSelectedToken: (value: any) => void
+  setSelectedToken: (value: Token) => void
   activeAsset?: string
   isDisabled?: boolean
 }
@@ -29,7 +29,7 @@ export interface ModalOnlyTokenMenuProps {
 export interface MenuOnlyTokenProps
   extends Omit<ModalOnlyTokenMenuProps, "setSelectedToken"> {
   value: Token
-  onChange: (...events: any[]) => void
+  onChange: (value: Token) => void
   isDisabled?: boolean
 }
 
@@ -70,7 +70,6 @@ export const OnlyTokenMenu = ({
         alignItems: "center",
       }}
     >
-      {/* @ts-ignore using string where number is expected. This is to ensure popover is always placed at the top of button, no matter the height value. */}
       <ChMenu placement="bottom">
         <MenuButton
           as={Box}

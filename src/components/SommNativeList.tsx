@@ -3,8 +3,8 @@ import { StrategyTable } from "components/_tables/StrategyTable"
 import { useSommNativeVaults } from "data/hooks/useSommNativeVaults"
 
 type Props = {
-  columns: any
-  data?: any[]
+  columns: React.ComponentProps<typeof StrategyTable>["columns"]
+  data?: React.ComponentProps<typeof StrategyTable>["data"]
 }
 
 export default function SommNativeList({
@@ -17,7 +17,7 @@ export default function SommNativeList({
   return (
     <StrategyTable
       columns={columns}
-      data={data as any}
+      data={data}
       showHeader={false}
     />
   )

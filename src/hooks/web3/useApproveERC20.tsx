@@ -83,7 +83,7 @@ export const useApproveERC20 = ({
     }
     if (needsApproval) {
       try {
-        // @ts-ignore
+        // @ts-expect-error -- legacy typing gap
         const hash = await erc20Contract?.write.approve(
           [spender, amtInWei],
           { account: address }

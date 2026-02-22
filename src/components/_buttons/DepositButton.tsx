@@ -27,6 +27,21 @@ import { requestSwitchWithAdd } from "utils/wallet/chainUtils"
 import { useBrandedToast } from "hooks/chakra"
 import { analytics } from "utils/analytics"
 
+type SupportedChainId = 1 | 42161 | 8453
+
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) return error.message
+  if (
+    error &&
+    typeof error === "object" &&
+    "message" in error &&
+    typeof (error as { message?: unknown }).message === "string"
+  ) {
+    return (error as { message: string }).message
+  }
+  return "Unknown error"
+}
+
 export const DepositButton: FC<ButtonProps> = (props) => {
   const depositModal = useDisclosure()
   const notifyModal = useDisclosure()
@@ -62,19 +77,19 @@ export const DepositButton: FC<ButtonProps> = (props) => {
           return // wait for connection, effect will re-run
         }
         // Ensure correct network
-        const expectedChainId = (cellarData as any)?.config?.chain
-          ?.wagmiId as 1 | 42161 | 8453 | undefined
+        const expectedChainId = cellarData?.config?.chain
+          ?.wagmiId as SupportedChainId | undefined
         if (expectedChainId && chain?.id !== expectedChainId) {
           try {
-            await requestSwitchWithAdd(expectedChainId as any)
-          } catch (e: any) {
+            await requestSwitchWithAdd(expectedChainId)
+          } catch (e: unknown) {
             addToast({
               heading: "Unable to switch network",
               status: "error",
               body: (
                 <Text>
                   Please switch to the correct network, then try
-                  again. {e?.message}
+                  again. {getErrorMessage(e)}
                 </Text>
               ),
               duration: 6000,
@@ -102,7 +117,17 @@ export const DepositButton: FC<ButtonProps> = (props) => {
     }
 
     run()
-  }, [router.query?.action, isConnected, chain?.id])
+  }, [
+    router.query?.action,
+    isConnected,
+    chain?.id,
+    router,
+    cellarData,
+    depositModal,
+    openConnectModal,
+    addToast,
+    close,
+  ])
 
   return (
     <ClientOnly>

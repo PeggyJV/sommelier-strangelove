@@ -46,6 +46,8 @@ interface AlphaStethMigrationFormProps {
   onSuccessfulMigration?: () => void
 }
 
+type IngestEvent = Record<string, unknown>
+
 export const AlphaStethMigrationForm = ({
   onClose,
   onSuccessfulMigration,
@@ -87,7 +89,7 @@ export const AlphaStethMigrationForm = ({
     lpToken: { address: ZERO_ADDR, imagePath: "" },
     cellar: {
       address: ZERO_ADDR,
-      abi: [] as any,
+      abi: [] as ConfigProps["cellar"]["abi"],
       key: CellarKey.CELLAR_V0816,
       decimals: 18,
     },
@@ -215,7 +217,7 @@ export const AlphaStethMigrationForm = ({
   const geo = useGeo()
 
   // Attribution: helper to send events to ingestion API
-  const sendIngest = async (evt: any) => {
+  const sendIngest = async (evt: IngestEvent) => {
     try {
       if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true")
         return
@@ -449,7 +451,8 @@ export const AlphaStethMigrationForm = ({
 
       const depositHash = await writeContractAsync({
         address: alphaStethConfig.teller?.address as `0x${string}`,
-        abi: alphaStethConfig.teller?.abi!,
+        abi: (alphaStethConfig.teller?.abi ??
+          []) as ConfigProps["cellar"]["abi"],
         functionName: "deposit",
         args: [
           sourceConfig.baseAsset.address,
@@ -489,8 +492,8 @@ export const AlphaStethMigrationForm = ({
             contractMatch: true,
             strategyKey: "ALPHA_STETH",
             amount: String(amountOfBaseAsset),
-            blockNumber: Number((receipt as any)?.blockNumber ?? 0),
-            blockHash: (receipt as any)?.blockHash,
+            blockNumber: Number(receipt?.blockNumber ?? 0n),
+            blockHash: receipt?.blockHash,
             status: "success",
             token: sourceConfig.baseAsset.symbol,
             decimals: sourceConfig.baseAsset.decimals,
@@ -595,7 +598,7 @@ export const AlphaStethMigrationForm = ({
           Choose Source Vault
         </Text>
         <Text color="neutral.400">
-          Select which vault you'd like to migrate from to Alpha
+          Select which vault you&apos;d like to migrate from to Alpha
           STETH:
         </Text>
 

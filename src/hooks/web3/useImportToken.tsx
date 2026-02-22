@@ -9,7 +9,7 @@ interface ImportTokenParams {
 }
 
 interface ImportTokenCallbacks {
-  onSuccess?: (data: any) => void
+  onSuccess?: (data: unknown) => void
   onError?: (error: Error) => void
 }
 

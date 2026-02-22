@@ -7,10 +7,20 @@ const baseUrl =
 
 interface CellarType {
   id: string
-  dayDatas: any
-  shareValue: any
+  dayDatas: Array<{ date: number; shareValue: string }>
+  shareValue: string | number
   tvlTotal: number
   chain: string
+}
+
+type SommelierDayData = {
+  unix_seconds: number
+  share_price: number
+}
+
+type TransformedDayData = {
+  date: number
+  shareValue: string
 }
 
 async function fetchData(url: string) {
@@ -105,9 +115,9 @@ const sommelierAPIAllStrategiesData = async (
         CellaAddressDataMap[cellarAddress!.toString().toLowerCase()]
           .config.cellar.decimals
 
-      let transformedData = fetchedEthData.Response[
-        cellarAddress
-      ].map((dayData: any) => ({
+      let transformedData: TransformedDayData[] = (
+        fetchedEthData.Response[cellarAddress] as SommelierDayData[]
+      ).map((dayData: SommelierDayData): TransformedDayData => ({
         date: dayData.unix_seconds,
         // Multiply by cellarDecimals and drop any decimals
         shareValue: Math.floor(
@@ -116,19 +126,16 @@ const sommelierAPIAllStrategiesData = async (
       }))
 
       // Order by descending date
-      transformedData.sort((a: any, b: any) => b.date - a.date)
+      transformedData.sort((a, b) => b.date - a.date)
 
       // Get tvl
-      let tvl =
+      const tvl = Number(
         fetchedTVL?.Response?.[cellarAddress] ??
-        fetchedTVL?.Response?.[cellarAddress?.toLowerCase?.()] ??
-        0
+          fetchedTVL?.Response?.[cellarAddress?.toLowerCase?.()] ??
+          0
+      )
 
-      if (tvl === undefined) {
-        tvl = 0
-      }
-
-      let shareValue = 0
+      let shareValue: string | number = 0
       if (transformedData.length === 0) {
         console.warn(`No data found for ${cellarAddress} on Ethereum`)
       } else {
@@ -165,9 +172,9 @@ const sommelierAPIAllStrategiesData = async (
             cellarAddress!.toString().toLowerCase() + "-arbitrum"
           ].config.cellar.decimals
 
-        let transformedData = fetchedArbitrumData.Response[
-          cellarAddress
-        ].map((dayData: any) => ({
+        let transformedData: TransformedDayData[] = (
+          fetchedArbitrumData.Response[cellarAddress] as SommelierDayData[]
+        ).map((dayData: SommelierDayData): TransformedDayData => ({
           date: dayData.unix_seconds,
           // Multiply by cellarDecimals and drop any decimals
           shareValue: Math.floor(
@@ -176,21 +183,18 @@ const sommelierAPIAllStrategiesData = async (
         }))
 
         // Order by descending date
-        transformedData.sort((a: any, b: any) => b.date - a.date)
+        transformedData.sort((a, b) => b.date - a.date)
 
         // Get tvl
-        let tvl =
+        const tvl = Number(
           fetchedTVL?.Response?.[cellarAddress + "-arbitrum"] ??
-          fetchedTVL?.Response?.[
-            cellarAddress?.toLowerCase?.() + "-arbitrum"
-          ] ??
-          0
+            fetchedTVL?.Response?.[
+              cellarAddress?.toLowerCase?.() + "-arbitrum"
+            ] ??
+            0
+        )
 
-        if (tvl === undefined) {
-          tvl = 0
-        }
-
-        let shareValue = 0
+        let shareValue: string | number = 0
         if (transformedData.length === 0) {
           console.warn(
             `No data found for ${cellarAddress} on Arbitrum`
@@ -230,9 +234,9 @@ const sommelierAPIAllStrategiesData = async (
             cellarAddress!.toString().toLowerCase() + "-optimism"
           ].config.cellar.decimals
 
-        let transformedData = fetchedOptimismData.Response[
-          cellarAddress
-        ].map((dayData: any) => ({
+        let transformedData: TransformedDayData[] = (
+          fetchedOptimismData.Response[cellarAddress] as SommelierDayData[]
+        ).map((dayData: SommelierDayData): TransformedDayData => ({
           date: dayData.unix_seconds,
           // Multiply by cellarDecimals and drop any decimals
           shareValue: Math.floor(
@@ -241,21 +245,18 @@ const sommelierAPIAllStrategiesData = async (
         }))
 
         // Order by descending date
-        transformedData.sort((a: any, b: any) => b.date - a.date)
+        transformedData.sort((a, b) => b.date - a.date)
 
         // Get tvl
-        let tvl =
+        const tvl = Number(
           fetchedTVL?.Response?.[cellarAddress + "-optimism"] ??
-          fetchedTVL?.Response?.[
-            cellarAddress?.toLowerCase?.() + "-optimism"
-          ] ??
-          0
+            fetchedTVL?.Response?.[
+              cellarAddress?.toLowerCase?.() + "-optimism"
+            ] ??
+            0
+        )
 
-        if (tvl === undefined) {
-          tvl = 0
-        }
-
-        let shareValue = 0
+        let shareValue: string | number = 0
         if (transformedData.length === 0) {
           console.warn(
             `No data found for ${cellarAddress} on Optimism`

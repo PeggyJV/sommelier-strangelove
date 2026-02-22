@@ -626,23 +626,6 @@ let acceptedETHDepositTokens = [
   "ETH",
 ]
 
-let depositTokenMapETH = tokenConfig.reduce((map, token) => {
-  if (acceptedETHDepositTokens.includes(token.symbol)) {
-    map[token.symbol] = token
-  }
-  return map
-}, {} as { [symbol: string]: Token })
-
-// sort map by symbol
-export const acceptedETHDepositTokenMap = Object.keys(
-  depositTokenMapETH
-)
-  .sort()
-  .reduce((obj, key) => {
-    obj[key] = depositTokenMapETH[key]
-    return obj
-  }, {} as { [symbol: string]: Token })
-
 // --- ARB ACCEPTED TOKENS ---
 let acceptedARBDepositTokens = [
   "USDC",
@@ -655,27 +638,10 @@ let acceptedARBDepositTokens = [
   "ETH",
 ]
 
-let depositTokenMapARB = tokenConfig.reduce((map, token) => {
-  if (acceptedARBDepositTokens.includes(token.symbol)) {
-    map[token.symbol] = token
-  }
-  return map
-}, {} as { [symbol: string]: Token })
-
-// sort map by symbol
-export const acceptedARBDepositTokenMap = Object.keys(
-  depositTokenMapARB
-)
-  .sort()
-  .reduce((obj, key) => {
-    obj[key] = depositTokenMapARB[key]
-    return obj
-  }, {} as { [symbol: string]: Token })
-
 // --- OPTIMISM ACCEPTED TOKENS ---
 let acceptedOPTDepositTokens = ["WETH", "wstETH", "rETH", "ETH"]
 
-const acceptedDepositTokensByChain: { [key: string]: any } = {
+const acceptedDepositTokensByChain: Record<string, string[]> = {
   ethereum: acceptedETHDepositTokens,
   arbitrum: acceptedARBDepositTokens,
   optimism: acceptedOPTDepositTokens,

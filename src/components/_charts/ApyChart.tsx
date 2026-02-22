@@ -5,6 +5,7 @@ import {
   Point,
   PointTooltipProps,
   AllowedValue,
+  SliceData,
 } from "@nivo/line"
 import { useNivoThemes } from "hooks/nivo"
 import dynamic from "next/dynamic"
@@ -34,6 +35,12 @@ interface TokenPriceChartProps {
     SetStateAction<Point<LineSeries> | undefined>
   >
 }
+
+type AxisTick = {
+  x: number
+  y: number
+  value: string | number
+}
 export const ApyChart = ({
   timeline,
   pointActive,
@@ -41,9 +48,6 @@ export const ApyChart = ({
 }: TokenPriceChartProps) => {
   const { data } = useApyChart()
   const { chartTheme } = useNivoThemes()
-  const onMouseMove = (point: Point<LineSeries>) => {
-    setPointActive(point)
-  }
   const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
 
   const ToolTip: FunctionComponent<PointTooltipProps<LineSeries>> = ({
@@ -110,7 +114,9 @@ export const ApyChart = ({
     return null
   }
 
-  const hourlyAxisBottom = useMemo<any>(() => {
+  const hourlyAxisBottom = useMemo<
+    { axisBottom: { format: string; tickValues: string } } | undefined
+  >(() => {
     if (timeline === "1D") {
       return {
         axisBottom: {
@@ -177,7 +183,11 @@ export const ApyChart = ({
       ]}
       margin={{ bottom: 110, left: 35, right: 18, top: 20 }}
       theme={chartTheme}
-      onMouseMove={onMouseMove}
+      onMouseMove={(
+        datum: Readonly<Point<LineSeries>> | Readonly<SliceData<LineSeries>>
+      ) => {
+        if ("data" in datum) setPointActive(datum)
+      }}
       onMouseLeave={() => {
         setPointActive(undefined)
       }}
@@ -191,10 +201,9 @@ export const ApyChart = ({
         max: "auto",
         clamp: true,
         nice: true,
-        stepSize: 1,
       }}
       axisLeft={{
-        renderTick: (tick) => {
+        renderTick: (tick: AxisTick) => {
           return (
             <g
               transform={`translate(${tick.x + 3},${tick.y})`}

@@ -11,9 +11,9 @@ import {
   Thead,
   Tr,
 } from "@chakra-ui/react"
-import { FC } from "react"
+import { FC, ReactNode } from "react"
 
-import { useTable, useSortBy } from "react-table"
+import { Column, useTable, useSortBy } from "react-table"
 
 import { SortingArrowIcon } from "components/_icons/SortingArrowIcon"
 import { useRouter } from "next/router"
@@ -93,7 +93,9 @@ export interface StrategyTableProps {
   data: Awaited<
     ReturnType<typeof getUserDataAllStrategies>
   >["strategies"]
-  columns: any
+  columns: Column<
+    Awaited<ReturnType<typeof getUserDataAllStrategies>>["strategies"][number]
+  >[]
 }
 
 export const SidebarTable: FC<StrategyTableProps> = ({
@@ -106,7 +108,9 @@ export const SidebarTable: FC<StrategyTableProps> = ({
     headerGroups,
     rows,
     prepareRow,
-  } = useTable(
+  } = useTable<
+    Awaited<ReturnType<typeof getUserDataAllStrategies>>["strategies"][number]
+  >(
     {
       columns,
       data,
@@ -125,7 +129,15 @@ export const SidebarTable: FC<StrategyTableProps> = ({
         <Thead border="none" color="neutral.400">
           {headerGroups.map((headerGroup, index) => (
             <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
-              {headerGroup.headers.map((column: any, index) => {
+              {headerGroup.headers.map((header, index) => {
+                const column = header as unknown as {
+                  canSort?: boolean
+                  getHeaderProps: (
+                    props?: Record<string, unknown>
+                  ) => Record<string, unknown>
+                  getSortByToggleProps: () => Record<string, unknown>
+                  render: (prop: string) => ReactNode
+                }
                 return column.canSort ? (
                   <Th
                     {...column.getHeaderProps(

@@ -51,7 +51,7 @@ export const SliderStrategy: FC<SliderProps> = ({
             </Heading>
             <Box pb={4}>
               <PortableText
-                value={strategy.body}
+                value={strategy.body ?? []}
                 components={{
                   block: {
                     normal: ({ children }) => (

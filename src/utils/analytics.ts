@@ -1,5 +1,4 @@
 import Analytics from "analytics"
-// @ts-ignore - Missing type definitions for @analytics/mixpanel
 import mixpanel from "@analytics/mixpanel"
 
 const isBrowser = typeof window !== "undefined"
@@ -23,12 +22,15 @@ try {
 const appName =
   process.env.NEXT_PUBLIC_APP_NAME ?? "Sommelier <Local>"
 
+type AnalyticsConfig = Parameters<typeof Analytics>[0]
+type AnalyticsPlugins = NonNullable<AnalyticsConfig["plugins"]>
+
 // Google Tag Manager
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 const isSendToGTM =
   isBrowser && gtmId && gtmId !== null && gtmId.length > 0
 
-const plugins: any[] = []
+const plugins: AnalyticsPlugins = []
 
 const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN
 if (isBrowser && mixpanelToken && mixpanelToken.length > 0) {
@@ -46,7 +48,7 @@ export class AnalyticsWrapper {
   client: ReturnType<typeof Analytics>
   enabled: boolean
 
-  constructor(appName: string, plugins: any[]) {
+  constructor(appName: string, plugins: AnalyticsPlugins) {
     this.client = Analytics({
       app: appName,
       plugins,
@@ -64,8 +66,11 @@ export class AnalyticsWrapper {
       this.enabled && this.client.track(eventName, payload)
       this.enabled &&
         isSendToGTM &&
-        // @ts-ignore - dataLayer is added by GTM
-        window.dataLayer?.push({ event: eventName, ...payload })
+        (
+          window as Window & {
+            dataLayer?: Array<Record<string, unknown>>
+          }
+        ).dataLayer?.push({ event: eventName, ...payload })
     } catch (error) {
       console.error(error)
     }

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useAccount } from "wagmi"
-import { useAllContracts } from "./useAllContracts"
 import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
 import { useStrategyData } from "./useStrategyData"
 import { useUserBalance } from "./useUserBalance"
@@ -16,22 +15,42 @@ export const useUserStrategyData = (
   chain: string,
   enabled: boolean = true
 ) => {
-  const { address: userAddress } = useAccount()
-  const { data: _allContracts } = useAllContracts()
-  const strategyData = useStrategyData(strategyAddress, chain)
-  const sommToken = tokenConfig.find(
-    (token) =>
-      token.coinGeckoId === "sommelier" && token.chain === chain
-  )!
+  type UserStakesResult = {
+    userStakes?: Array<{
+      amount: string | number
+      lock: number
+      unbondTimestamp: number
+    }>
+    claimAllRewards?: unknown[]
+  }
+  const fallbackConfig = Object.values(cellarDataMap)[0]?.config
+  if (!fallbackConfig) {
+    throw new Error("cellarDataMap is empty")
+  }
 
-  const sommPrice = useCoinGeckoPrice(sommToken)
-
-  const config = Object.values(cellarDataMap).find(
+  const matchedCellar = Object.values(cellarDataMap).find(
     (item) =>
       item.config.cellar.address.toLowerCase() ===
         strategyAddress.toLowerCase() &&
       item.config.chain.id === chain
-  )!.config
+  )
+
+  const config = matchedCellar?.config ?? fallbackConfig
+  const isValidStrategyConfig = Boolean(matchedCellar?.config)
+
+  const { address: userAddress } = useAccount()
+  const strategyData = useStrategyData(strategyAddress, chain)
+  const chainSommToken = tokenConfig.find(
+    (token) =>
+      token.coinGeckoId === "sommelier" && token.chain === chain
+  )
+  const sommTokenFallback =
+    tokenConfig.find((token) => token.coinGeckoId === "sommelier") ??
+    tokenConfig[0]
+  const sommToken = chainSommToken ?? sommTokenFallback
+  const hasSommToken = Boolean(chainSommToken || sommTokenFallback)
+
+  const sommPrice = useCoinGeckoPrice(sommToken)
 
   const isNoDataSource = Boolean(
     Object.values(cellarDataMap).find(
@@ -60,15 +79,33 @@ export const useUserStrategyData = (
     ],
     queryFn: async () => {
       // Attempt to read legacy staking positions regardless of LP token availability
-      let userStakesResult: any = null
+      let userStakesResult: UserStakesResult | null = null
       try {
         if (config.staker && stakerContract && userAddress) {
-          userStakesResult = await fetchUserStakes(
+          const stakingData = (await fetchUserStakes(
             userAddress,
             stakerContract,
             (sommPrice.data as string) || "0",
             config
-          )
+          )) as unknown as {
+            userStakes?: Array<{
+              amount: bigint | string | number
+              lock: number
+              unbondTimestamp: number
+            }>
+            claimAllRewards?: unknown[]
+          }
+          userStakesResult = {
+            claimAllRewards: stakingData.claimAllRewards ?? [],
+            userStakes: stakingData.userStakes?.map((stake) => ({
+              amount:
+                typeof stake.amount === "bigint"
+                  ? stake.amount.toString()
+                  : stake.amount,
+              lock: stake.lock,
+              unbondTimestamp: stake.unbondTimestamp,
+            })),
+          }
         }
       } catch (e) {
         // Non-fatal; keep staking data null on failure
@@ -148,6 +185,8 @@ export const useUserStrategyData = (
     enabled:
       enabled &&
       !!userAddress &&
+      isValidStrategyConfig &&
+      hasSommToken &&
       !!strategyData.data &&
       isNoDataSource === false,
     staleTime: 120_000,

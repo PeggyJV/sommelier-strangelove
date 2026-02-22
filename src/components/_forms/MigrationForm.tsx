@@ -192,9 +192,12 @@ export const MigrationForm = ({ onClose }: MigrationFormProps) => {
       ])
 
       // Execute migration
+      if (!cellarSigner?.abi) {
+        throw new Error("Cellar signer ABI unavailable")
+      }
       const migrationHash = await writeContractAsync({
         address: cellarSigner?.address as `0x${string}`,
-        abi: cellarSigner?.abi!,
+        abi: cellarSigner.abi,
         functionName: "deposit",
         args: [
           cellarConfig.baseAsset.address,

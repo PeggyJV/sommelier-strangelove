@@ -37,11 +37,11 @@ export const getEnsoRouterAddress = async (fromAddress: string) => {
 export const useEnsoRoutes = (
   config: EnsoRouteConfig,
   shouldFetch: boolean,
-  lastResponse: any
+  lastResponse: unknown
 ) => {
   // Enso routes aren't in use for now and to avoid failing requests, returning early
   return { ensoResponse: '1', ensoError: null, ensoLoading: false };
-  const [ensoResponse, setResponse] = useState<any>(null)
+  const [ensoResponse, setResponse] = useState<unknown>(null)
   const [ensoError, setError] = useState<string | null>(null)
   const [ensoLoading, setLoading] = useState<boolean>(true)
 
@@ -121,7 +121,7 @@ export const useEnsoRoutes = (
     return () => {
       clearInterval(intervalId)
     }
-  }, [config, shouldFetch])
+  }, [config, shouldFetch, lastResponse])
 
   return { ensoResponse, ensoError, ensoLoading }
 }

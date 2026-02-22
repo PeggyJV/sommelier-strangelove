@@ -3,7 +3,7 @@
 
 // Ensure process.env exists even on client-side
 if (typeof window !== "undefined" && typeof process === "undefined") {
-  // @ts-ignore
+  // @ts-expect-error -- legacy typing gap
   window.process = { env: {} };
 }
 

@@ -6,26 +6,50 @@ import {
 
 const registry = buildAlphaStethRegistry()
 
+type RpcPayload = {
+  method?: string
+  params?: Array<{ to?: string } | unknown>
+}
+
+type WrappedProvider = {
+  request: (payload: RpcPayload) => Promise<unknown>
+  __sommWrapped?: boolean
+}
+
+type ConnectorWithProvider = Connector & {
+  getProvider?: (...args: unknown[]) => Promise<unknown>
+}
+
 export function wrapConnector(connector: Connector): Connector {
-  const origGetProvider = connector.getProvider?.bind(connector)
+  const mutableConnector = connector as ConnectorWithProvider
+  const origGetProvider = mutableConnector.getProvider?.bind(
+    mutableConnector
+  )
   if (!origGetProvider) return connector
-  ;(connector as any).getProvider = async (...args: any[]) => {
-    const provider: any = await origGetProvider(...args)
+  mutableConnector.getProvider = async (...args: unknown[]) => {
+    const provider = (await origGetProvider(
+      ...args
+    )) as WrappedProvider | null
     if (
       provider &&
       typeof provider.request === "function" &&
       !provider.__sommWrapped
     ) {
       const orig = provider.request.bind(provider)
-      provider.request = async (payload: any) => {
+      provider.request = async (payload: RpcPayload) => {
         try {
           const res = await orig(payload)
+          const firstParam =
+            payload?.params?.[0] &&
+            typeof payload.params[0] === "object"
+              ? (payload.params[0] as { to?: string })
+              : undefined
           if (
             payload?.method === "eth_sendTransaction" &&
             Array.isArray(payload?.params) &&
-            payload.params[0]?.to
+            firstParam?.to
           ) {
-            const to = String(payload.params[0].to)
+            const to = String(firstParam.to)
             const match = isAttributedAddress(registry, to)
             if (match) {
               fetch("/api/ingest-rpc", {

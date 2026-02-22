@@ -122,7 +122,7 @@ export const InputSommelierAddress: FC<
               fontWeight="semibold"
               color="red.light"
             >
-              Somm address is not valid—make sure it's from a Cosmos
+              Somm address is not valid—make sure it&apos;s from a Cosmos
               wallet.
             </Text>
           </HStack>

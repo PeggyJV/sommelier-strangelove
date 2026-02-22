@@ -1,6 +1,13 @@
-import { onCLS, onFCP, onLCP, onTTFB, onINP } from "web-vitals"
+import {
+  Metric,
+  onCLS,
+  onFCP,
+  onLCP,
+  onTTFB,
+  onINP,
+} from "web-vitals"
 
-function sendToAnalytics(metric: any) {
+function sendToAnalytics(metric: Metric) {
   const { name, value, id } = metric
 
   // Get current page path

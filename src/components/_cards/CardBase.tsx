@@ -1,8 +1,8 @@
 import { Flex, FlexProps } from "@chakra-ui/react"
-import { ReactElement } from "react"
+import { ReactNode } from "react"
 
 interface Props extends FlexProps {
-  children: ReactElement<any> | ReactElement<any>[]
+  children: ReactNode
 }
 export const CardBase: React.FC<Props> = ({ children, ...rest }) => {
   return (

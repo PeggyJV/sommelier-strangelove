@@ -40,18 +40,20 @@ export const getStrategyData = async ({
   stratData?: GetStrategyDataQuery["cellar"]
   baseAssetPrice: string
 }) => {
+  const contractChain =
+    (contracts as { chain?: string }).chain ?? ""
   const data = await (async () => {
     try {
       const strategy = Object.values(cellarDataMap).find(
         ({ config }) =>
           config.cellar.address.toLowerCase() ===
             address.toLowerCase() &&
-          config.chain.id === (contracts as any)?.chain
+          config.chain.id === contractChain
       )
       if (!strategy) {
         throw new Error(
           `Strategy not found for address ${address} on chain ${
-            (contracts as any)?.chain
+            contractChain
           }`
         )
       }
@@ -297,8 +299,15 @@ export const getStrategyData = async ({
               if (!(contracts.boringVaultLens && config.accountant)) return undefined
               const total_monthly_stETH = 57.5 // Manual input; adjust as needed
               try {
+                const lens = contracts.boringVaultLens as unknown as {
+                  read: {
+                    totalAssets: (
+                      args: [`0x${string}`, `0x${string}`]
+                    ) => Promise<readonly [unknown, bigint]>
+                  }
+                }
                 const [, totalAssets] = await (
-                  contracts.boringVaultLens as any
+                  lens
                 ).read.totalAssets([
                   config.cellar.address as `0x${string}`,
                   config.accountant.address as `0x${string}`,

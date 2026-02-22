@@ -365,7 +365,9 @@ describe("RPC Connection Tests", () => {
       } catch (error) {
         const err = error as Error
         expect(err).toBeInstanceOf(Error)
-        expect(err.message).toMatch(/transport|not found/i)
+        expect(err.message).toMatch(
+          /transport|not found|contract read failed/i
+        )
       }
     })
   })

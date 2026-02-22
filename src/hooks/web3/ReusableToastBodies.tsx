@@ -3,6 +3,18 @@ import truncateWalletAddress from "utils/truncateWalletAddress"
 import { AiFillCopy } from "react-icons/ai"
 import { Link } from "components/Link"
 import { ExternalLinkIcon } from "components/_icons"
+import type { ReactNode } from "react"
+
+type ToastInput = {
+  heading: string
+  body: ReactNode
+  status: "success" | "error" | "info" | "default"
+  duration?: number | null
+  closeHandler?: () => void
+}
+
+type AddToast = (toast: ToastInput) => void
+type CloseAll = () => void
 
 export const TxHashToastBody = ({
   title,
@@ -12,8 +24,8 @@ export const TxHashToastBody = ({
 }: {
   title: string
   hash: string
-  addToast: Function
-  closeAll: Function
+  addToast: AddToast
+  closeAll: CloseAll
 }) => (
   <Stack>
     <Stack spacing={0} fontSize="xs">
@@ -51,8 +63,8 @@ export const BridgeTxHashToastBody = ({
 }: {
   hash: string
   amount: string
-  addToast: Function
-  closeAll: Function
+  addToast: AddToast
+  closeAll: CloseAll
 }) => (
   <Stack>
     <Stack spacing={0} fontSize="xs">
@@ -98,8 +110,8 @@ const CopyTxHashButton = ({
   closeAll,
 }: {
   hash: string
-  addToast: Function
-  closeAll: Function
+  addToast: AddToast
+  closeAll: CloseAll
 }) => (
   <IconButton
     onClick={() => {

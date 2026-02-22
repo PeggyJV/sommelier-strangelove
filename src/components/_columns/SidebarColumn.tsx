@@ -1,10 +1,27 @@
 import { PercentageText } from "components/PercentageText"
 import { StrategySection } from "components/_tables/StrategySection"
 import { Timeline } from "data/context/homeContext"
+import { Badge } from "data/types"
 import { CellValue } from "react-table"
 
 type SidebarColumnProps = {
   timeline: Timeline
+}
+
+type StrategyRow = {
+  config: { badges?: Badge[] }
+  userStrategyData: {
+    strategyData: {
+      logo: string
+      name: string
+      description: string
+      changes: Record<string, number | string>
+    }
+    userData: {
+      netValue: { formatted: string }
+      claimableSommReward?: { value?: unknown; formatted?: string }
+    }
+  }
 }
 
 export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
@@ -12,7 +29,7 @@ export const SidebarColumn = ({ timeline }: SidebarColumnProps) => {
     {
       Header: "Vault",
       accessor: "name",
-      Cell: ({ row }: any) => {
+      Cell: ({ row }: { row: { original: StrategyRow } }) => {
         return (
           <StrategySection
             icon={row.original.userStrategyData.strategyData.logo}

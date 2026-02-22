@@ -1,5 +1,6 @@
 import { useRef, useCallback, useEffect, useState } from "react"
 import { useConnect, useAccount } from "wagmi"
+import type { Connector } from "wagmi"
 import { useBrandedToast } from "hooks/chakra"
 
 export const useWalletConnection = () => {
@@ -75,7 +76,7 @@ export const useWalletConnection = () => {
 
   // Advanced connection handler with AbortController support
   const handleConnectWithAbort = useCallback(
-    async (connector: any) => {
+    async (connector: Connector) => {
       if (isConnecting) return
 
       setIsConnecting(true)
@@ -96,9 +97,13 @@ export const useWalletConnection = () => {
 
         // Clear timeout on successful connection
         clearTimeout(timer)
-      } catch (e: any) {
+      } catch (e: unknown) {
+        const error = e as {
+          name?: string
+          message?: string
+        }
         if (
-          e.name === "AbortError" ||
+          error.name === "AbortError" ||
           abortRef.current?.signal.aborted
         ) {
           addToast({
@@ -109,8 +114,8 @@ export const useWalletConnection = () => {
         } else {
           // Handle specific wallet permission pending error
           if (
-            e.message?.includes("wallet_requestPermissions") &&
-            e.message?.includes("already pending")
+            error.message?.includes("wallet_requestPermissions") &&
+            error.message?.includes("already pending")
           ) {
             addToast({
               heading: "Connection in Progress",
@@ -120,7 +125,7 @@ export const useWalletConnection = () => {
           } else {
             addToast({
               heading: "Connection Failed",
-              body: e.message || "Failed to connect wallet",
+              body: error.message || "Failed to connect wallet",
               status: "error",
             })
           }

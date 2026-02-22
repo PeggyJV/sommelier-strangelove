@@ -164,11 +164,12 @@ export const ApyChartProvider: FC<{
       item.config.cellar.address === address &&
       item.config.chain.id === cellarConfig.config.chain.id
   )!
-  const launchDate = cellarData?.launchDate!
+  const chainId = cellarData.config.chain.id
+  const launchDate = cellarData?.launchDate
   const { data: strategyData, isLoading: isStrategyDataLoading } =
     useStrategyData(
-      cellarData!.config.cellar.address,
-      cellarData!.config.chain.id
+      cellarData.config.cellar.address,
+      chainId
     )
   const launchDay = launchDate ?? subDays(new Date(), 8)
   const launchEpoch = Math.floor(launchDay.getTime() / 1000)
@@ -191,7 +192,7 @@ export const ApyChartProvider: FC<{
     fetchWeeklyShareValueData(
       prevWeek,
       address,
-      cellarData.config.chain.id
+      chainId
     )
       .then((data) => {
         setWeeklyDataRaw(data)
@@ -201,7 +202,7 @@ export const ApyChartProvider: FC<{
         setWeeklyError(error)
         setWeeklyIsFetching(false)
       })
-  }, [prevWeek, address, reexecuteWeeklyTrigger]) // re-execute the effect when 'prevWeek' or 'address' changes
+  }, [address, reexecuteWeeklyTrigger, chainId]) // re-execute the effect when 'address' changes
 
   const [_monthlyDataRaw, setMonthlyDataRaw] = useState<
     GetMonthlyShareValueQuery | undefined
@@ -221,7 +222,7 @@ export const ApyChartProvider: FC<{
     fetchMonthlyShareValueData(
       prevMonth,
       address,
-      cellarData.config.chain.id
+      chainId
     )
       .then((data) => {
         setMonthlyDataRaw(data)
@@ -231,7 +232,7 @@ export const ApyChartProvider: FC<{
         setMonthlyError(error)
         setMonthlyIsFetching(false)
       })
-  }, [prevMonth, address, reexecuteMonthlyTrigger]) // re-execute the effect when 'prevMonth' or 'address' changes
+  }, [address, reexecuteMonthlyTrigger, chainId]) // re-execute the effect when 'address' changes
 
   const [allTimeDataRaw, setAllTimeDataRaw] = useState<
     GetAllTimeShareValueQuery | undefined
@@ -248,7 +249,7 @@ export const ApyChartProvider: FC<{
 
   useEffect(() => {
     setAllTimeIsFetching(true)
-    fetchAllTimeShareValueData(address, cellarData.config.chain.id)
+    fetchAllTimeShareValueData(address, chainId)
       .then((data) => {
         setAllTimeDataRaw(data)
         setAllTimeIsFetching(false)
@@ -257,11 +258,11 @@ export const ApyChartProvider: FC<{
         setAllTimeError(error)
         setAllTimeIsFetching(false)
       })
-  }, [address, reexecuteAllTimeTrigger])
+  }, [address, reexecuteAllTimeTrigger, chainId])
 
   // data inverted
   let allTimeData = allTimeDataRaw?.cellar?.dayDatas
-    .filter((item) => new Date(item.date * 1000) > launchDate)
+    .filter((item) => new Date(item.date * 1000) > launchDay)
     .reverse()
 
   // Functions to update data returned by hook

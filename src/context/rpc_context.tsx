@@ -56,7 +56,7 @@ export async function getActiveProvider(chain: Chain) {
 
 export async function queryContract(
   contractAddress: string,
-  abi: readonly {}[],
+  abi: readonly Record<string, unknown>[],
   chain: Chain
 ) {
   const publicClient = await getActiveProvider(chain)

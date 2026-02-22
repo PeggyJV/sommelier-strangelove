@@ -2,6 +2,26 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import { kv } from "@vercel/kv"
 import { getJson } from "src/lib/attribution/kv"
 
+type ZRangeByScoreOptions = {
+  limit: { offset: number; count: number }
+}
+
+type KVSortedClient = {
+  zrange?: (key: string, start: number, stop: number) => Promise<string[]>
+  zrangebyscore?: (
+    key: string,
+    min: string,
+    max: string,
+    opts: ZRangeByScoreOptions
+  ) => Promise<string[]>
+  zrevrangebyscore?: (
+    key: string,
+    max: string,
+    min: string,
+    opts: ZRangeByScoreOptions
+  ) => Promise<string[]>
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -26,29 +46,30 @@ export default async function handler(
 
   let members: string[] = []
   try {
-    const fn: any = (kv as any).zrangebyscore || (kv as any).zrange
+    const kvClient = kv as unknown as KVSortedClient
+    const fn = kvClient.zrangebyscore || kvClient.zrange
     if (!fn) throw new Error("KV client zrangebyscore unavailable")
 
-    if ((kv as any).zrangebyscore && order === "asc") {
-      members = (await (kv as any).zrangebyscore(
+    if (kvClient.zrangebyscore && order === "asc") {
+      members = await kvClient.zrangebyscore(
         zkey,
         min,
         max,
         {
           limit: { offset: 0, count: limit },
         }
-      )) as string[]
-    } else if ((kv as any).zrevrangebyscore && order === "desc") {
-      members = (await (kv as any).zrevrangebyscore(
+      )
+    } else if (kvClient.zrevrangebyscore && order === "desc") {
+      members = await kvClient.zrevrangebyscore(
         zkey,
         max,
         min,
         {
           limit: { offset: 0, count: limit },
         }
-      )) as string[]
+      )
     } else {
-      const all = (await (kv as any).zrange(zkey, 0, -1)) as string[]
+      const all = (await kvClient.zrange?.(zkey, 0, -1)) || []
       members = order === "desc" ? all.slice(-limit).reverse() : all.slice(0, limit)
     }
   } catch (e) {
@@ -63,4 +84,3 @@ export default async function handler(
 
   res.json(records.filter(Boolean))
 }
-

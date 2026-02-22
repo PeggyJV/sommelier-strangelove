@@ -43,14 +43,21 @@ const PAD = [125n, 140n, 155n, 170n, 185n]
  *   )
  */
 export const estimateGasLimitWithRetry = async (
-  fnEstimateGas: any,
-  fnCallStatic: any,
-  args: any[],
+  fnEstimateGas: unknown,
+  fnCallStatic: unknown,
+  args: unknown[],
   knownGasLimit: number,
   account?: string
 ) => {
+  const estimateGas = fnEstimateGas as (
+    args: unknown[]
+  ) => Promise<bigint>
+  const callStatic = fnCallStatic as (
+    args: unknown[],
+    options: { gas: bigint; account?: string }
+  ) => Promise<unknown>
   const gasEstimatedRes = await estimateGasLimit(
-    fnEstimateGas(args),
+    estimateGas(args),
     knownGasLimit,
     100n
   )
@@ -65,7 +72,7 @@ export const estimateGasLimitWithRetry = async (
         PAD[count - 1]
       )
 
-      const tx = await fnCallStatic(args, {
+      const tx = await callStatic(args, {
         gas: gasLimit,
         account: account
       })
@@ -77,7 +84,7 @@ export const estimateGasLimitWithRetry = async (
       if (count === maxTries) {
         const lastTryGasLimit = pow(BigInt(10), BigInt(10)) // Last try limit is very high -- users hate the gas limits
         try {
-          const tx = await fnCallStatic(args, {
+          const tx = await callStatic(args, {
             gas: lastTryGasLimit,
             account: account
           })

@@ -23,7 +23,7 @@ export const MobileWarningCTA: FC<FlexProps> = (props) => {
         <Text textAlign="center">
           This app only works on desktop but please use uniswap link
           to buy the token directly on mobile. Buying a token is
-          easiest way to onboard yourself to Somm's automated trading
+          easiest way to onboard yourself to Somm&apos;s automated trading
           strategies which have been expertly curated.
         </Text>
         <Link

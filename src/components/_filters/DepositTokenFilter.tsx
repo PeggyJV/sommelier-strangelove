@@ -291,3 +291,5 @@ export const DepositTokenFilter: FC<DepositTokenFilterProps> = memo((
   )
 }
 )
+
+DepositTokenFilter.displayName = "DepositTokenFilter"

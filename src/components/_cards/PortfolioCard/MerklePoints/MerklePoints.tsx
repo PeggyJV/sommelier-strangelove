@@ -32,6 +32,13 @@ interface MerklePointsProps {
   cellarConfig: ConfigProps
 }
 
+type MerkleTxData = {
+  rootHashes: string[]
+  tokens: `0x${string}`[]
+  balances: bigint[]
+  merkleProofs: string[][]
+}
+
 export const MerklePoints = ({
   userAddress,
   cellarConfig,
@@ -39,7 +46,9 @@ export const MerklePoints = ({
   const [merklePoints, setMerklePoints] = useState<string | null>(
     null
   )
-  const [merkleData, setMerkleData] = useState<any>(null)
+  const [merkleData, setMerkleData] = useState<MerkleTxData | null>(
+    null
+  )
   const { addToast, close } = useBrandedToast()
 
   const { data: walletClient } = useWalletClient()
@@ -121,7 +130,14 @@ export const MerklePoints = ({
       setMerklePoints(null)
       setMerkleData(null)
     }
-  }, [userAddress])
+  }, [
+    userAddress,
+    address,
+    cellarConfig.cellar.address,
+    cellarConfig.chain.id,
+    addToast,
+    close,
+  ])
 
   const ensureHexPrefix = (value: string) =>
     value?.startsWith("0x") ? value : `0x${value}`
@@ -189,7 +205,6 @@ export const MerklePoints = ({
               return prefixedProof
             })
         )
-        // @ts-ignore
         const hash = await merkleRewardsContract.write.claim([
           getAddress(userAddress ?? ""),
           rootHashes,
@@ -224,7 +239,8 @@ export const MerklePoints = ({
         if (error instanceof Error) {
           if (
             "code" in error &&
-            (error as any).code === "UNPREDICTABLE_GAS_LIMIT"
+            (error as { code?: unknown }).code ===
+              "UNPREDICTABLE_GAS_LIMIT"
           ) {
             console.error(
               "Claim failed: It has already been claimed or another error occurred",
@@ -243,10 +259,10 @@ export const MerklePoints = ({
               duration: null,
             })
           } else {
-            // @ts-ignore
+            // @ts-expect-error -- legacy typing gap
             const code = error.cause.code
             if (code === 4001) {
-              // @ts-ignore
+              // @ts-expect-error -- legacy typing gap
               const message = error.cause.message
               console.error("Claim failed:", error)
 

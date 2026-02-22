@@ -34,7 +34,12 @@ export const handleTransactionError = (
   _context: TransactionErrorContext
 ): TransactionError => {
   // Check for user rejection patterns
-  const anyErr: any = error as any
+  const anyErr = error as Error & {
+    code?: number
+    shortMessage?: string
+    cause?: { message?: string; shortMessage?: string }
+    walk?: () => { message?: string }
+  }
   const combined = [
     anyErr?.message,
     anyErr?.shortMessage,

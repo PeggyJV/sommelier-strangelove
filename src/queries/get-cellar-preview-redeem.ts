@@ -1,9 +1,9 @@
-const getUrl = (cellarId: string, shares: BigInt) =>
+const getUrl = (cellarId: string, shares: bigint) =>
   `/api/cellar-preview-redeem?cellarId=${cellarId}&shares=${shares}`
 
 export const fetchCellarPreviewRedeem = async (
   cellarId: string,
-  shares: BigInt
+  shares: bigint
 ) => {
   const url = getUrl(cellarId, shares)
 

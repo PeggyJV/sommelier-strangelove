@@ -42,13 +42,14 @@ export default function ConnectGate({
         overridechainid={overrideChainId}
         // Use default styled variant to match app header theme
         // size and width align with primary CTAs
-        children={fallbackLabel || "Connect wallet to continue"}
         size="md"
         height="44px"
         minW="148px"
         w={fullWidth ? "100%" : undefined}
         variant="sommOutline"
-      />
+      >
+        {fallbackLabel || "Connect wallet to continue"}
+      </ConnectButton>
     </Box>
   )
 }
