@@ -1,16 +1,14 @@
 import { PageSnapshot } from "components/_pages/PageSnapshot"
-import { configureGraz, GrazChain } from "graz"
+import { configureGraz } from "graz"
 import type { NextPage } from "next"
 import { NextSeo } from "next-seo"
 import { useRouter } from "next/router"
 import { origin } from "utils/origin"
 import { sommelierChain } from "utils/grazChains"
 
-const chain: GrazChain = sommelierChain
-
 if (typeof window !== "undefined") {
   configureGraz({
-    defaultChain: chain,
+    chains: [sommelierChain],
   })
 }
 

@@ -16,7 +16,7 @@ import {
   useBalances as useGrazBalances,
   useAccount as useGrazAccount,
 } from "graz"
-import { getSommelierDecimals } from "utils/grazChains"
+import { getSommelierDecimals, SOMMELIER_CHAIN_ID } from "utils/grazChains"
 import { toEther } from "utils/formatCurrency"
 import { useFormContext } from "react-hook-form"
 import { BridgeFormValues } from "."
@@ -57,12 +57,16 @@ export const InputAmount: React.FC = () => {
     queryClient.invalidateQueries({ queryKey })
   }, [blockNumber, queryClient, queryKey])
 
-  const { isConnecting: isGrazConnecting } = useGrazAccount()
+  const { data: grazAccountData, isConnecting: isGrazConnecting } = useGrazAccount()
+  const grazAccount = grazAccountData?.[SOMMELIER_CHAIN_ID]
   const {
     data: grazData,
     isLoading: isGrazLoading,
     error: grazError,
-  } = useGrazBalances()
+  } = useGrazBalances({
+    chainId: SOMMELIER_CHAIN_ID,
+    bech32Address: grazAccount?.bech32Address ?? "",
+  })
   const sommBalance = grazData?.find((item) => item.denom === "usomm")
   const sommDecimal = getSommelierDecimals()
 

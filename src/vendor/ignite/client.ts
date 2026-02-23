@@ -6,7 +6,7 @@ import {
   EncodeObject,
   Registry,
 } from "@cosmjs/proto-signing"
-import { StdFee } from "@cosmjs/launchpad"
+import { StdFee } from "@cosmjs/amino"
 import { SigningStargateClient } from "@cosmjs/stargate"
 import { Env } from "./env"
 import { UnionToIntersection, Return, Constructor } from "./helpers"

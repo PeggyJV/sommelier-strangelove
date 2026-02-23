@@ -8,9 +8,11 @@ import {
 } from "@chakra-ui/react"
 import React from "react"
 import { useAccount, useDisconnect } from "graz"
+import { SOMMELIER_CHAIN_ID } from "utils/grazChains"
 
 export const SommelierAddress: React.FC = () => {
   const { data, isConnecting, isConnected } = useAccount()
+  const account = data?.[SOMMELIER_CHAIN_ID]
   const { disconnect } = useDisconnect()
   return (
     <Stack spacing={2}>
@@ -46,7 +48,7 @@ export const SommelierAddress: React.FC = () => {
             color="neutral.300"
             overflow="auto"
           >
-            {data?.bech32Address ||
+            {account?.bech32Address ||
               "Please connect your Cosmos Wallet"}
           </Text>
         )}

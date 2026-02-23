@@ -4,6 +4,7 @@ import { BridgeFormValues } from "components/_cards/BridgeCard"
 import { useAccount, useOfflineSigners } from "graz"
 import { txClient } from "src/vendor/ignite/gravity.v1"
 import { analytics } from "utils/analytics"
+import { SOMMELIER_CHAIN_ID } from "utils/grazChains"
 import {
   TxHashToastBody,
   BridgeTxHashToastBody,
@@ -17,8 +18,10 @@ export const useBridgeSommToEthTx = () => {
   const { addToast, update, closeAll } = useBrandedToast()
   const [isLoading, setIsLoading] = useState(false)
 
-  const { data } = useAccount()
-  const { signerAmino } = useOfflineSigners()
+  const { data: accountData } = useAccount()
+  const account = accountData?.[SOMMELIER_CHAIN_ID]
+  const { data: signersData } = useOfflineSigners()
+  const signerAmino = signersData?.[SOMMELIER_CHAIN_ID]?.offlineSignerAmino
 
   const importToken = useImportToken()
 
@@ -34,7 +37,7 @@ export const useBridgeSommToEthTx = () => {
         closeHandler: closeAll,
       })
 
-      if (data?.bech32Address === undefined) {
+      if (account?.bech32Address === undefined) {
         throw new Error("No Connected Cosmos wallet")
       }
 
@@ -44,7 +47,7 @@ export const useBridgeSommToEthTx = () => {
       analytics.track("bridge.contract-started", {
         value: props.amount,
         path: "sommToEth",
-        sender: data?.bech32Address,
+        sender: account?.bech32Address,
         receiver: props.address,
       })
 
@@ -59,7 +62,7 @@ export const useBridgeSommToEthTx = () => {
             amount: String(convertedAmount),
             denom: "usomm",
           },
-          sender: data?.bech32Address,
+          sender: account?.bech32Address,
           bridgeFee: {
             amount: "50000000",
             denom: "usomm",
@@ -71,7 +74,7 @@ export const useBridgeSommToEthTx = () => {
         analytics.track("bridge.contract-failed", {
           value: props.amount,
           path: "sommToEth",
-          sender: data?.bech32Address,
+          sender: account?.bech32Address,
           receiver: props.address,
           txHash: res.transactionHash,
         })
@@ -99,7 +102,7 @@ export const useBridgeSommToEthTx = () => {
         analytics.track("bridge.contract-succeeded", {
           value: props.amount,
           path: "sommToEth",
-          sender: data?.bech32Address,
+          sender: account?.bech32Address,
           receiver: props.address,
           txHash: res.transactionHash,
         })
@@ -147,7 +150,7 @@ export const useBridgeSommToEthTx = () => {
       analytics.track("bridge.failed", {
         value: props.amount,
         path: "sommToEth",
-        sender: data?.bech32Address,
+        sender: account?.bech32Address,
         receiver: props.address,
       })
 
