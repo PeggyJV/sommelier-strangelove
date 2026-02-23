@@ -135,7 +135,7 @@
     "jest-junit": "^16.0.0",
     "lighthouse": "^12.8.2",
     "patch-package": "^8.0.1",
-    "playwright": "^1.55.0",
+    "playwright": "^1.55.1",
     "prettier": "^2",
     "size-limit": "^11.2.0",
     "string-replace-loader": "^3.2.0",
@@ -157,7 +157,12 @@
       "@walletconnect/universal-provider": "2.12.2",
       "@walletconnect/sign-client": "2.12.2",
       "h3": ">=1.15.5",
-      "tar-fs": ">=3.1.1"
+      "tar-fs": ">=3.1.1",
+      "protobufjs": ">=6.11.4",
+      "@coinbase/wallet-sdk": ">=4.3.0",
+      "preact": ">=10.27.3",
+      "qs": ">=6.14.1",
+      "loader-utils": ">=1.4.1"
     }
   }
 }
