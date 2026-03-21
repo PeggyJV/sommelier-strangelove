@@ -83,7 +83,7 @@
     "framer-motion": "^11.2.10",
     "graz": "^0.4.2",
     "html-react-parser": "^5.2.5",
-    "next": "15.5.10",
+    "next": "15.5.14",
     "next-sanity": "^1.0.0",
     "next-seo": "^5.15.0",
     "node-fetch": "^3.3.2",
