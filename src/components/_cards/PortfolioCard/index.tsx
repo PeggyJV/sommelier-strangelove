@@ -544,7 +544,34 @@ export const PortfolioCard = (props: BoxProps) => {
                           width="100%"
                           minW={0}
                         >
-                          {isWithdrawQueueEnabled(cellarConfig) ? (
+                          {isAlphaSteth ? (
+                            <Button
+                              as="a"
+                              href="https://stake.lido.fi/earn/ggv/deposit"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              size={{ base: "sm", md: "md" }}
+                              height={{ base: "40px", md: "44px" }}
+                              variant="outline"
+                              bg="transparent"
+                              color="cta.outline.fg"
+                              borderColor="cta.outline.br"
+                              borderWidth="2px"
+                              width={{ base: "100%", md: "100%" }}
+                              rightIcon={<FaExternalLinkAlt />}
+                              sx={{
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden",
+                              }}
+                              _focusVisible={{
+                                boxShadow:
+                                  "0 0 0 3px var(--chakra-colors-purple-base)",
+                              }}
+                            >
+                              Upgrade on Lido GGV
+                            </Button>
+                          ) : isWithdrawQueueEnabled(cellarConfig) ? (
                             <WithdrawQueueButton
                               chain={cellarConfig.chain}
                               buttonLabel={withdrawQueueLabel}

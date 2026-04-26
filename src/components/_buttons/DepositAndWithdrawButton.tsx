@@ -251,6 +251,17 @@ export function DepositAndWithdrawButton({
               e.stopPropagation()
               // analytics.track("home.deposit.modal-opened")
 
+              // Alpha stETH has been replaced by Lido GGV — send users
+              // there to upgrade their position instead of withdrawing.
+              if (id === "Alpha-stETH") {
+                window.open(
+                  "https://stake.lido.fi/earn/ggv/deposit",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
+                return
+              }
+
               // Check if user is on the right chain, if not prompt them to switch
               if (
                 cellarConfig &&

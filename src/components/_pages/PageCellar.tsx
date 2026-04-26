@@ -109,6 +109,34 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   return (
     <Layout chainObj={cellarConfig.chain}>
       <WalletHealthBanner />
+      {isAlphaSteth && (
+        <InfoBanner
+          text={
+            <>
+              Alpha stETH has been succeeded by{" "}
+              <a
+                href="https://stake.lido.fi/earn/eth/deposit"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "underline" }}
+              >
+                Lido Earn ETH
+              </a>
+              . Existing depositors can upgrade to the new vault or
+              withdraw via{" "}
+              <a
+                href="https://stake.lido.fi/earn/ggv/deposit"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "underline" }}
+              >
+                Lido GGV
+              </a>
+              .
+            </>
+          }
+        />
+      )}
       {cellarConfig.cellarNameKey === CellarNameKey.TURBO_EETH && (
         <InfoBanner
           text={
