@@ -216,19 +216,7 @@ export const AlphaStethMigrationForm = ({
 
   const geo = useGeo()
 
-  // Attribution: helper to send events to ingestion API
-  const sendIngest = async (evt: IngestEvent) => {
-    try {
-      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true")
-        return
-      await fetch("/api/ingest-rpc", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ events: [evt] }),
-        keepalive: true,
-      })
-    } catch {}
-  }
+  const sendIngest = async (_evt: IngestEvent) => {}
 
   const onSubmit = async ({ withdrawAmount }: FormValues) => {
     if (geo?.isRestrictedAndOpenModal()) return

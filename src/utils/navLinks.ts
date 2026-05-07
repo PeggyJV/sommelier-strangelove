@@ -1,15 +1,16 @@
 import { BRIDGE_PAGE_ENABLED } from "./constants"
 
+type NavLink = {
+  link: string
+  title: string
+  isNew?: boolean
+}
+
 export const NAV_LINKS = (() => {
-  const links = [
+  const links: NavLink[] = [
     {
       link: "/",
       title: "Vaults",
-    },
-    {
-      link: "/snapshot",
-      title: "Snapshot",
-      isNew: false,
     },
     {
       link: "https://www.somm.finance/staking",
