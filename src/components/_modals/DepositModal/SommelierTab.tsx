@@ -159,19 +159,7 @@ export const SommelierTab = ({
   const { writeContractAsync } = useWriteContract()
   const geo = useGeo()
 
-  // Attribution (deposit started/receipt/error): send to ingestion API using Vercel KV backend
-  const sendIngest = async (evt: IngestEvent) => {
-    try {
-      if (process.env.NEXT_PUBLIC_ATTRIBUTION_ENABLED !== "true")
-        return
-      await fetch("/api/ingest-rpc", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ events: [evt] }),
-        keepalive: true,
-      })
-    } catch {}
-  }
+  const sendIngest = async (_evt: IngestEvent) => {}
 
   const { refetch } = useUserStrategyData(
     cellarConfig.cellar.address,
