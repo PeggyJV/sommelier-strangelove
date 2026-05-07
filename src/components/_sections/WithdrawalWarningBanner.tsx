@@ -8,7 +8,11 @@ import {
   ListItem,
   Icon,
   IconProps,
+  Spinner,
 } from "@chakra-ui/react"
+import { useQuery } from "@tanstack/react-query"
+import { config as utilConfig } from "utils/config"
+import { fetchCellarLiquidityState } from "queries/get-cellar-liquidity-state"
 
 function WarningIcon(props: IconProps) {
   return (
@@ -16,6 +20,63 @@ function WarningIcon(props: IconProps) {
       <path fill="currentColor" d="M1 21h22L12 2 1 21z" />
       <path fill="currentColor" d="M13 16h-2v2h2zm0-6h-2v4h2z" />
     </Icon>
+  )
+}
+
+function TurboStethStatus() {
+  const slug = utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["cellar-liquidity-state", slug],
+    queryFn: () => fetchCellarLiquidityState(slug),
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+  })
+
+  if (isLoading) {
+    return (
+      <HStack spacing={2}>
+        <Spinner size="xs" />
+        <Text>Checking TurboStETH liquidity…</Text>
+      </HStack>
+    )
+  }
+
+  if (isError || !data || data.totalAssets === 0n) {
+    return (
+      <Text>
+        <Text as="span" fontWeight="semibold" color="yellow.300">
+          TurboStETH
+        </Text>{" "}
+        – Withdrawals are open. The withdrawal form will tell you the
+        maximum amount currently available.
+      </Text>
+    )
+  }
+
+  const liquidPct =
+    Number((data.totalAssetsWithdrawable * 10000n) / data.totalAssets) /
+    100
+
+  if (liquidPct >= 99.5) {
+    return (
+      <Text>
+        <Text as="span" fontWeight="semibold" color="green.300">
+          TurboStETH
+        </Text>{" "}
+        – Fully liquid. Withdraw directly from the vault.
+      </Text>
+    )
+  }
+
+  return (
+    <Text>
+      <Text as="span" fontWeight="semibold" color="green.300">
+        TurboStETH
+      </Text>{" "}
+      – {liquidPct.toFixed(0)}% of NAV is currently liquid and
+      available for direct withdrawal. Larger redemptions will need to
+      wait for the strategist to rebalance liquidity.
+    </Text>
   )
 }
 
@@ -57,12 +118,7 @@ export default function WithdrawalWarningBanner() {
           </Text>
         </ListItem>
         <ListItem>
-          <Text>
-            <Text as="span" fontWeight="semibold" color="yellow.300">
-              TurboStETH
-            </Text>{" "}
-            – Please enter the withdrawal queue.
-          </Text>
+          <TurboStethStatus />
         </ListItem>
         <ListItem>
           <Text>

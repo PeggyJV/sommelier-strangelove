@@ -46,6 +46,7 @@ import {
   type TransactionErrorContext,
 } from "utils/handleTransactionError"
 import { config } from "utils/config"
+import { isWithdrawQueueEnabled } from "data/uiConfig"
 
 interface FormValues {
   withdrawAmount: number
@@ -144,9 +145,51 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
       cellarConfig.cellar.decimals
     )
 
+    const liquidityPreflightSlugs = new Set<string>([
+      config.CONTRACT.ALPHA_STETH.SLUG,
+      config.CONTRACT.TURBO_STETH.SLUG,
+    ])
+
+    const handleInsufficientLiquidity = (
+      redeemableAssets: number,
+      previewRedeem: number
+    ) => {
+      // Queue is the primary path only for vaults explicitly configured
+      // to use it (e.g. AlphaSTETH). For every other vault, surface
+      // the liquidity shortfall directly instead of pushing the queue.
+      if (isWithdrawQueueEnabled(cellarConfig)) {
+        openWithdrawQueueModal()
+        return
+      }
+      const decimals = cellarConfig.cellar.decimals
+      const maxShares =
+        previewRedeem > 0
+          ? (redeemableAssets / previewRedeem).toFixed(
+              Math.min(decimals, 6)
+            )
+          : "0"
+      addToast({
+        heading: "Insufficient vault liquidity",
+        body: (
+          <Text>
+            The vault doesn&apos;t currently hold enough liquid assets
+            to process this redemption. Maximum currently
+            withdrawable: {maxShares}{" "}
+            {lpTokenData?.symbol ?? "shares"}. Please reduce your
+            amount and try again.
+          </Text>
+        ),
+        status: "default",
+        closeHandler: closeAll,
+      })
+      setValue("withdrawAmount", 0)
+      refetch()
+    }
+
     try {
-      // Alpha STETH: pre-check redeemable liquidity to avoid failing redeem tx
-      if (id === config.CONTRACT.ALPHA_STETH.SLUG) {
+      // Pre-check redeemable liquidity for cellars where the strategist
+      // may park assets in non-synchronously-liquid positions
+      if (liquidityPreflightSlugs.has(id)) {
         const redeemableAssets: number = parseInt(
           await fetchCellarRedeemableReserves(id)
         )
@@ -160,7 +203,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
           previewRedeem * watchWithdrawAmount
         )
         if (redeemAmt > redeemableAssets) {
-          openWithdrawQueueModal()
+          handleInsufficientLiquidity(redeemableAssets, previewRedeem)
           return
         }
       }
@@ -233,8 +276,7 @@ export const WithdrawForm = ({ onClose }: WithdrawFormProps) => {
 
       // Check if attempting to withdraw more than availible
       if (redeemingMoreThanAvailible) {
-        // Open a modal with information about the withdraw queue
-        openWithdrawQueueModal()
+        handleInsufficientLiquidity(redeemableAssets, previewRedeem)
       } else {
         // Use centralized error handling
         const errorContext: TransactionErrorContext = {
