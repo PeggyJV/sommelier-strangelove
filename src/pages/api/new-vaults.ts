@@ -37,12 +37,40 @@ type CellarMapEntry = {
 // Temporary list of Somm-native slugs. Extend as more in-house vaults are added.
 const SOMM_NATIVE_SLUGS = new Set<string>(["Alpha-stETH"])
 
+// Live TVL endpoint, used as a fallback when a vault is missing from the
+// aggregator. The aggregator only includes cellars present in the last month
+// of dailyData, so a vault whose data collection has stalled drops out and its
+// TVL would otherwise default to 0 even while it holds real value.
+const LIVE_TVL_URL = "https://api.sommelier.finance/tvl"
+
+// Fetch live per-cellar TVL keyed lowercase (keys are `address` on ethereum or
+// `address-<chain>` on L2s). Never throws -- returns {} on any failure.
+async function fetchLiveTvlByKey(): Promise<Record<string, number>> {
+  try {
+    const res = await fetch(LIVE_TVL_URL)
+    if (!res.ok) return {}
+    const json = await res.json()
+    const resp = (json?.Response ?? {}) as Record<string, unknown>
+    const out: Record<string, number> = {}
+    for (const [k, v] of Object.entries(resp)) {
+      if (k === "total_tvl") continue
+      out[k.toLowerCase()] = Number(v) || 0
+    }
+    return out
+  } catch {
+    return {}
+  }
+}
+
 export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
-    const agg = (await fetchCellarStrategyData()) as AggregatedResponse
+    const [agg, liveTvlByKey] = await Promise.all([
+      fetchCellarStrategyData() as Promise<AggregatedResponse>,
+      fetchLiveTvlByKey(),
+    ])
 
     // Map address->tvl from aggregator result (normalize keys to lowercase)
     const tvlByKey: Record<string, number> = {}
@@ -63,7 +91,10 @@ export default async function handler(
       if (!chainId || !addr || !data?.name) continue
       const tvlKey =
         chainId === "ethereum" ? addr : `${addr}-${chainId}`
-      const tvlVal = tvlByKey[tvlKey] ?? 0
+      // Prefer the aggregator value; fall back to live /tvl when the vault is
+      // missing or zero there (e.g. its dailyData feed has stalled).
+      const aggTvl = tvlByKey[tvlKey] ?? 0
+      const tvlVal = aggTvl > 0 ? aggTvl : liveTvlByKey[tvlKey] ?? 0
 
       const tvl = {
         value: tvlVal,
