@@ -85,7 +85,11 @@ jobs:
           name: eslint-junit
           path: reports/eslint-junit.xml
       - name: Test with coverage
-        run: pnpm run test:all -- --coverage
+        # `test:all` already runs `jest --coverage --verbose`. The previous
+        # `-- --coverage` was passed through to jest as a positional test-path
+        # pattern, so jest matched 0 tests and exited 1 ("No tests found"),
+        # failing this job on every run regardless of the actual tests.
+        run: pnpm run test:all
       - name: Upload coverage
         uses: actions/upload-artifact@v4
         with:
