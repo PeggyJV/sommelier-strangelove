@@ -87,7 +87,7 @@ export const useWaitForTransaction = ({
         }
         return { data: receipt, error: undefined }
       } catch (error_) {
-        const error = <Error>error_
+        const error = error_ as Error
         if (!didCancel) {
           setState((x) => ({ ...x, error, loading: false }))
         }

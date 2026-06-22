@@ -42,6 +42,7 @@
     "^constants/(.*)$": "<rootDir>/src/constants/$1",
     "^pages/(.*)$": "<rootDir>/src/pages/$1",
     "^api/(.*)$": "<rootDir>/src/pages/api/$1",
+    "^i18n/(.*)$": "<rootDir>/src/i18n/$1",
     "^src/(.*)$": "<rootDir>/src/$1"
   },
   "collectCoverageFrom": [

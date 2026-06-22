@@ -31,11 +31,14 @@ jest.mock("next/router", () => ({
 
 // Mock wagmi hooks
 jest.mock("wagmi", () => ({
-  useAccount: () => ({
+  // jest.fn so tests can override per-case via (useAccount as jest.Mock).mockReturnValue(...)
+  useAccount: jest.fn(() => ({
     address: "0x1234567890123456789012345678901234567890",
     isConnected: true,
     chain: { id: 1, name: "Ethereum" },
-  }),
+  })),
+  // wagmi v2 connector factory; some setup/provider code imports this.
+  createConnector: (createConnectorFn: any) => createConnectorFn,
   usePublicClient: () => ({
     chain: { id: 1, name: "Ethereum" },
     getBalance: jest.fn(),
@@ -82,15 +85,18 @@ process.env.NEXT_PUBLIC_INFURA_API_KEY = "test-infura-key"
 process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID =
   "test-walletconnect-id"
 
-// Mock window.ethereum
-Object.defineProperty(window, "ethereum", {
-  value: {
-    request: jest.fn(),
-    on: jest.fn(),
-    removeListener: jest.fn(),
-  },
-  writable: true,
-})
+// Mock window.ethereum (guard for node-environment test files, e.g. API route
+// tests that declare `@jest-environment node` and have no `window`).
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "ethereum", {
+    value: {
+      request: jest.fn(),
+      on: jest.fn(),
+      removeListener: jest.fn(),
+    },
+    writable: true,
+  })
+}
 
 // Mock fetch: provide minimal Response-like object when tests don't override
 global.fetch = jest

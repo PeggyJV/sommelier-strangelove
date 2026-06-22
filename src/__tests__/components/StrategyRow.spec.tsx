@@ -33,6 +33,13 @@ jest.mock("wagmi", () => ({
     address: "0x1234567890123456789012345678901234567890",
     isConnected: true,
   }),
+  usePublicClient: () => ({
+    chain: { id: 1, name: "Ethereum" },
+    getBalance: jest.fn(),
+    readContract: jest.fn(),
+  }),
+  useWalletClient: () => ({ data: undefined }),
+  createConnector: (createConnectorFn: any) => createConnectorFn,
 }))
 
 const renderWithTheme = (component: React.ReactElement) => {
