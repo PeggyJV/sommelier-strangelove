@@ -60,8 +60,33 @@ jest.mock("wagmi", () => ({
     isSuccess: false,
     isError: false,
   }),
+  useWaitForTransactionReceipt: () => ({
+    data: null,
+    isLoading: false,
+    isSuccess: false,
+    isError: false,
+  }),
+  useBalance: () => ({ data: undefined, isLoading: false }),
+  useConnect: () => ({
+    connect: jest.fn(),
+    connectAsync: jest.fn(),
+    connectors: [],
+    isPending: false,
+  }),
+  useDisconnect: () => ({ disconnect: jest.fn(), disconnectAsync: jest.fn() }),
+  useChainId: () => 1,
+  useReadContract: () => ({ data: undefined, isLoading: false }),
+  useReadContracts: () => ({ data: undefined, isLoading: false }),
+  useWriteContract: () => ({ writeContract: jest.fn(), writeContractAsync: jest.fn() }),
+  useSimulateContract: () => ({ data: undefined }),
+  useEnsName: () => ({ data: undefined }),
+  useEnsAvatar: () => ({ data: undefined }),
   http: jest.fn(),
   createConfig: jest.fn(),
+  // Provider components: WagmiConfig (v1 name, used by tests/utils/renderWithProviders)
+  // and WagmiProvider (v2 name). Render children directly in tests.
+  WagmiConfig: ({ children }: { children: any }) => children,
+  WagmiProvider: ({ children }: { children: any }) => children,
 }))
 
 // Mock viem http transport to avoid real network in tests that accidentally construct clients
@@ -77,6 +102,14 @@ jest.mock("viem", () => ({
       .fn()
       .mockRejectedValue(new Error("Contract read failed")),
   })),
+  // Pure helpers used across components; provide identity/simple stand-ins.
+  getAddress: (address: string) => address,
+  isAddress: (value: unknown) =>
+    typeof value === "string" && /^0x[0-9a-fA-F]{40}$/.test(value),
+  formatUnits: (value: bigint | number | string, _decimals?: number) =>
+    String(value),
+  parseUnits: (value: string, _decimals?: number) => BigInt(value || "0"),
+  zeroAddress: "0x0000000000000000000000000000000000000000",
 }))
 
 // Mock environment variables
@@ -96,6 +129,37 @@ if (typeof window !== "undefined") {
     },
     writable: true,
   })
+
+  // jsdom does not implement these; components using media queries / observers
+  // (e.g. useBetterMediaQuery) would otherwise throw on render.
+  if (!window.matchMedia) {
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      value: (query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      }),
+    })
+  }
+
+  const NoopObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return []
+    }
+  }
+  ;(globalThis as any).ResizeObserver =
+    (globalThis as any).ResizeObserver || NoopObserver
+  ;(globalThis as any).IntersectionObserver =
+    (globalThis as any).IntersectionObserver || NoopObserver
 }
 
 // Mock fetch: provide minimal Response-like object when tests don't override

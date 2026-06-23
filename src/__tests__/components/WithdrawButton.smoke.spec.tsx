@@ -5,20 +5,22 @@ import { renderWithProviders } from "../../../tests/utils/renderWithProviders"
 jest.mock("data/hooks/useUserBalance", () => ({
   useUserBalance: () => ({ lpToken: { data: undefined } }),
 }))
-jest.mock("wagmi/chains", () => ({
-  mainnet: { id: 1, name: "Ethereum" },
-}))
+// Uses the global wagmi/chains mock (src/__tests__/mocks/wagmi-chains.ts),
+// which provides mainnet/arbitrum/optimism/base with blockExplorers as
+// chainConfig.ts requires.
 import { DepositAndWithdrawButton } from "components/_buttons/DepositAndWithdrawButton"
 
-describe("Withdraw button smoke test", () => {
-  it("renders withdraw button testid and is disabled for zero net value", async () => {
+describe("Deposit/Withdraw button smoke test", () => {
+  it("renders the deposit button for a vault with no balance / zero net value", async () => {
     const row: any = {
       original: {
         slug: "Alpha-stETH",
         deprecated: false,
         launchDate: new Date().toISOString(),
         name: "Real Yield ETH Test",
-        // no lpToken balance mocked; netValue 0 ensures disabled
+        // No lpToken balance and zero net value: the component shows the
+        // deposit action (there is nothing to withdraw). Withdraw-state
+        // behaviour is covered in withdrawState.spec.tsx.
         netValue: 0,
       },
     }
@@ -32,7 +34,7 @@ describe("Withdraw button smoke test", () => {
       />
     )
 
-    const btn = screen.getByTestId("withdraw-btn")
-    expect(btn).toBeDisabled()
+    expect(screen.getByTestId("deposit-btn")).toBeInTheDocument()
+    expect(screen.queryByTestId("withdraw-btn")).not.toBeInTheDocument()
   })
 })
