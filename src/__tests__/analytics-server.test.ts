@@ -2,10 +2,55 @@
  * @jest-environment node
  */
 
-import { createMocks } from 'node-mocks-http'
-import handler from '../pages/api/events'
+// Minimal stand-in for node-mocks-http's createMocks (avoids the extra dep).
+// Covers exactly what the /api/events handler touches: req.method/headers/body
+// (+ connection/socket for IP lookup) and a chainable res.status().json().
+function createMocks(opts: {
+  method?: string
+  headers?: Record<string, string>
+  body?: unknown
+}) {
+  const req: any = {
+    method: opts.method ?? 'GET',
+    headers: opts.headers ?? {},
+    body: opts.body,
+    connection: {},
+    socket: {},
+  }
+  const res: any = {
+    statusCode: 200,
+    _data: undefined,
+    status(code: number) {
+      this.statusCode = code
+      return this
+    },
+    json(data: unknown) {
+      this._data = data
+      return this
+    },
+    setHeader() {
+      return this
+    },
+    _getStatusCode() {
+      return this.statusCode
+    },
+    _getData() {
+      return JSON.stringify(this._data)
+    },
+  }
+  return { req, res }
+}
 
-// Mock environment variables
+// The handler reads `NEXT_PUBLIC_ANALYTICS_ENABLED` into a module-level const at
+// import time, so it must be loaded fresh (after env is set) for each scenario.
+function loadHandler() {
+  let handler: any
+  jest.isolateModules(() => {
+    handler = require('../pages/api/events').default
+  })
+  return handler
+}
+
 const originalEnv = process.env
 
 beforeEach(() => {
@@ -22,9 +67,8 @@ afterEach(() => {
 
 describe('/api/events', () => {
   it('should reject non-POST requests', async () => {
-    const { req, res } = createMocks({
-      method: 'GET',
-    })
+    const handler = loadHandler()
+    const { req, res } = createMocks({ method: 'GET' })
 
     await handler(req, res)
 
@@ -36,7 +80,8 @@ describe('/api/events', () => {
 
   it('should return success when analytics is disabled', async () => {
     process.env.NEXT_PUBLIC_ANALYTICS_ENABLED = 'false'
-    
+    const handler = loadHandler()
+
     const { req, res } = createMocks({
       method: 'POST',
       body: {
@@ -55,6 +100,7 @@ describe('/api/events', () => {
   })
 
   it('should reject invalid event format', async () => {
+    const handler = loadHandler()
     const { req, res } = createMocks({
       method: 'POST',
       body: {
@@ -72,6 +118,7 @@ describe('/api/events', () => {
   })
 
   it('should accept valid event and return success', async () => {
+    const handler = loadHandler()
     const { req, res } = createMocks({
       method: 'POST',
       headers: {
@@ -97,6 +144,7 @@ describe('/api/events', () => {
   })
 
   it('should hash sensitive data', async () => {
+    const handler = loadHandler()
     const { req, res } = createMocks({
       method: 'POST',
       headers: {
@@ -116,6 +164,5 @@ describe('/api/events', () => {
     expect(res._getStatusCode()).toBe(200)
     // The wallet address should be hashed and removed from properties
     // This is tested by checking that the event was processed successfully
-    // In a real test, you'd check the actual enrichment logic
   })
 })
