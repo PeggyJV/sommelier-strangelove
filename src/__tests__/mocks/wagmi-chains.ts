@@ -24,3 +24,11 @@ export const optimism = {
     },
   },
 } as any
+
+export const base = {
+  id: 8453,
+  name: "Base",
+  blockExplorers: {
+    default: { name: "Basescan", url: "https://basescan.org" },
+  },
+} as any

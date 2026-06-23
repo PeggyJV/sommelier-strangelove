@@ -31,6 +31,8 @@ jest.mock("wagmi", () => ({
     switchChainAsync: jest.fn(),
   }),
   createConnector: (createConnectorFn: any) => createConnectorFn,
+  http: jest.fn(),
+  createConfig: jest.fn(),
   WagmiProvider: ({ children }: { children: React.ReactNode }) =>
     ({ children } as any),
 }))
@@ -203,6 +205,9 @@ describe("Application Integration Tests", () => {
         useSwitchChain: () => ({
           switchChainAsync: jest.fn(),
         }),
+        http: jest.fn(),
+        createConfig: jest.fn(),
+        createConnector: (createConnectorFn: any) => createConnectorFn,
         WagmiProvider: ({
           children,
         }: {

@@ -62,6 +62,10 @@ jest.mock("wagmi", () => ({
   }),
   http: jest.fn(),
   createConfig: jest.fn(),
+  // Provider components: WagmiConfig (v1 name, used by tests/utils/renderWithProviders)
+  // and WagmiProvider (v2 name). Render children directly in tests.
+  WagmiConfig: ({ children }: { children: any }) => children,
+  WagmiProvider: ({ children }: { children: any }) => children,
 }))
 
 // Mock viem http transport to avoid real network in tests that accidentally construct clients

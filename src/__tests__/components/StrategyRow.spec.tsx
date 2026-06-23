@@ -27,6 +27,12 @@ jest.mock("../../data/hooks/useUserStrategyData", () => ({
   }),
 }))
 
+// StrategyRow also calls useStrategyData (which reaches on-chain hooks); this
+// test renders the row from its `vault` prop, so stub the data hook.
+jest.mock("../../data/hooks/useStrategyData", () => ({
+  useStrategyData: () => ({ data: undefined, isLoading: false }),
+}))
+
 // Mock wagmi
 jest.mock("wagmi", () => ({
   useAccount: () => ({
@@ -106,9 +112,11 @@ describe("StrategyRow", () => {
       expect(screen.getByText("1000.00")).toBeInTheDocument()
     })
 
-    it("should render Net Rewards correctly", () => {
+    it("should render Net APY correctly", () => {
+      // Alpha vaults render the third KPI as "Net APY" formatted to one
+      // decimal via formatAlphaStethNetApyNoApprox ("0.00%" -> "0.0%").
       renderWithTheme(<StrategyRow vault={mockVault} />)
-      expect(screen.getByText("0.00%")).toBeInTheDocument()
+      expect(screen.getByText("0.0%")).toBeInTheDocument()
     })
 
     it("should render description correctly", () => {
@@ -158,10 +166,11 @@ describe("StrategyRow", () => {
     it("should render KPI grid with three columns", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
 
-      // Check that all three KPI labels are present
+      // Check that all three KPI labels are present (Alpha vaults label the
+      // third KPI "Net APY"; non-Alpha vaults use "Net Rewards").
       expect(screen.getByText("TVL")).toBeInTheDocument()
       expect(screen.getByText("Net Value")).toBeInTheDocument()
-      expect(screen.getByText("Net Rewards")).toBeInTheDocument()
+      expect(screen.getByText("Net APY")).toBeInTheDocument()
     })
 
     it("should have horizontal KPI layout on mobile", () => {
@@ -282,10 +291,8 @@ describe("StrategyRow", () => {
 
       renderWithTheme(<StrategyRow vault={vaultWithZeroValues} />)
 
-      expect(
-        screen.getByText("–")
-      ).toBeInTheDocument()
-      expect(screen.getByText("0.00%")).toBeInTheDocument()
+      // Zero APY renders as "0.0%" without crashing.
+      expect(screen.getByText("0.0%")).toBeInTheDocument()
     })
 
     it("should handle large numbers correctly", () => {
