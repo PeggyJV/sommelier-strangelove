@@ -1,14 +1,14 @@
-import { useQuery } from "@tanstack/react-query"
-import { getStrategyData } from "data/actions/common/getStrategyData"
-import { cellarDataMap } from "data/cellarDataMap"
-import { GetStrategyDataQuery } from "src/data/actions/types"
-import { StrategyContracts } from "src/data/actions/types"
-import { usePublicClient } from "wagmi"
-import { useAllContracts } from "./useAllContracts"
-import { useCoinGeckoPrice } from "./useCoinGeckoPrice"
-import { fetchIndividualCellarStrategyData } from "queries/get-individual-strategy-data"
-import { useState, useEffect } from "react"
-import { tokenConfig } from "data/tokenConfig"
+import { useQuery } from '@tanstack/react-query'
+import { getStrategyData } from 'data/actions/common/getStrategyData'
+import { cellarDataMap } from 'data/cellarDataMap'
+import { GetStrategyDataQuery } from 'src/data/actions/types'
+import { StrategyContracts } from 'src/data/actions/types'
+import { usePublicClient } from 'wagmi'
+import { useAllContracts } from './useAllContracts'
+import { useCoinGeckoPrice } from './useCoinGeckoPrice'
+import { fetchIndividualCellarStrategyData } from 'queries/get-individual-strategy-data'
+import { useState, useEffect } from 'react'
+import { tokenConfig } from 'data/tokenConfig'
 
 export const useStrategyData = (
   address: string,
@@ -19,8 +19,8 @@ export const useStrategyData = (
 
   const { data: allContracts } = useAllContracts()
   const sommToken = tokenConfig.find(
-    (token) =>
-      token.coinGeckoId === "sommelier" && token.chain === chain
+    token =>
+      token.coinGeckoId === 'sommelier' && token.chain === chain
   )!
 
   const { data: sommPrice } = useCoinGeckoPrice(sommToken)
@@ -31,7 +31,7 @@ export const useStrategyData = (
   const [error, setError] = useState(null)
 
   const cellarData = Object.values(cellarDataMap).find(
-    (item) =>
+    item =>
       item.config.cellar.address.toLowerCase() ===
         address.toLowerCase() && item.config.chain.id === chain
   )!
@@ -41,18 +41,19 @@ export const useStrategyData = (
       address.toLowerCase(),
       cellarData.config.chain.id
     )
-      .then(({ data, error }) => {
+      .then(result => {
+        const { data, error } = result ?? {}
         if (error) {
           setError(error)
         } else {
           setStratData(data)
         }
       })
-      .catch((error) => setError(error))
+      .catch(error => setError(error))
   }, [address, cellarData.config.chain.id])
 
   const config = Object.values(cellarDataMap).find(
-    (item) =>
+    item =>
       item.config.cellar.address.toLowerCase() ===
         address.toLowerCase() && item.config.chain.id === chain
   )!.config
@@ -62,13 +63,13 @@ export const useStrategyData = (
 
   // if chain is not ethereum, key format is '{address}-{chain}', otherwise it is '{address}'
   const key =
-    address + (config.chain.id !== "ethereum" ? "-" + chain : "")
+    address + (config.chain.id !== 'ethereum' ? '-' + chain : '')
 
   // Get cellar contracts for the chain
   const query = useQuery({
     queryKey: [
-      "USE_STRATEGY_DATA",
-      { provider: publicClient?.uid, address: key },
+      'USE_STRATEGY_DATA',
+      { provider: publicClient?.uid, address: key }
     ],
     queryFn: async () => {
       const contractsForKey = allContracts?.[key]
@@ -78,9 +79,9 @@ export const useStrategyData = (
       const result = await getStrategyData({
         address,
         contracts: contractsForKey as StrategyContracts,
-        sommPrice: sommPrice ?? "0",
+        sommPrice: sommPrice ?? '0',
         stratData: structuredClone(stratData?.cellar),
-        baseAssetPrice: baseAssetPrice ?? "0",
+        baseAssetPrice: baseAssetPrice ?? '0'
       })
       return result
     },
@@ -90,11 +91,11 @@ export const useStrategyData = (
       !!allContracts[key] &&
       !!sommPrice &&
       (isNoDataSource || !!stratData) &&
-      !!baseAssetPrice,
+      !!baseAssetPrice
   })
 
   return {
     ...query,
-    isError: Boolean(error) || query.isError,
+    isError: Boolean(error) || query.isError
   }
 }
