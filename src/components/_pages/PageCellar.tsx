@@ -1,49 +1,51 @@
-import { FC, useMemo } from "react"
+import { FC, useMemo } from 'react'
 import {
   Heading,
   HeadingProps,
   HStack,
-  VStack,
-} from "@chakra-ui/react"
-import { Layout } from "components/_layout/Layout"
-import { Section } from "components/_layout/Section"
-import CellarDetailsCard from "components/_cards/CellarDetailsCard"
-import { CellarStatsYield } from "components/CellarStatsYield"
-import { BreadCrumb } from "components/BreadCrumb"
-import { cellarDataMap } from "data/cellarDataMap"
-import { PortfolioCard } from "components/_cards/PortfolioCard"
-import { CellarStatsAutomated } from "components/CellarStatsAutomated"
-import { CellarNameKey, CellarType } from "data/types"
+  VStack
+} from '@chakra-ui/react'
+import { Layout } from 'components/_layout/Layout'
+import { Section } from 'components/_layout/Section'
+import CellarDetailsCard from 'components/_cards/CellarDetailsCard'
+import { CellarStatsYield } from 'components/CellarStatsYield'
+import { BreadCrumb } from 'components/BreadCrumb'
+import { cellarDataMap } from 'data/cellarDataMap'
+import { PortfolioCard } from 'components/_cards/PortfolioCard'
+import { CellarStatsAutomated } from 'components/CellarStatsAutomated'
+import { CellarNameKey, CellarType } from 'data/types'
 import {
   isApyChartEnabled,
   isEstimatedApyEnable,
-  isTokenPriceChartEnabled,
-} from "data/uiConfig"
-import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
-import { TokenPriceChartProvider } from "data/context/tokenPriceChartContext"
-import { TokenPricePerfomanceCard } from "components/_cards/TokenPricePerfomaceCard"
-import { ApyChartProvider } from "data/context/apyChartContext"
-import { ApyPerfomanceCard } from "components/_cards/ApyPerfomanceCard"
-import { InView } from "react-intersection-observer"
-import { isComingSoon } from "utils/isComingSoon"
-import { InfoBanner } from "components/_banners/InfoBanner"
-import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
-import dynamic from "next/dynamic"
-import { useDepositModalStore } from "data/hooks/useDepositModalStore"
-import { useRouter } from "next/router"
-import { useEffect } from "react"
-import { useState } from "react"
+  isTokenPriceChartEnabled
+} from 'data/uiConfig'
+import useBetterMediaQuery from 'hooks/utils/useBetterMediaQuery'
+import { TokenPriceChartProvider } from 'data/context/tokenPriceChartContext'
+import { TokenPricePerfomanceCard } from 'components/_cards/TokenPricePerfomaceCard'
+import { ApyChartProvider } from 'data/context/apyChartContext'
+import { ApyPerfomanceCard } from 'components/_cards/ApyPerfomanceCard'
+import { InView } from 'react-intersection-observer'
+import { isComingSoon } from 'utils/isComingSoon'
+import { InfoBanner } from 'components/_banners/InfoBanner'
+import { WalletHealthBanner } from 'components/_banners/WalletHealthBanner'
+import { WithdrawalsPausedBanner } from 'components/_banners/WithdrawalsPausedBanner'
+import { isWithdrawalsPaused } from 'data/withdrawalsPaused'
+import dynamic from 'next/dynamic'
+import { useDepositModalStore } from 'data/hooks/useDepositModalStore'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
-import { config as utilConfig } from "utils/config"
-import { Box, Image, Text, Button } from "@chakra-ui/react"
+import { config as utilConfig } from 'utils/config'
+import { Box, Image, Text, Button } from '@chakra-ui/react'
 
-import { useAccount } from "wagmi"
+import { useAccount } from 'wagmi'
 
 const h2Styles: HeadingProps = {
-  as: "h2",
-  fontSize: "2xl",
-  color: "neutral.300",
-  pl: { base: 6, sm: 8 },
+  as: 'h2',
+  fontSize: '2xl',
+  color: 'neutral.300',
+  pl: { base: 6, sm: 8 }
 }
 
 export interface PageCellarProps {
@@ -63,8 +65,8 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
     () =>
       dynamic(
         () =>
-          import("components/_modals/MigrationModal").then((m) => ({
-            default: m.MigrationModal,
+          import('components/_modals/MigrationModal').then(m => ({
+            default: m.MigrationModal
           })),
         { ssr: false, loading: () => null }
       ),
@@ -74,9 +76,9 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   // Deep-link: ?action=deposit → open deposit modal (after wallet/network checks on page)
   useEffect(() => {
     const action = router.query?.action
-    if (action === "deposit") {
+    if (action === 'deposit') {
       // Open the deposit modal for this vault
-      setIsOpen({ id, type: "deposit" })
+      setIsOpen({ id, type: 'deposit' })
     }
   }, [router.query?.action, id, setIsOpen, router])
 
@@ -90,45 +92,46 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   }, [isRealYieldEth, isTurboSteth])
   const staticCellarData = cellarDataMap[id]
   const cellarAddress = cellarDataMap[id].config.id
-  const isLarger768 = useBetterMediaQuery("(min-width: 768px)")
+  const isLarger768 = useBetterMediaQuery('(min-width: 768px)')
   const isYieldStrategies =
     staticCellarData.cellarType === CellarType.yieldStrategies
   const isAutomatedPortfolio =
     staticCellarData.cellarType === CellarType.automatedPortfolio
   const notLaunched = isComingSoon(cellarDataMap[id].launchDate)
-  const isMobileWidth = useBetterMediaQuery("(max-width: 768px)")
+  const isMobileWidth = useBetterMediaQuery('(max-width: 768px)')
   const [showBackChip, setShowBackChip] = useState(false)
   useEffect(() => {
     if (!isMobileWidth) return
     const onScroll = () => setShowBackChip(window.scrollY > 400)
     onScroll()
-    window.addEventListener("scroll", onScroll)
-    return () => window.removeEventListener("scroll", onScroll)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
   }, [isMobileWidth])
 
   return (
     <Layout chainObj={cellarConfig.chain}>
       <WalletHealthBanner />
+      {isWithdrawalsPaused(id) && <WithdrawalsPausedBanner />}
       {isAlphaSteth && (
         <InfoBanner
           text={
             <>
-              Alpha stETH has been succeeded by{" "}
+              Alpha stETH has been succeeded by{' '}
               <a
-                href="https://stake.lido.fi/earn/eth/deposit"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: "underline" }}
+                href='https://stake.lido.fi/earn/eth/deposit'
+                target='_blank'
+                rel='noopener noreferrer'
+                style={{ textDecoration: 'underline' }}
               >
                 Lido Earn ETH
               </a>
               . Existing depositors can upgrade to the new vault or
-              withdraw via{" "}
+              withdraw via{' '}
               <a
-                href="https://stake.lido.fi/earn/ggv/deposit"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: "underline" }}
+                href='https://stake.lido.fi/earn/ggv/deposit'
+                target='_blank'
+                rel='noopener noreferrer'
+                style={{ textDecoration: 'underline' }}
               >
                 Lido GGV
               </a>
@@ -141,24 +144,24 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
         <InfoBanner
           text={
             <>
-              Turbo eETH V1 (current vault) is migrating to{" "}
+              Turbo eETH V1 (current vault) is migrating to{' '}
               <a
-                href="https://app.sommelier.finance/Turbo-eETHV2/manage"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: "underline" }}
+                href='https://app.sommelier.finance/Turbo-eETHV2/manage'
+                target='_blank'
+                rel='noopener noreferrer'
+                style={{ textDecoration: 'underline' }}
               >
                 Turbo eETH V2
-              </a>{" "}
+              </a>{' '}
               (new vault).
               <div>
                 Your capital in V1 is already earning the native yield
-                from{" "}
+                from{' '}
                 <a
-                  href="https://app.sommelier.finance/Turbo-eETHV2/manage"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: "underline" }}
+                  href='https://app.sommelier.finance/Turbo-eETHV2/manage'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  style={{ textDecoration: 'underline' }}
                 >
                   Turbo eETH V2
                 </a>
@@ -168,12 +171,12 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
               <div>
                 To participate in any new rewards program, you must
                 withdraw your assets from Turbo eETH V1 and deposit
-                into{" "}
+                into{' '}
                 <a
-                  href="https://app.sommelier.finance/Turbo-eETHV2/manage"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ textDecoration: "underline" }}
+                  href='https://app.sommelier.finance/Turbo-eETHV2/manage'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  style={{ textDecoration: 'underline' }}
                 >
                   Turbo eETH V2
                 </a>
@@ -186,22 +189,22 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
       <Section>
         {/* Desktop header */}
         <HStack
-          display={{ base: "none", md: "flex" }}
+          display={{ base: 'none', md: 'flex' }}
           pb={12}
-          justify="space-between"
-          align="flex-end"
-          wrap="wrap"
+          justify='space-between'
+          align='flex-end'
+          wrap='wrap'
           rowGap={4}
         >
-          <VStack spacing={6} align="flex-start">
+          <VStack spacing={6} align='flex-start'>
             <BreadCrumb cellarName={staticCellarData.name} id={id} />
             <HStack spacing={4}>
-              <Heading fontSize="2.5rem">
-                {staticCellarData.name}{" "}
+              <Heading fontSize='2.5rem'>
+                {staticCellarData.name}{' '}
               </Heading>
             </HStack>
           </VStack>
-          <HStack spacing={3} align="flex-end">
+          <HStack spacing={3} align='flex-end'>
             {isYieldStrategies && (
               <CellarStatsYield
                 cellarId={id}
@@ -219,30 +222,30 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
         {/* Mobile compact header */}
         <VStack
           spacing={3}
-          align="stretch"
-          display={{ base: "flex", md: "none" }}
+          align='stretch'
+          display={{ base: 'flex', md: 'none' }}
           px={6}
           pt={4}
         >
           <BreadCrumb cellarName={staticCellarData.name} id={id} />
-          <HStack justify="space-between" align="center">
-            <Heading fontSize="xl" noOfLines={1}>
+          <HStack justify='space-between' align='center'>
+            <Heading fontSize='xl' noOfLines={1}>
               {staticCellarData.name}
             </Heading>
             <HStack
               spacing={2}
               px={2}
               py={1}
-              rounded="full"
-              bg="whiteAlpha.100"
+              rounded='full'
+              bg='whiteAlpha.100'
             >
               <Image
                 src={cellarConfig.chain.logoPath}
                 alt={cellarConfig.chain.alt}
                 boxSize={4}
-                background={"transparent"}
+                background={'transparent'}
               />
-              <Text fontSize="xs" color="whiteAlpha.800">
+              <Text fontSize='xs' color='whiteAlpha.800'>
                 {cellarConfig.chain.displayName}
               </Text>
             </HStack>
@@ -261,11 +264,11 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
           )}
         </VStack>
 
-        <VStack spacing={4} align="stretch">
+        <VStack spacing={4} align='stretch'>
           <Heading {...h2Styles} pt={12}>
             Your Portfolio
           </Heading>
-          {type === "migrate" &&
+          {type === 'migrate' &&
             (isAlphaSteth || showMigrationForSourceVault) &&
             id && (
               <DynamicMigrationModal
@@ -278,8 +281,8 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
       </Section>
 
       <Section px={{ base: 0, md: 4 }}>
-        <VStack spacing={6} align="stretch">
-          <InView triggerOnce rootMargin="200px">
+        <VStack spacing={6} align='stretch'>
+          <InView triggerOnce rootMargin='200px'>
             {({ inView, ref }) => (
               <div ref={ref}>
                 {!notLaunched &&
@@ -302,7 +305,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
               </div>
             )}
           </InView>
-          <InView triggerOnce rootMargin="200px">
+          <InView triggerOnce rootMargin='200px'>
             {({ inView, ref }) => (
               <div ref={ref}>
                 {isTokenPriceChartEnabled(cellarConfig) && inView && (
@@ -333,15 +336,15 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
       {/* Floating Back to Vaults chip (mobile after scroll) */}
       {isMobileWidth && showBackChip && (
         <Box
-          position="fixed"
-          bottom={{ base: isOpen ? "64px" : "16px", md: "16px" }}
-          left="16px"
+          position='fixed'
+          bottom={{ base: isOpen ? '64px' : '16px', md: '16px' }}
+          left='16px'
           zIndex={9}
-          display={{ base: "block", md: "none" }}
+          display={{ base: 'block', md: 'none' }}
         >
           <Button
-            size="sm"
-            variant="outline"
+            size='sm'
+            variant='outline'
             onClick={() => window.history.back()}
           >
             Back to Vaults
