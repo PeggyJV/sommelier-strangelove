@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react"
+import { FC, useMemo } from 'react'
 import {
   Box,
   HStack,
@@ -7,23 +7,23 @@ import {
   Text,
   Tooltip,
   useBreakpointValue,
-  VStack,
-} from "@chakra-ui/react"
-import { CardDivider } from "./_layout/CardDivider"
-import { CardHeading } from "./_typography/CardHeading"
-import { InformationIcon } from "./_icons"
-import { AlphaApyPopover } from "components/alpha/AlphaApyPopover"
-import { Apy } from "./Apy"
-import { cellarDataMap } from "data/cellarDataMap"
-import { apyHoverLabel, apyLabel } from "data/uiConfig"
-import { config as utilConfig } from "utils/config"
-import { alphaStethI18n } from "i18n/alphaSteth"
-import { formatAlphaStethNetApyNoApprox } from "utils/alphaStethFormat"
+  VStack
+} from '@chakra-ui/react'
+import { CardDivider } from './_layout/CardDivider'
+import { CardHeading } from './_typography/CardHeading'
+import { InformationIcon } from './_icons'
+import { AlphaApyPopover } from 'components/alpha/AlphaApyPopover'
+import { Apy } from './Apy'
+import { cellarDataMap } from 'data/cellarDataMap'
+import { apyHoverLabel, apyLabel } from 'data/uiConfig'
+import { config as utilConfig } from 'utils/config'
+import { alphaStethI18n } from 'i18n/alphaSteth'
+import { formatAlphaStethNetApyNoApprox } from 'utils/alphaStethFormat'
 import {
   AlphaStethBreakdown,
-  type AlphaApyParts,
-} from "components/AlphaStethBreakdown"
-import { useStrategyData } from "data/hooks/useStrategyData"
+  type AlphaApyParts
+} from 'components/AlphaStethBreakdown'
+import { useStrategyData } from 'data/hooks/useStrategyData'
 
 // Define an interface for APY data which includes the optional 'formatted' property
 interface ApyData {
@@ -43,8 +43,8 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
 }) => {
   const cellarConfig = cellarDataMap[cellarId].config
   const borderColor = useBreakpointValue({
-    sm: "transparent",
-    md: "neutral.700",
+    sm: 'transparent',
+    md: 'neutral.700'
   })
 
   const { data: strategyData, isLoading: isStrategyLoading } =
@@ -76,7 +76,7 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
   const alphaParts: AlphaApyParts = useMemo(() => {
     const parsePct = (s?: string) => {
       if (!s) return 0
-      const n = parseFloat(String(s).replace(/%/g, ""))
+      const n = parseFloat(String(s).replace(/%/g, ''))
       return Number.isNaN(n) ? 0 : n
     }
     return {
@@ -86,49 +86,56 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
       ),
       feesImpact: 0,
       netApy: parsePct(baseApySumRewards?.formatted),
-      approximate: true,
+      approximate: true
     }
   }, [
     baseApy?.formatted,
     extraRewardsApy?.formatted,
     rewardsApy?.formatted,
-    baseApySumRewards?.formatted,
+    baseApySumRewards?.formatted
   ])
 
   return (
     <HStack
       spacing={{ base: 2, md: 8 }}
       rowGap={4}
-      w={{ base: "full", md: "auto" }}
-      justifyContent={{ base: "space-between", md: "unset" }}
+      w={{ base: 'full', md: 'auto' }}
+      justifyContent={{ base: 'space-between', md: 'unset' }}
       divider={
         <CardDivider
           _last={{
-            borderColor,
+            borderColor
           }}
         />
       }
       {...rest}
     >
-      <VStack spacing={1} align="center">
-        <Text as="span" fontSize="21px" fontWeight="bold">
-          {tvm ? `${tvm?.formatted}` : <Spinner />}
+      <VStack spacing={1} align='center'>
+        <Text as='span' fontSize='21px' fontWeight='bold'>
+          {/*
+            Spin only while the query is genuinely in flight. When the
+            strategy data API returns `data_pending`, useStrategyData's
+            `enabled` gate never opens, so `tvm` never arrives and a
+            `tvm ? ... : <Spinner />` check spins forever. Show `--` once
+            the query has settled without data.
+          */}
+          {isStrategyLoading ? <Spinner /> : tvm?.formatted ?? '--'}
         </Text>
         <Tooltip
           hasArrow
-          placement="top"
-          label="Total value locked"
-          bg="surface.bg"
-          color="neutral.300"
+          placement='top'
+          label='Total value locked'
+          bg='surface.bg'
+          color='neutral.300'
         >
-          <HStack spacing={1} align="center">
+          <HStack spacing={1} align='center'>
             <CardHeading>TVL</CardHeading>
-            <InformationIcon color="neutral.300" boxSize={3} />
+            <InformationIcon color='neutral.300' boxSize={3} />
           </HStack>
         </Tooltip>
       </VStack>
       {baseApySumRewards && (
-        <VStack spacing={1} align="center">
+        <VStack spacing={1} align='center'>
           {isAlpha ? (
             <>
               <Apy
@@ -140,7 +147,7 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                   )
                 }
               />
-              <HStack spacing={2} align="center">
+              <HStack spacing={2} align='center'>
                 <CardHeading>
                   {alphaStethI18n.netApyLabel}
                 </CardHeading>
@@ -161,12 +168,12 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
               <Box>
                 <Tooltip
                   hasArrow
-                  placement="top"
+                  placement='top'
                   label={
                     <>
                       <Text>
-                        {apyHoverLabel(cellarConfig)}{" "}
-                        {baseApy?.formatted ?? "0.00%"}
+                        {apyHoverLabel(cellarConfig)}{' '}
+                        {baseApy?.formatted ?? '0.00%'}
                       </Text>
                       {cellarConfig.customReward?.showOnlyBaseApy !==
                         undefined &&
@@ -179,7 +186,7 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                             {cellarConfig.customReward
                               ?.showSommRewards
                               ? `SOMM Rewards APY ${
-                                  rewardsApy?.formatted ?? "0.00%"
+                                  rewardsApy?.formatted ?? '0.00%'
                                 }`
                               : null}
                           </Text>
@@ -189,26 +196,26 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
                               `${
                                 cellarConfig.customReward?.showAPY
                                   ? `${cellarConfig.customReward.tokenDisplayName} `
-                                  : ""
+                                  : ''
                               }Rewards APY ${
                                 extraRewardsApy?.formatted ??
                                 rewardsApy?.formatted ??
-                                "0.00%"
+                                '0.00%'
                               }`}
                           </Text>
                         </>
                       )}
                     </>
                   }
-                  bg="surface.bg"
-                  color="neutral.300"
+                  bg='surface.bg'
+                  color='neutral.300'
                 >
-                  <HStack spacing={2} align="center">
+                  <HStack spacing={2} align='center'>
                     <CardHeading>
                       {apyLabel(cellarConfig)}
                     </CardHeading>
                     <InformationIcon
-                      color="neutral.300"
+                      color='neutral.300'
                       boxSize={3}
                     />
                   </HStack>
@@ -217,7 +224,7 @@ export const CellarStatsYield: FC<CellarStatsYieldProps> = ({
             </>
           )}
           {isAlpha && (
-            <Box display={{ base: "none", md: "block" }}>
+            <Box display={{ base: 'none', md: 'block' }}>
               <AlphaStethBreakdown
                 parts={alphaParts}
                 showToggle={false}
