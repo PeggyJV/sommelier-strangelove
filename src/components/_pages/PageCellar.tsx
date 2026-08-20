@@ -29,7 +29,7 @@ import { isComingSoon } from 'utils/isComingSoon'
 import { InfoBanner } from 'components/_banners/InfoBanner'
 import { WalletHealthBanner } from 'components/_banners/WalletHealthBanner'
 import { WithdrawalsPausedBanner } from 'components/_banners/WithdrawalsPausedBanner'
-import { isWithdrawalsPaused } from 'data/withdrawalsPaused'
+import { useWithdrawalsPaused } from 'data/hooks/useWithdrawalsPaused'
 import dynamic from 'next/dynamic'
 import { useDepositModalStore } from 'data/hooks/useDepositModalStore'
 import { useRouter } from 'next/router'
@@ -58,6 +58,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   const isRealYieldEth =
     id === utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG
   const isTurboSteth = id === utilConfig.CONTRACT.TURBO_STETH.SLUG
+  const withdrawalsPaused = useWithdrawalsPaused(id)
   const { isOpen, onClose, type, setIsOpen } = useDepositModalStore()
   const { isConnected: _isConnected } = useAccount()
   const router = useRouter()
@@ -111,7 +112,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
   return (
     <Layout chainObj={cellarConfig.chain}>
       <WalletHealthBanner />
-      {isWithdrawalsPaused(id) && <WithdrawalsPausedBanner />}
+      {withdrawalsPaused && <WithdrawalsPausedBanner />}
       {isAlphaSteth && (
         <InfoBanner
           text={

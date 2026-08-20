@@ -5,9 +5,7 @@ import {
   Heading,
   HStack,
   Button,
-  Icon,
   Image,
-  Link,
   SimpleGrid,
   Spacer,
   Stack,
@@ -30,6 +28,7 @@ import { config as utilConfig } from "utils/config"
 import { LighterSkeleton } from "components/_skeleton"
 import { cellarDataMap } from "data/cellarDataMap"
 import { useStrategyData } from "data/hooks/useStrategyData"
+import { StrategyDashboardLink } from "./StrategyDashboardLink"
 import { useUserBalance } from "data/hooks/useUserBalance"
 import { useUserStrategyData } from "data/hooks/useUserStrategyData"
 import { useWithdrawRequestStatus } from "data/hooks/useWithdrawRequestStatus"
@@ -758,21 +757,11 @@ export const PortfolioCard = (props: BoxProps) => {
           )}
 
           <CardStat label="Strategy Dashboard">
-            {strategyData ? (
-              <HStack
-                as={Link}
-                href={`${dashboard}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <Text as="span" fontWeight="bold" fontSize={21}>
-                  {strategyData?.name}
-                </Text>
-                <Icon as={FaExternalLinkAlt} color="purple.base" />
-              </HStack>
-            ) : (
-              <Text>Loading...</Text>
-            )}
+            <StrategyDashboardLink
+              href={dashboard}
+              name={strategyData?.name ?? cellarDataMap[id].name}
+              isLoading={isStrategyLoading}
+            />
           </CardStat>
         </CardStatRow>
         {isBondingEnabled(cellarConfig) && (
