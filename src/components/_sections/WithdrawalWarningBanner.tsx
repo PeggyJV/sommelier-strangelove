@@ -54,8 +54,9 @@ export default function WithdrawalWarningBanner() {
             </Text>{" "}
             – Withdrawals are temporarily unavailable due to a stale
             price oracle. Deposited funds are safe and remain fully
-            accounted for on-chain. The team is actively working on a
-            fix.
+            accounted for on-chain. We expect withdrawals to be enabled by
+            October 6, 2026, subject to final validation. Availability
+            may vary by vault.
           </Text>
         </ListItem>
         <ListItem>

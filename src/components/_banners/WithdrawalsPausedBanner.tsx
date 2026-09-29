@@ -35,7 +35,8 @@ export const WithdrawalsPausedBanner: FC = () => {
           on-chain.
         </Text>
         <Text color="orange.100">
-          The team is actively working on a fix. Follow{" "}
+          We expect withdrawals to be enabled by October 6, 2026, subject to
+          final validation. Availability may vary by vault. Follow{" "}
           <Link
             href="https://x.com/sommfinance"
             isExternal
