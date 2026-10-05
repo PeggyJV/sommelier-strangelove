@@ -35,6 +35,7 @@ import { useDepositModalStore } from 'data/hooks/useDepositModalStore'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useState } from 'react'
+import { isOrdinaryDepositEnabled } from 'data/vaultInteractionMode'
 
 import { config as utilConfig } from 'utils/config'
 import { Box, Image, Text, Button } from '@chakra-ui/react'
@@ -74,12 +75,17 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
     []
   )
 
-  // Deep-link: ?action=deposit → open deposit modal (after wallet/network checks on page)
+  // Deposit deep links are ignored while the app is in withdrawal/migration
+  // mode. Remove the stale query parameter so it cannot reopen later.
   useEffect(() => {
     const action = router.query?.action
-    if (action === 'deposit') {
-      // Open the deposit modal for this vault
-      setIsOpen({ id, type: 'deposit' })
+    if (action === 'deposit' && !isOrdinaryDepositEnabled(id)) {
+      const { action: _action, ...query } = router.query
+      void router.replace(
+        { pathname: router.pathname, query },
+        undefined,
+        { shallow: true }
+      )
     }
   }, [router.query?.action, id, setIsOpen, router])
 
@@ -117,26 +123,9 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
         <InfoBanner
           text={
             <>
-              Alpha stETH has been succeeded by{' '}
-              <a
-                href='https://stake.lido.fi/earn/eth/deposit'
-                target='_blank'
-                rel='noopener noreferrer'
-                style={{ textDecoration: 'underline' }}
-              >
-                Lido Earn ETH
-              </a>
-              . Existing depositors can upgrade to the new vault or
-              withdraw via{' '}
-              <a
-                href='https://stake.lido.fi/earn/ggv/deposit'
-                target='_blank'
-                rel='noopener noreferrer'
-                style={{ textDecoration: 'underline' }}
-              >
-                Lido GGV
-              </a>
-              .
+              Alpha stETH is in migration-only mode. Eligible Real
+              Yield ETH and Turbo stETH positions can use the migration
+              flow below; ordinary deposits and withdrawals are disabled.
             </>
           }
         />
@@ -277,7 +266,7 @@ const PageCellar: FC<PageCellarProps> = ({ id }) => {
                 onClose={onClose}
               />
             )}
-          <PortfolioCard />
+          <PortfolioCard withdrawalsPaused={withdrawalsPaused} />
         </VStack>
       </Section>
 

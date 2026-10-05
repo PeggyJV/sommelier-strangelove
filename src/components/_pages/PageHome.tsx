@@ -12,7 +12,6 @@ import { StrategyDesktopColumn } from "components/_columns/StrategyDesktopColumn
 import { StrategyMobileColumn } from "components/_columns/StrategyMobileColumn"
 import { StrategyTabColumn } from "components/_columns/StrategyTabColumn"
 import { LayoutWithSidebar } from "components/_layout/LayoutWithSidebar"
-import { SommelierTab } from "components/_modals/DepositModal/SommelierTab"
 import {
   TransparentSkeleton,
   LightSkeleton,
@@ -73,13 +72,6 @@ const LegacyVaultsSection = dynamic(
 )
 
 // Defer heavy modals until opened
-const DynamicModalWithExchangeTab = dynamic(
-  () =>
-    import("components/_modals/ModalWithExchangeTab").then((m) => ({
-      default: m.ModalWithExchangeTab,
-    })),
-  { ssr: false, loading: () => null }
-)
 const DynamicWithdrawModal = dynamic(
   () =>
     import("components/_modals/WithdrawModal").then((m) => ({
@@ -566,7 +558,8 @@ export const PageHome = () => {
                 : hasRealYieldEthBalance
                 ? "Real Yield ETH"
                 : "Turbo stETH"}
-              . Migrate to Alpha stETH for enhanced yields.
+              . Use the migration flow to consolidate the position into
+              Alpha stETH.
             </Text>
           </Box>
           <Button
@@ -692,17 +685,6 @@ export const PageHome = () => {
 
         {id && (
           <>
-            <DynamicModalWithExchangeTab
-              heading="Deposit"
-              isOpen={isOpen && modalType === "deposit"}
-              onClose={onClose}
-              sommelierTab={
-                <SommelierTab
-                  isOpen={isOpen && modalType === "deposit"}
-                  onClose={onClose}
-                />
-              }
-            />
             <DynamicWithdrawModal
               isOpen={isOpen && modalType === "withdraw"}
               onClose={onClose}

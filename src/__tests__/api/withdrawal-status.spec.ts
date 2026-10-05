@@ -54,6 +54,18 @@ describe("/api/withdrawal-status", () => {
     )
   })
 
+  it("probes Real Yield USD on Arbitrum before enabling withdrawals", async () => {
+    const previewRedeem = jest.fn().mockResolvedValue(1000000n)
+    mockQueryContract.mockResolvedValue({ read: { previewRedeem } })
+
+    const { json } = await call("real-yield-usd-arb")
+
+    expect(previewRedeem).toHaveBeenCalledWith([1000000n])
+    expect(json).toHaveBeenCalledWith(
+      expect.objectContaining({ paused: false, reason: "redeemable" })
+    )
+  })
+
   it("reports paused while previewRedeem reverts", async () => {
     mockQueryContract.mockResolvedValue({
       read: {

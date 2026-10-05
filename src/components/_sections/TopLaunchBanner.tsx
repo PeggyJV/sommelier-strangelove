@@ -139,8 +139,8 @@ export default function TopLaunchBanner({
                 color="text.secondary"
                 noOfLines={1}
               >
-                Dynamic leveraged stETH strategy powered by Somm +
-                Lido.
+                Migration access for eligible legacy stETH vault
+                positions.
               </Text>
 
               {/* Countdown disabled */}
@@ -148,7 +148,7 @@ export default function TopLaunchBanner({
               {/* Paragraph with clamp + Read more disclosure */}
               <ExpandableBody
                 text={
-                  "Built with Lido, Alpha stETH dynamically reallocates stETH across Aave, Morpho, Unichain, and Mellow to capture sustainable rewards. Automated risk controls and off-chain strategy computation ensure secure, efficient deployment."
+                  "Alpha stETH is in migration-only mode. Eligible Real Yield ETH and Turbo stETH holders can use the guided migration flow; ordinary deposits and withdrawals are unavailable."
                 }
               />
 
@@ -200,30 +200,7 @@ export default function TopLaunchBanner({
                       "0 0 0 3px var(--chakra-colors-purple-base)",
                   }}
                 >
-                  Explore Vault
-                </Button>
-
-                {/* New CTA: Watch Deposit Guide */}
-                <Button
-                  as={NextLink}
-                  href="/strategies/Alpha-stETH/deposit_guide"
-                  size="md"
-                  height={{ base: "44px", md: "40px" }}
-                  px={{ base: 4, md: "20px" }}
-                  w={{ base: "100%", md: "auto" }}
-                  fontWeight={600}
-                  fontSize="sm"
-                  variant="outline"
-                  bg="transparent"
-                  color="cta.outline.fg"
-                  borderColor="cta.outline.br"
-                  borderWidth="2px"
-                  _focusVisible={{
-                    boxShadow:
-                      "0 0 0 3px var(--chakra-colors-purple-base)",
-                  }}
-                >
-                  Watch Deposit Guide
+                  Open Migration
                 </Button>
 
                 <Link

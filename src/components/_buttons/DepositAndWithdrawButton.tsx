@@ -141,17 +141,10 @@ const getButtonType = (
     return "withdraw"
   }
 
-  const alphaStEth = cellarDataMap["Alpha-stETH"]
-  const includesBaseAsset = alphaStEth.depositTokens.list.includes(
-    cellarConfig.baseAsset.symbol
-  )
   if (id === "Alpha-stETH") {
-    return "deposit"
+    return "migrate"
   }
-  if (!includesBaseAsset || cellarConfig.chain.id !== "ethereum") {
-    return "withdraw"
-  }
-  return "migrate"
+  return "withdraw"
 }
 
 export function DepositAndWithdrawButton({

@@ -5,7 +5,12 @@ import {
 import { config as utilConfig } from "utils/config"
 
 describe("withdrawalsPaused", () => {
-  it("flags Real Yield ETH and Turbo stETH", () => {
+  it("flags recovery vaults for a live redemption probe", () => {
+    expect(
+      isWithdrawalsPaused(
+        utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG
+      )
+    ).toBe(true)
     expect(
       isWithdrawalsPaused(utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG)
     ).toBe(true)
@@ -28,6 +33,7 @@ describe("withdrawalsPaused", () => {
 
   it("resolves to the real route slugs", () => {
     expect(WITHDRAWALS_PAUSED_SLUGS).toEqual([
+      "real-yield-usd-arb",
       "Real-Yield-ETH",
       "Turbo-STETH",
     ])
