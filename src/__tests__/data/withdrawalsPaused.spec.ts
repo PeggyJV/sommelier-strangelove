@@ -15,6 +15,11 @@ describe("withdrawalsPaused", () => {
       isWithdrawalsPaused(utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG)
     ).toBe(true)
     expect(
+      isWithdrawalsPaused(
+        utilConfig.CONTRACT.REAL_YIELD_ETH_OPT.SLUG
+      )
+    ).toBe(true)
+    expect(
       isWithdrawalsPaused(utilConfig.CONTRACT.TURBO_STETH.SLUG)
     ).toBe(true)
   })
@@ -35,6 +40,7 @@ describe("withdrawalsPaused", () => {
     expect(WITHDRAWALS_PAUSED_SLUGS).toEqual([
       "real-yield-usd-arb",
       "Real-Yield-ETH",
+      "real-yield-eth-opt",
       "Turbo-STETH",
     ])
   })

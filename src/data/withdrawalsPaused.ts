@@ -14,6 +14,7 @@ import { config as utilConfig } from "utils/config"
 export const WITHDRAWALS_PAUSED_SLUGS: readonly string[] = [
   utilConfig.CONTRACT.REAL_YIELD_USD_ARB.SLUG,
   utilConfig.CONTRACT.REAL_YIELD_ETH.SLUG,
+  utilConfig.CONTRACT.REAL_YIELD_ETH_OPT.SLUG,
   utilConfig.CONTRACT.TURBO_STETH.SLUG,
 ]
 
