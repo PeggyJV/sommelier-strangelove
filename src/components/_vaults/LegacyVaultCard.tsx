@@ -26,6 +26,7 @@ import ConnectGate from "components/wallet/ConnectGate"
 import ChainSwitcherInline from "components/network/ChainSwitcherInline"
 import ActionButton from "components/ui/ActionButton"
 import { coerceNetValue, parseMoneyString } from "utils/money"
+import { useWithdrawalsPaused } from "data/hooks/useWithdrawalsPaused"
 
 type StrategyLike = {
   slug?: string
@@ -78,6 +79,7 @@ export default function LegacyVaultCard({
   const chainLogo = vault?.config?.chain?.logoPath
   const _status: "active" | "paused" | "withdrawals-only" =
     vault?.status ?? (vault?.deprecated ? "paused" : "paused")
+  const withdrawalsPaused = useWithdrawalsPaused(vault?.slug)
 
   // Wallet/chain/balance state
   const { isConnected, chain } = useAccount()
@@ -160,6 +162,8 @@ export default function LegacyVaultCard({
   if (!isConnected) tooltipLabel = "Connect your wallet first"
   else if (needsSwitch)
     tooltipLabel = `Switch to ${cellarConfig?.chain?.displayName}`
+  else if (withdrawalsPaused)
+    tooltipLabel = "Waiting for the live withdrawal check"
   else if (lpTokenDisabled) tooltipLabel = "No funds to withdraw"
 
   return (
@@ -386,13 +390,15 @@ export default function LegacyVaultCard({
                 >
                   <ActionButton
                     variantStyle={
-                      !canWithdraw || !vault?.slug
+                      !canWithdraw || withdrawalsPaused || !vault?.slug
                         ? "ghost"
                         : "primary"
                     }
                     size="md"
                     fullWidth
-                    isDisabled={!canWithdraw || !vault?.slug}
+                    isDisabled={
+                      !canWithdraw || withdrawalsPaused || !vault?.slug
+                    }
                     onClick={async (e) => {
                       e.stopPropagation()
                       if (!vault?.slug) return

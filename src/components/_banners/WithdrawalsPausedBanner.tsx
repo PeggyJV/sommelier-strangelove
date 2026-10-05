@@ -2,11 +2,9 @@ import { FC } from "react"
 import { HStack, VStack, Text, Link, Icon } from "@chakra-ui/react"
 
 /**
- * Shown on the vault page for any vault in WITHDRAWALS_PAUSED_SLUGS.
- *
- * Redemptions on these vaults revert on-chain, so the withdraw form cannot
- * succeed. Say so plainly rather than letting users burn gas on a call that
- * always reverts.
+ * Shown while the live redemption probe cannot confirm that a recovery vault
+ * is withdrawable. Say so plainly rather than letting users burn gas on a
+ * transaction that is expected to revert.
  */
 export const WithdrawalsPausedBanner: FC = () => {
   return (
@@ -29,14 +27,12 @@ export const WithdrawalsPausedBanner: FC = () => {
           Withdrawals temporarily unavailable
         </Text>
         <Text color="orange.100">
-          Withdrawals from Real Yield ETH and Turbo stETH are
-          temporarily unavailable due to a stale price oracle.
-          Deposited funds are safe and remain fully accounted for
-          on-chain.
+          This vault is not yet passing the live withdrawal check.
+          Withdrawals will become available automatically once an
+          on-chain redemption preview succeeds.
         </Text>
         <Text color="orange.100">
-          We expect withdrawals to be enabled by October 6, 2026, subject to
-          final validation. Availability may vary by vault. Follow{" "}
+          The team is actively working on a fix. Follow{" "}
           <Link
             href="https://x.com/sommfinance"
             isExternal

@@ -4,7 +4,6 @@ import {
   BoxProps,
   Heading,
   HStack,
-  Button,
   Image,
   SimpleGrid,
   Spacer,
@@ -13,13 +12,11 @@ import {
   useTheme,
   VStack,
 } from "@chakra-ui/react"
-import NextLink from "next/link"
 import { CardStat } from "components/CardStat"
 import { CardStatRow } from "components/CardStatRow"
 import { TokenAssets } from "components/TokenAssets"
 import { BondButton } from "components/_buttons/BondButton"
 import ConnectButton from "components/_buttons/ConnectButton"
-import { DepositButton } from "components/_buttons/DepositButton"
 import { WithdrawButton } from "components/_buttons/WithdrawButton"
 import { WithdrawQueueButton } from "components/_buttons/WithdrawQueueButton"
 import { BaseButton } from "components/_buttons/BaseButton"
@@ -44,7 +41,6 @@ import {
 import { formatDistanceToNowStrict, isFuture } from "date-fns"
 import { useIsMounted } from "hooks/utils/useIsMounted"
 import { useRouter } from "next/router"
-import { FaExternalLinkAlt } from "react-icons/fa"
 import { toEther, formatUSD } from "utils/formatCurrency"
 import { useBrandedToast } from "hooks/chakra"
 import useBetterMediaQuery from "hooks/utils/useBetterMediaQuery"
@@ -58,6 +54,7 @@ import WithdrawQueueCard from "../WithdrawQueueCard"
 import { CellarKey, CellarNameKey, ConfigProps } from "data/types"
 import { MerklePoints } from "./MerklePoints/MerklePoints"
 import { WrongNetworkBanner } from "components/_banners/WrongNetworkBanner"
+import { isOrdinaryWithdrawalEnabled } from "data/vaultInteractionMode"
 
 type UserStakesView = Partial<{
   totalBondedAmount: Partial<{
@@ -70,7 +67,12 @@ type UserStakesView = Partial<{
 type NetValueInAssetView = Partial<{ value: number }>
 type StrategyTokenView = Partial<{ token: Partial<{ value: unknown }> }>
 
-export const PortfolioCard = (props: BoxProps) => {
+type PortfolioCardProps = BoxProps & { withdrawalsPaused?: boolean }
+
+export const PortfolioCard = ({
+  withdrawalsPaused = false,
+  ...props
+}: PortfolioCardProps) => {
   const theme = useTheme()
   const isMounted = useIsMounted()
   const {
@@ -252,6 +254,7 @@ export const PortfolioCard = (props: BoxProps) => {
   // or on source vault pages (Real Yield ETH / Turbo stETH) if user has balance there
   const showMigrationButton = Boolean(
     buttonsEnabled &&
+      !withdrawalsPaused &&
       ((isAlphaSteth && hasMigrationSourceBalance) ||
         (isRealYieldEth && realYieldEthValue > 0n) ||
         (isTurboSteth && turboStethValue > 0n))
@@ -289,12 +292,7 @@ export const PortfolioCard = (props: BoxProps) => {
     ? "Withdraw"
     : "Enter Withdraw Queue"
   const migrateLabel = isMobile ? "Migrate" : "Migrate to Alpha STETH"
-  const depositGuideLabel = isMobile
-    ? "Deposit Guide"
-    : "Watch Deposit Guide"
   const hasSecondaryValue = showNetValueInAsset(cellarConfig)
-  const showDeposit = !strategyData?.deprecated
-  const showGuide = id === "Alpha-stETH"
   const DISCONNECTED_PLACEHOLDER = "--"
 
   // Resolve display strings with a strict disconnected placeholder
@@ -467,55 +465,6 @@ export const PortfolioCard = (props: BoxProps) => {
                       width="100%"
                       paddingTop={"1em"}
                     >
-                      {/* Row 1: Deposit (primary) + Watch Guide (secondary) */}
-                      <SimpleGrid
-                        columns={{
-                          base: 1,
-                          sm: showDeposit && showGuide ? 2 : 1,
-                          md: 2,
-                        }}
-                        gap={{ base: 2, md: 3 }}
-                        width="100%"
-                        overflow="visible"
-                      >
-                        {showDeposit && (
-                          <DepositButton
-                            width={{ base: "100%", md: "100%" }}
-                            disabled={
-                              !isConnected ||
-                              strategyData?.isContractNotReady ||
-                              !buttonsEnabled
-                            }
-                          />
-                        )}
-                        {showGuide && (
-                          <Button
-                            as={NextLink}
-                            href="/strategies/Alpha-stETH/deposit_guide"
-                            size={{ base: "sm", md: "md" }}
-                            height={{ base: "40px", md: "44px" }}
-                            variant="outline"
-                            bg="transparent"
-                            color="cta.outline.fg"
-                            borderColor="cta.outline.br"
-                            borderWidth="2px"
-                            width={{ base: "100%", md: "100%" }}
-                            sx={{
-                              whiteSpace: "nowrap",
-                              textOverflow: "ellipsis",
-                              overflow: "hidden",
-                              fontSize: { base: "sm", md: "md" },
-                              px: { base: 3, md: 4 },
-                            }}
-                            _focusVisible={{
-                              boxShadow:
-                                "0 0 0 3px var(--chakra-colors-purple-base)",
-                            }}
-                          >
-                            {depositGuideLabel}
-                          </Button>
-                        )}
-                      </SimpleGrid>
                       {/*
                       <>
                         <WithdrawQueueButton
@@ -530,7 +479,7 @@ export const PortfolioCard = (props: BoxProps) => {
                         />
                       </>
                         */}
-                      {/* Row 2: network CTA or Withdraw/Migrate */}
+                      {/* Withdrawal or migration action */}
                       {isWrongNetwork ? (
                         <WrongNetworkBanner
                           chain={cellarConfig.chain}
@@ -543,52 +492,30 @@ export const PortfolioCard = (props: BoxProps) => {
                           width="100%"
                           minW={0}
                         >
-                          {isAlphaSteth ? (
-                            <Button
-                              as="a"
-                              href="https://stake.lido.fi/earn/ggv/deposit"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              size={{ base: "sm", md: "md" }}
-                              height={{ base: "40px", md: "44px" }}
-                              variant="outline"
-                              bg="transparent"
-                              color="cta.outline.fg"
-                              borderColor="cta.outline.br"
-                              borderWidth="2px"
-                              width={{ base: "100%", md: "100%" }}
-                              rightIcon={<FaExternalLinkAlt />}
-                              sx={{
-                                whiteSpace: "nowrap",
-                                textOverflow: "ellipsis",
-                                overflow: "hidden",
-                              }}
-                              _focusVisible={{
-                                boxShadow:
-                                  "0 0 0 3px var(--chakra-colors-purple-base)",
-                              }}
-                            >
-                              Upgrade on Lido GGV
-                            </Button>
-                          ) : isWithdrawQueueEnabled(cellarConfig) ? (
+                          {isOrdinaryWithdrawalEnabled(id) &&
+                          isWithdrawQueueEnabled(cellarConfig) ? (
                             <WithdrawQueueButton
                               chain={cellarConfig.chain}
                               buttonLabel={withdrawQueueLabel}
                               disabled={
-                                !hasValueInVault || !buttonsEnabled
+                                !hasValueInVault ||
+                                !buttonsEnabled ||
+                                withdrawalsPaused
                               }
                               showTooltip={true}
                               width={{ base: "100%", md: "100%" }}
                             />
-                          ) : (
+                          ) : isOrdinaryWithdrawalEnabled(id) ? (
                             <WithdrawButton
                               isDeprecated={strategyData?.deprecated}
                               disabled={
-                                !hasValueInVault || !buttonsEnabled
+                                !hasValueInVault ||
+                                !buttonsEnabled ||
+                                withdrawalsPaused
                               }
                               width={{ base: "100%", md: "100%" }}
                             />
-                          )}
+                          ) : null}
 
                           {showMigrationButton && (
                             <BaseButton
@@ -627,26 +554,6 @@ export const PortfolioCard = (props: BoxProps) => {
                           overridechainid={cellarConfig.chain.id}
                         />
                       </HStack>
-                      {id === "Alpha-stETH" && (
-                        <Button
-                          as={NextLink}
-                          href="/strategies/Alpha-stETH/deposit_guide"
-                          size="md"
-                          height="44px"
-                          variant="outline"
-                          bg="transparent"
-                          color="cta.outline.fg"
-                          borderColor="cta.outline.br"
-                          borderWidth="2px"
-                          width={{ base: "100%", md: "auto" }}
-                          _focusVisible={{
-                            boxShadow:
-                              "0 0 0 3px var(--chakra-colors-purple-base)",
-                          }}
-                        >
-                          Watch Deposit Guide
-                        </Button>
-                      )}
                     </VStack>
                   </>
                 ))}

@@ -8,7 +8,6 @@ export const isSommNative = true
 export const provider = "Somm Protocol"
 export const shortDescription =
   "Dynamic leveraged stETH across blue-chip DeFi; no legacy vault dependency."
-export const status = "active" // active | withdrawals-only | paused
 export const builtWith = ["Lido", "EigenLayer"]
 export const launchDateISO = "2025-08-19T00:00:00Z"
 

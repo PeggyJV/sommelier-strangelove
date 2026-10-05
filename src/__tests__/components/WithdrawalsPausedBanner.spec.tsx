@@ -17,12 +17,11 @@ describe("WithdrawalsPausedBanner", () => {
     ).toBeInTheDocument()
   })
 
-  it("names both affected vaults and reassures on fund safety", () => {
+  it("explains the live redemption gate", () => {
     renderBanner()
-    const body = screen.getByText(/stale price oracle/i)
-    expect(body).toHaveTextContent(/Real Yield ETH/)
-    expect(body).toHaveTextContent(/Turbo stETH/)
-    expect(body).toHaveTextContent(/funds are safe/i)
+    const body = screen.getByText(/live withdrawal check/i)
+    expect(body).toHaveTextContent(/redemption preview succeeds/i)
+    expect(body).toHaveTextContent(/available automatically/i)
   })
 
   it("links to the status account", () => {

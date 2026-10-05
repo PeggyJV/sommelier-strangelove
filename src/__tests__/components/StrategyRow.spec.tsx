@@ -4,10 +4,12 @@ import { ChakraProvider } from "@chakra-ui/react"
 import StrategyRow from "../../components/_vaults/StrategyRow"
 import theme from "../../theme"
 
+const mockSetIsOpen = jest.fn()
+
 // Mock the deposit modal store
 jest.mock("../../data/hooks/useDepositModalStore", () => ({
   useDepositModalStore: () => ({
-    setIsOpen: jest.fn(),
+    setIsOpen: mockSetIsOpen,
   }),
 }))
 
@@ -184,22 +186,49 @@ describe("StrategyRow", () => {
   })
 
   describe("Action Button", () => {
-    it('should render deposit button when connected', () => {
+    it('should render migration button when connected', () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
       expect(
-        screen.getByText("Deposit")
+        screen.getByText("Migrate")
       ).toBeInTheDocument()
     })
 
-    it('should render "Deposit" button when connected', () => {
+    it('should render "Migrate" button when connected', () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
-      expect(screen.getByText("Deposit")).toBeInTheDocument()
+      expect(screen.getByText("Migrate")).toBeInTheDocument()
+    })
+
+    it("opens the Alpha stETH migration flow", () => {
+      renderWithTheme(<StrategyRow vault={mockVault} />)
+
+      fireEvent.click(screen.getByText("Migrate"))
+
+      expect(mockSetIsOpen).toHaveBeenCalledWith({
+        id: "Alpha-stETH",
+        type: "migrate",
+      })
+    })
+
+    it("opens withdrawals for non-Alpha vaults", () => {
+      const withdrawalVault = {
+        ...mockVault,
+        name: "Real Yield USD",
+        slug: "real-yield-usd-arb",
+      }
+      renderWithTheme(<StrategyRow vault={withdrawalVault} />)
+
+      fireEvent.click(screen.getByText("Withdraw"))
+
+      expect(mockSetIsOpen).toHaveBeenCalledWith({
+        id: "real-yield-usd-arb",
+        type: "withdraw",
+      })
     })
 
     it("should have responsive button sizing", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
 
-      const button = screen.getByText("Deposit")
+      const button = screen.getByText("Migrate")
       expect(button).toHaveClass("chakra-button")
     })
   })
@@ -320,14 +349,14 @@ describe("StrategyRow", () => {
     it("should have proper ARIA labels", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
 
-      const button = screen.getByText("Deposit")
+      const button = screen.getByText("Migrate")
       expect(button.tagName.toLowerCase()).toBe("button")
     })
 
     it("should be keyboard navigable", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
 
-      const button = screen.getByText("Deposit")
+      const button = screen.getByText("Migrate")
       expect(button).toBeInstanceOf(HTMLElement)
     })
   })
@@ -347,7 +376,7 @@ describe("StrategyRow", () => {
       expect(screen.getByText(/Available in:/)).toBeInTheDocument()
     })
 
-    it("should disable deposit button for pre-launch vaults", () => {
+    it("should disable migration button for pre-launch vaults", () => {
       const futureDate = new Date()
       futureDate.setDate(futureDate.getDate() + 7)
 
@@ -358,7 +387,7 @@ describe("StrategyRow", () => {
 
       renderWithTheme(<StrategyRow vault={preLaunchVault} />)
 
-      const button = screen.getByText("Deposit")
+      const button = screen.getByText("Migrate")
       expect(button).toBeDisabled()
     })
   })

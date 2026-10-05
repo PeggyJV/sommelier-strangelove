@@ -60,6 +60,8 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
       : (vault?.baseApySumRewards?.value as number | undefined)
   const netFmt = vault?.baseApySumRewards?.formatted
   const isAlpha = vault?.slug === utilConfig.CONTRACT.ALPHA_STETH.SLUG
+  const actionLabel = isAlpha ? "Migrate" : "Withdraw"
+  const actionType = isAlpha ? "migrate" : "withdraw"
   const approxNetFmt = (() => {
     const raw = netFmt
     if (!raw) return undefined
@@ -278,7 +280,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
         >
           <Box px={{ base: 3, md: 0 }} w="100%">
             <ConnectGate
-              fallbackLabel="Connect wallet to deposit"
+              fallbackLabel={`Connect wallet to ${actionLabel.toLowerCase()}`}
               fullWidth
               overrideChainId={vault?.config?.chain?.id}
             >
@@ -290,7 +292,7 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                   isDisabled
                   onClick={(e) => e.stopPropagation()}
                 >
-                  Deposit
+                  {actionLabel}
                 </ActionButton>
               ) : (
                 <ActionButton
@@ -302,10 +304,10 @@ export default function StrategyRow({ vault }: { vault: Vault }) {
                   onClick={(e) => {
                     e.stopPropagation()
                     if (!vault?.slug) return
-                    setIsOpen({ id: vault.slug, type: "deposit" })
+                    setIsOpen({ id: vault.slug, type: actionType })
                   }}
                 >
-                  Deposit
+                  {actionLabel}
                 </ActionButton>
               )}
             </ConnectGate>
