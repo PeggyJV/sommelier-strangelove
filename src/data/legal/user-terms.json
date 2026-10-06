@@ -1,0 +1,2097 @@
+{
+  "_createdAt": "2023-02-07T00:09:46Z",
+  "_id": "135527b3-17d7-49d5-9ace-751ba183c08d",
+  "_rev": "EXNVeWMDyo36m8LYbQW9qq",
+  "_type": "userTerms",
+  "_updatedAt": "2024-10-23T10:39:12Z",
+  "content": [
+    {
+      "_key": "a6040c9da2b1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "7afec24336120",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm is a decentralized multi-chain execution platform, built on the Cosmos SDK to maximize interoperability with other blockchains, and supported by a network of independent validator nodes. The Somm protocol website, https://www.sommelier.finance/, and the Somm decentralized application access website, https://app.sommelier.finance/, as well the Somm protocol and network are generally referred to as “Somm”."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "e43b93636a6a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "60b1f3042deb0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "444565c42618",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "72f02182ec070",
+          "_type": "span",
+          "marks": [],
+          "text": "Bajanss OÜ, Maakri 36-50, Tallinn, Estonia 10145 (“Bajanss”) has developed these Terms of Use to clarify what are the terms and conditions of your interactions with Somm. Bajanss may from time to time update the Terms of Use to take account of legal and regulatory developments so that the development of Somm may continue in line with such requirements. Decentralized applications such as Somm have been gathering increased attention worldwide and it is possible that Somm will be subject to additional regulatory requirements in the future. Please note that any updates to the Terms of Use will be immediately applicable. It is your duty to become comfortable with the Terms of Use and the Privacy Policy of Somm, and your continued access to and interaction with Somm constitutes your awareness of and agreement to all amendments made to the Terms of Use and the Privacy Policy as of the date of your accessing and interacting with Somm. It is your duty to review the Terms of Use regularly as you shall be bound by it, and Bajanss shall have no obligation to, and no technical means to, inform you of any changes. If, for some reason, you are not satisfied with the Terms of Use, your immediate recourse is to stop interacting with Somm."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "bd4253f3262a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ea910f2544fe0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "557af941ed04",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ad18f06289750",
+          "_type": "span",
+          "marks": [],
+          "text": "These Terms of Use and any terms and conditions incorporated herein by reference (collectively, the “Terms”) govern your access to and interactions with Somm at any time. You must read the Terms carefully. Anybody who accesses or interacts, in any way, with Somm will be bound by these Terms. If you are accessing or interacting with Somm on behalf of a company (such as your employer) or other legal entity, you represent and warrant that you have the authority to bind that entity to these Terms and, in that case, “you” will refer to that entity. By accessing, browsing or otherwise interacting with Somm you agree that you have read, understood and accepted all of the Terms and our Privacy Policy (the “Privacy Policy”), which is incorporated by reference into the Terms."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "2bc9a6a6ad74",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "cd1e058601ab0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "0b63899dcaa0",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f2e934d147df0",
+          "_type": "span",
+          "marks": [],
+          "text": "WHEN YOU AGREE TO THESE TERMS BY USING OR ACCESSING SOMM, YOU ARE AGREEING TO RESOLVE ANY DISPUTE BETWEEN YOU AND BAJANSS THROUGH BINDING, INDIVIDUAL ARBITRATION RATHER THAN IN COURT. AND YOU AGREE TO A CLASS ACTION WAIVER, BOTH OF WHICH IMPACT YOUR RIGHTS AS TO HOW DISPUTES ARE RESOLVED."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1b28aa04377f",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "31ab1cc6e8670",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "918159f91007",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b6001dce0d630",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fdba21d7e58f",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "fd96017d5e1e0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "656abcc5f5eb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2e2c0ee4d4ee0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d78b5cc4dbac",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "1060bb3c67d30",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "8cbf7cab5753",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4c1c61ff7ecd0",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "1. Eligibility"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "5a1c011a85bf",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "bfaa1df3c7520",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4b1761cbc209",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "3f18d29b15000",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm is NOT open to persons or entities who reside in, are citizens of, are incorporated in, or have a registered office in any Prohibited Locations or are Restricted Persons, as defined below, with no exceptions. If you are a Restricted Person, then do not attempt to access or interact with Somm."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "01030a204afd",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4211814b1ee80",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "66767b4018a2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "84704cec26ff0",
+          "_type": "span",
+          "marks": [],
+          "text": "Use of a virtual private network (e.g., a VPN) or other means by Restricted Persons to access or interact with Somm is prohibited under these Terms. If you continue to access and/or you interact with Somm you represent and warrant to Bajanss that you:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d457169d5e05",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "09a70fcf22f10",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f01e856b3186",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "70a21808dd4a0",
+          "_type": "span",
+          "marks": [],
+          "text": "(i) are at least 18 years old;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "8a7b0e745d0e",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d93f77851d530",
+          "_type": "span",
+          "marks": [],
+          "text": "(ii) you don’t break any laws of your jurisdiction by accessing and/or interacting with Somm; (iii) you are not using your wallet to carry out transactions for other persons, except to the extent you are an authorized person acting on behalf of a legal entity;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "66b5fc82099d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "dab67ad203250",
+          "_type": "span",
+          "marks": [],
+          "text": "(iv) you are not located, established or registered in any of the jurisdictions listed below as “Prohibited Locations”;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7631db8ee431",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4f9f9ae4bc750",
+          "_type": "span",
+          "marks": [],
+          "text": "(v) you are not subject to the Sanction Lists and you are not a Restricted Person; and"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f8a9a9dc5bdf",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6b725c7896dc0",
+          "_type": "span",
+          "marks": [],
+          "text": "(vi) you are not transmitting, exchanging, or otherwise laundering, directly or indirectly, proceeds of criminal or fraudulent activity, or supporting criminal or terrorist activities."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "929cec622266",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "208660e055c00",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "41df330bdc96",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "54954bab0a730",
+          "_type": "span",
+          "marks": [],
+          "text": "More generally, we make no representations or warranties that Somm is appropriate for access or use in any jurisdictions. You may not access and/or interact with Somm if you are otherwise barred from using blockchain technology, digital assets, and/or decentralized networks under your applicable laws, or from any jurisdiction or country if it would be contrary to the law or regulation of that jurisdiction or if it would subject Somm or Bajanss to the laws of, or any registration requirement with, such jurisdiction. You are solely responsible for adhering to all laws and regulations applicable to you and your access to and/or interactions with Somm. Your access and/or interactions with Somm are prohibited and you may be blocked if your access and/or interactions with Somm would violate or facilitate the violation of any applicable laws or regulations, or contribute to or facilitate any illegal activity."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "12f43d8c15f8",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "090aa408aa630",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "89a4a815fb7a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4d35a78bd8330",
+          "_type": "span",
+          "marks": [],
+          "text": "“Sanction Lists” means any sanctions designations listed on economic/trade embargo lists and/or specially designated persons/blocked persons listspublished by the international organizations, as well as any state and governmental authorities of any jurisdiction, including, but not limited to the lists of United Nations, European Union and its Member States, United States and United Kingdom sanctions lists."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "0c11af857078",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a593a947115e0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fe1800c3d49c",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "814f6839f7ca0",
+          "_type": "span",
+          "marks": [],
+          "text": "“Prohibited Locations” means that Somm cannot interact with digital wallets located in, established in, or a resident of Myanmar (Burma), Côte D'Ivoire (Ivory Coast), Cuba, Democratic Republic of Congo, Iran, Iraq, Libya, Mali, Nicaragua, Democratic People’s Republic of Korea (North Korea), Russia, Somalia, Sudan, Syria, Ukraine (the regions of Crimea, Donetsk and Luhansk), Yemen, Venezuela, Zimbabwe or any other state, country or region that is included in the Sanction Lists. You must not use any software or networking techniques, including use of a Virtual Private Network (VPN) to modify your internet protocol (IP) address or otherwise circumvent or attempt to circumvent this prohibition."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "8ca267930a00",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "675574fa96870",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "426f29cfc8c3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "78de5e9e36330",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm cannot interact with digital wallets which have been previously classified or otherwise identified by international organizations or any state and governmental authorities of any jurisdiction, as belonging or affiliated with the persons specially designated or otherwise included in the Sanction Lists (“Restricted Persons”). For the purposes of these Terms, Restricted Persons shall also include all persons or entities who reside in, are citizens of, are incorporated in, or have a registeredoffice in the Prohibited Locations."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a8e8513a2647",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2fdb544f5aca0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "467fe665261d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "939e04ab32b20",
+          "_type": "span",
+          "marks": [],
+          "text": "You agree not to access and/or interact with Somm using any technology for the purposes of circumventing these Terms."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "86dbdb218f60",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c4b9ddd0f8c10",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f09540cbebaa",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "9663cbfabbba0",
+          "_type": "span",
+          "marks": [],
+          "text": "In addition to the above, certain of the products and apps built on Somm and some functions of this website may be restricted in certain jurisdictions including the United States although the Somm protocol is not restricted. For example, if you are based in the United States, you can still build on Somm and access the Somm protocol, and tokens but you may not access vaults / cellars built on Somm offered through this website."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "136f78755fef",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "831593128ca80",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "2af6c4fe3fb0",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b3ae7d716e350",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "461aaeee4de3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f2e20951b1710",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "2. Compliance Obligations"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7a4f388665ca",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "422f29b3efa10",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d7b90f2ac0c9",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0dabc6263ffb0",
+          "_type": "span",
+          "marks": [],
+          "text": "You expressly agree that you assume all risks in connection with your access to and interactions with Somm. Additionally, you expressly waive and release Bajanss, any affiliates entities, directors, officers, consultants, employees, contractors, etc., from any and all liability, claims, causes ofaction, or damages arising from or in any way relating to your access to and interactions with Somm. Somm may not be available or appropriate for use in all jurisdictions. By accessing or interacting with Somm, you agree that you are solely and entirely responsible for compliance with all laws and regulations that may apply to you. You further agree that we have no obligation to inform you of any potential liabilities or violations of law or regulation that may arise in connection with your access and interactions with Somm, tax and other legal consequences, and that we are not liable in any respect for any failure by you to comply with any applicable laws or regulations."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9861623d4870",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "22a5e08d70fb0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "6f6f5996f64f",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "19884ea7503e0",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "3. Access and Interactions with Somm"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c31787f4775c",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f5299fb0621c0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "e243aa847bcc",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "522ebfb203070",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm can be used as an interface to access the Somm Network and various projects and decentralized applications developed by participants to the Somm Network, some of which may display price and other information on cryptocurrency, digital tokens or digital assets (“virtual assets”). All interactions are executed outside of our direct or indirect control. We do not interact with the virtual assets at any stage of your interactions. Somm is constantly changing, so you might see features come and go as various projects and decentralized applications are developed by participants to the Somm Network."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c6b6d6c00fbc",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d431f600a2d60",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4decf34b3e75",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c6b3082fb8fc0",
+          "_type": "span",
+          "marks": [],
+          "text": "We reserve the right to disable access to Somm at any time in the event of any breach of the Terms, including without limitation, if we, in our sole discretion, believe that you, at any time, fail to satisfy the eligibility requirements set forth in the Terms. Further, we reserve the right to limit or restrict access to Somm by any person or entity, or within any geographic area or legal jurisdiction, at any time and at our sole discretion. We will not be liable to you for any losses or damages you may suffer as a result of or in connection with Somm being inaccessible to you at any time or for any reason."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "511dacba4092",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b0e3da1a7c1d0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "cdf561430fb7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "bc78b00eb9820",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "4. Your Interactions with Somm and Decentralized Applications"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d877b09919de",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f55fc5fcdf8d0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "bdd16e2fd757",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6f47cc2d386b0",
+          "_type": "span",
+          "marks": [],
+          "text": "We do not and cannot control any interactions and/or stop any interaction or attempt to reverse any interactions after they occurred. You are prohibited by these Terms to in any way harm Somm or any of the participants in the Somm Network, but you are ultimately responsible for any interactions. If you are uncertain as to the consequences of interacting with Somm, please seek additional information or support before interactions with any decentralized applications. The Somm documentation is constantly updated and added to and accessible at https://www.sommelier.finance/."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1f4e022e75db",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2bffebacd34d0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "066744410061",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "15fe785962610",
+          "_type": "span",
+          "marks": [],
+          "text": "You agree that you will not access and/or interact with Somm in a manner which breaches these Terms and without limitation you are prohibited from acting in a manner which:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f82183055e11",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "3f2fda300d550",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "cd4364ecae2a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f3ba4ce5f1210",
+          "_type": "span",
+          "marks": [],
+          "text": "(i) infringes on or violates any copyright, trademark, service mark, patent, right of publicity, right of privacy, or other proprietary or intellectual property rights under the law;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c0d33023b0b7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "78a80b7d72de0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "28160a669ee3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "76545ecc8a510",
+          "_type": "span",
+          "marks": [],
+          "text": "(ii) seeks to interfere with or compromise the integrity, security, or proper functioning of anycomputer, server, network, personal device, or other information technology system, including,but not limited to, the deployment of viruses and denial of service attacks;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1ba64ddb52ba",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "7f59e34f542e0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "083007bd144e",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "04b71d353d5e0",
+          "_type": "span",
+          "marks": [],
+          "text": "(iii) attempts, in any manner, to obtain the private key, password, account, or other securityinformation from any other participant in the Somm Network, including such information about any digital wallets"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "403b881c8c02",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d47cce23ddc60",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "04deb4a8fad4",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e33d68aece590",
+          "_type": "span",
+          "marks": [],
+          "text": "(iv) decompiles, reverse engineers, or otherwise attempts to obtain the source code or underlying ideas or information of or relating to Somm, except as specifically listed as open source on our GitHub at https://github.com/PeggyJV/sommelier;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "aa5b09e178a7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6a595e8817520",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "38634229dadd",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "34deece696150",
+          "_type": "span",
+          "marks": [],
+          "text": "(v) seeks to defraud any of the participants to the Somm Network, including, but not limited to, providing any false, inaccurate, or misleading information in order to unlawfully obtain the property of another;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a709ff955588",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b25d03cc0ff30",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fa23d0ac89f3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2ff08e951f5d0",
+          "_type": "span",
+          "marks": [],
+          "text": "(vi) violates the integrity of trading markets, including, but not limited to, manipulative tactics commonly known as spoofing and wash trading;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "afde7fbf73b7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "290bb5d189430",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "3207ebcc9b28",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a5ed04b0bc9b0",
+          "_type": "span",
+          "marks": [],
+          "text": "(vii) disguises or interferes in any way with the IP address of the computer you are using to access or interact with Somm or that otherwise prevents Somm from correctly identifying the IP address of the computer you are using to access Somm;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ca53496c9ba9",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4966ab44f9610",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "e58577f177f5",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "96ea5bc431dc0",
+          "_type": "span",
+          "marks": [],
+          "text": "(viii) transmits, exchanges, or is otherwise supported by the direct or indirect proceeds of criminal or fraudulent activity; or"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c43283b76f04",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8e88037112ac0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "832b492c6ee5",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4ca2c471ee2f0",
+          "_type": "span",
+          "marks": [],
+          "text": "(ix) contributes to or facilitates any of the foregoing activities, or conspires to."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "390efeee507e",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "9bc96cf7c6dc0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a897ba9c8f84",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "979b9facb5280",
+          "_type": "span",
+          "marks": [],
+          "text": "By accessing the websites and interacting with Somm, you represent and warrant that you understand that there are inherent risks associated with virtual assets, the underlying technologies including, without limitation, cryptography and blockchain, and regulatory requirements and tax and reporting requirements in connection with virtual assets, and you agree that we are not responsible for any losses or damages associated with these risks."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "2fb48214ee17",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ecfac5a9307a0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "92b096a659a1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "fe863c3f33880",
+          "_type": "span",
+          "marks": [],
+          "text": "You specifically acknowledge and agree that Somm is a gateway to your interaction with decentralized networks and technology and, as such, we have no control over any blockchain or virtual assets and cannot and do not ensure that any of your interactions will be confirmed on the relevant blockchain and do not have the ability to effectuate any cancellation or modification requests regarding any of your interactions. Without limiting the foregoing, you specifically acknowledge and agree that:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d4d8336e8209",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "77a02970bc680",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "06c0cacad421",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "cbbb42ef6e290",
+          "_type": "span",
+          "marks": [],
+          "text": "(i) any pricing information and data on Somm does not represent an offer, a solicitation of an offer, or any advice regarding, or recommendation to enter into, a transaction in any of the decentralized applications, Cellars, Strategies which may be available on Somm;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "6df1acbc4089",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a7fb022bcebd0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4a842f940f8d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "611cc1c165e90",
+          "_type": "span",
+          "marks": [],
+          "text": "(ii) we are not an agent or intermediary in any sense;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "5f692f8ac4fb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2f01632c68630",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "bf5fd8bbcffa",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d1c0ca5fd3780",
+          "_type": "span",
+          "marks": [],
+          "text": "(iii) we do not own or control any of the underlying software through which blockchain networks are formed, and we are not responsible for them and their operation;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fa1b3cde6a9a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e5d851ffe82d0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7fa447a3f8bf",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "eec9fbe21d520",
+          "_type": "span",
+          "marks": [],
+          "text": "(iv) Somm data may not always be entirely accurate, complete or current and you should verify all information before relying on it, and all decisions based on Somm data are still your sole responsibility; and"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7e353db39392",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "51bff85357650",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4eb3c900cd56",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "38cf356ad7ed0",
+          "_type": "span",
+          "marks": [],
+          "text": "(v) you are solely responsible for reporting and paying any taxes applicable for any gains which may result from the interactions with Somm."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4c9baf70c686",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "55fad26cd22d0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a1bc97e2b844",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a017de052a0d0",
+          "_type": "span",
+          "marks": [],
+          "text": "Any actions, interactions and transactions carried out by you on Somm shall always remain your sole responsibility."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "97bca510b3f4",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ed0ec6c27b470",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "3909ebac7c87",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e9337d0457440",
+          "_type": "span",
+          "marks": [],
+          "text": "All information provided in connection with your access and interacting with Somm, including official documentation, is for informationalpurposes only and should not be construed as professional advice. You should not take, or refrain from taking, any action based on any information in Somm or any other information that we make available at any time, including, without limitation, blog posts, articles, links to third-party content, news feeds, tutorials, tweets and videos. Before you make any financial, legal, or other decisions regarding Somm or interactions and transactions in Somm, you should seek independent professional advice from an advisor licensed and qualified in the area for which such advice would be appropriate."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "2a3bf5384bfb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8365c26884790",
+          "_type": "span",
+          "marks": [],
+          "text": "The Terms are not intended to, and do not, create or impose any fiduciary duties on us."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a3caa1f19ed0",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0de57d9eb5550",
+          "_type": "span",
+          "marks": [],
+          "text": "To the fullest extent permitted by law, you acknowledge and agree that we owe no fiduciary duties or liabilities to you or any other party, and that to the extent any such duties or liabilities may exist at law or in equity, those duties and liabilities are hereby irrevocably disclaimed, waived, and eliminated. You further agree that the only duties and obligations that we owe you are those set forth expressly in the Terms."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7796a8f513ff",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "98f525c334af0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a02d44fdabc2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ff565e2d05940",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "5. Disclaimers"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "06a3f7a05f09",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0fb9496c45dd0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "22737aa281e4",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "3c8518565b750",
+          "_type": "span",
+          "marks": [],
+          "text": "We do not control the Somm Network."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "44510f89bddb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c4be06351b8a0",
+          "_type": "span",
+          "marks": [],
+          "text": "We do not have access to your private keys or any of the virtual assets and cannot initiate an interaction with your virtual assets or otherwise access it. We are not responsible for any activities that you engage in when using your wallet, or within Somm generally."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "0c30789ec4c7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6a20c49dc68f0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c193fd8e9fe6",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "170f29bc9f2c0",
+          "_type": "span",
+          "marks": [],
+          "text": "Any information displayed within Somm including information about prices, liquidity, staking or other is provided by third parties and/or calculated for informational purposes and we do not provide any warranties for such information. We cannot and do not represent or guarantee that any of the information available is accurate, reliable, current, complete or appropriate for your needs. Your use of any third party scripts, indicators, ideas and other content is at your sole risk."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "6a5944fbb22d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d48c1bcb54840",
+          "_type": "span",
+          "marks": [],
+          "text": "You expressly understand and agree that your access and/or interactions with Somm and transactions within the Somm Network at your sole risk. We expressly disclaim all representations and warranties, express, implied or statutory, and with respect to Somm and the code proprietary or open-source, any representation or warranty, express, implied or statutory, including withoutlimitation, any representations or warranties of title, non-infringement, merchantability, usage,security, suitability or fitness for any particular purpose, or as to the workmanship or technical codingthereof, or the absence of any defects therein, whether latent or patent. We do not represent orwarrant that the Somm code and any related information are accurate, complete, reliable, current orerror-free. The Somm websites and decentralized applications should be always deemed to be on an “as is” and “as available” basis, without warranties of any kind, either express or implied, including, without limitation, implied warranties of merchantability, fitness for a particular purpose or non-infringement. No advice, information, or statement that we make should be treated as creating any warranty or obligation. We do not endorse, guarantee, or assume responsibility for any advertisements, offers, or statements made by third parties concerning Somm."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "08710d67c46a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "434b4db58cd70",
+          "_type": "span",
+          "marks": [],
+          "text": "Most importantly, we are not responsible for transferring, safeguarding, or maintaining your private keys. We are not and cannot be responsible for transferring, safeguarding, or maintaining your private keys or any virtual assets associated therewith. If you lose, mishandle or have stolen associated private keys, you may not be able to recoverassociated virtual assets and we will not be held responsible for such loss."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "760666c8a236",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "5bb6539296e10",
+          "_type": "span",
+          "marks": [],
+          "text": "By accessing and interacting with Somm, you represent that you understand that:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "948bcf97aecb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "7a8e74d2659f0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1623e47e4093",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "fbc33d29e2e60",
+          "_type": "span",
+          "marks": [],
+          "text": "(i) the websites facilitate access to the Somm Network, the use of which has many inherent risks, and cryptographic and blockchain-based systems generally have inherent risks to which you are exposed when interacting with Somm;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1fc09b34a932",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "86b226d8a1500",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "3398958247f1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "1313bc3b6a320",
+          "_type": "span",
+          "marks": [],
+          "text": "(ii) you must have a working knowledge of the usage and intricacies of blockchain-based assets and networks;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "3bf0b59d07ad",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "188bcf5d1f7e0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9f848e02b549",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "9a7f92c83d4d0",
+          "_type": "span",
+          "marks": [],
+          "text": "(iii) markets for virtual assets are highly volatile due to factors that include, but are not limited to, adoption, speculation, technology, security, and regulation;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "237f87de3b00",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0ceaaf9368060",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d7e0d9f84269",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "007359df540b0",
+          "_type": "span",
+          "marks": [],
+          "text": "(iv) the cost and speed of transacting with blockchain-based systems are variable and may increase or decrease drastically at any time, and we are not responsible for any of these variables or risks associated with the Somm Network and cannot be held liable for any resulting losses;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c55dd6d520c0",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b1fde9ec12530",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "cb55e400211a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a5261796fdaf0",
+          "_type": "span",
+          "marks": [],
+          "text": "(v) you assume full responsibility for all of the risks of accessing and interacting with Somm and any of the decentralization applications, Cellars and Strategies."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "294a1d3c8871",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "953d0092ca630",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "61fb3f6eeb65",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2ab7cde695f60",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm may contain references or links to third-party resources, including, but not limited to,information, materials, products, or services, that we do not own or control. Third parties may offer promotions related to your access and interactions with Somm, but we do not endorse or assume any responsibility for any such resources or promotions. If you access any such resources or participate in any such promotions, you do so at your own risk, and you understand that the Terms do not apply to your dealings or relationships with any third parties. We expressly disclaim any and all liability arising from your use of any such resources or participation in any such promotions."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7de60935c1ea",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f84e09d1db870",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ecef5136affe",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "996229f7f36f0",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "6. Intellectual Proprietary Rights"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a53fc4456148",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d1fb1317bf4a0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "abf3e14e9358",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0a2582a2c80d0",
+          "_type": "span",
+          "marks": [],
+          "text": "We own all intellectual property and other rights with respect to Somm and its contents, including, but not limited to, software, text, images, trademarks, service marks, copyrights, patents, and designs, except for the resources specifically marked open source on our GitHub. Unless expressly authorized by us, you may not copy, modify, adapt, rent, license, sell, publish, distribute, or otherwise permit any third party to access or interact with Somm or any of its contents. Accessing or interacting with Somm does not constitute a grant to you of any proprietary intellectual property or other rights in Somm or its contents, including any Cellars, Strategies, and any decentralized applications."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "589a50a27de6",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f6506f810ccf0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "3ecc71aecdb8",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "1067395861160",
+          "_type": "span",
+          "marks": [],
+          "text": "You will retain ownership of all intellectual property and other rights in any information and materials you submit during your interactions with Somm. However, by uploading such information or materials, you grant us aworldwide, royalty-free, irrevocable license to use, copy, distribute, publish and send this data in any manner in accordance with applicable laws and regulations. For example, you may choose to submit comments, bug reports, ideas or other feedback about Somm, including, without limitation, about how to improve Somm (collectively, “Feedback”). By submitting any Feedback, you agree that we are free to use such Feedback at our discretion and without additional compensation to you, and to disclose such Feedback to third parties (whether on a non confidential basis or otherwise). If necessary under applicable law, then you hereby grant us a perpetual, irrevocable, non-exclusive, transferable, worldwide license under all rights necessary for us toincorporate and use your Feedback for any purpose."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "78289d2f5610",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "3997ed3de7ff0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "45498659105a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a3402232ecae0",
+          "_type": "span",
+          "marks": [],
+          "text": "If (i) you satisfy all of the eligibility requirements set forth in the Terms, and (ii) your access to and interactions with Somm complies with the Terms, you hereby are granted a single, personal, limited license to access and use Somm, which is non-exclusive, non-transferable, and freely revocable by us at any time without notice or cause in our sole discretion. Use of Somm outside these Terms is strictly prohibited."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a8c908a59d11",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c0be03c7dcde0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "3774d9417b59",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "104d676d30a20",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "7. Indemnification. Limitation of Liability"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "8f865b598ef1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "01b75a2b3d8b0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1b93454b0356",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "004df8c3b4c20",
+          "_type": "span",
+          "marks": [],
+          "text": "You agree to hold harmless, release, defend, and indemnify us and our officers, directors, employees,contractors, agents, affiliates, and subsidiaries from and against all claims, damages, obligations, losses, liabilities, costs and expenses arising from your access to and interactions with Somm, any violation by you of these Terms, the right of any third party, or any other applicable law, rule, or regulation, as well as an other party’s access and interacting with Somm with your assistance or using any device or wallet that you own or control."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f802f5f34a62",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "57d37710f6b10",
+          "_type": "span",
+          "marks": [],
+          "text": "Under no circumstances shall we or any of our officers, directors, employees, contractors, agents, affiliates, or subsidiaries be liable to you for any indirect, punitive, incidental, special, consequential, orexemplary damages, including (but not limited to) damages for loss of profits, goodwill, use, data, or other intangible property, arising out of or relating to any access to or interactions with Somm, nor will we be responsible for any damage, loss, or injury resulting from hacking, tampering, or other unauthorized access to or interactions with Somm, or from any access to or use of any information obtained by any unauthorized access. Without limitation, we assume no liability or responsibility for any:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "107606899849",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "075fbfc6d5850",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ba023e2d9892",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0d80df31074e0",
+          "_type": "span",
+          "marks": [],
+          "text": "(i) errors, mistakes, or inaccuracies of content;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ba53dea1a445",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6f72f451745a0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "e67176635d11",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "176dbf9987ac0",
+          "_type": "span",
+          "marks": [],
+          "text": "(ii) personal injury or property damage, of any nature whatsoever;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "76b1c630c29b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e10e76f0dc220",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4eb1e0a65988",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "973eddef731e0",
+          "_type": "span",
+          "marks": [],
+          "text": "(iii) unauthorized access to or use of any secure server or database in our control, or the use of any information or data stored therein;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "652891682601",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "afb6e10b2d760",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "35f0820079b0",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "91f1fe45cc220",
+          "_type": "span",
+          "marks": [],
+          "text": "(iv)interruption or cessation of function;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4fd0633234d9",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d2d5ed3ac5110",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9ba886d7ca73",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "dd46b083b8630",
+          "_type": "span",
+          "marks": [],
+          "text": "(v) bugs, viruses, trojan horses, or the like that may be transmitted to or through Somm;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d326e22e6438",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "37f8125718530",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "b4aaeed2ee1d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "020792de208f0",
+          "_type": "span",
+          "marks": [],
+          "text": "(vi) errors or omissions in, or loss or damage incurred as a result of, the use of any content made available through Somm; and"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "949debddb493",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "9e688fe8b1670",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "5842c836127b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f04be903e51a0",
+          "_type": "span",
+          "marks": [],
+          "text": "(vii) defamatory, offensive, or illegal conduct of any third party."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "530bbcb0c685",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4883967649960",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "02e5bf4e19a7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "65d6dcb897800",
+          "_type": "span",
+          "marks": [],
+          "text": "This limitation of liability shall apply to the fullest extent permitted by law."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "edc5b9fb92e4",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "fd429bf150260",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ce8363df566c",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8d0ff13dc5d30",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "8. Applicable Law, Arbitration and Class Action Waiver"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c5849ce11b7d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "1b1741461eff0",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d9f9c8ffe7b1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a7d54f8f1a8c0",
+          "_type": "span",
+          "marks": [],
+          "text": "You acknowledge and agree that any dispute is personal to you and any such dispute will be resolved solely through individual arbitration and will not be brought as a class arbitration, class action or any other type of representative proceeding. Neither party agrees to class arbitration or to an arbitration in which an individual attempts to resolve a dispute as a representative of another individual or group of individuals. Further, a dispute cannot be brought as a class, or other types of representative action, whether within or outside of arbitration, or on behalf of any other individual or group of individuals."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "84acb33942a3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "adfdb5599be00",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c7b267bc55d2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "35c61330f7c80",
+          "_type": "span",
+          "marks": [],
+          "text": "Except for disputes regarding injunctive or other equitable relief for the alleged unlawful use of copyrights, trademarks, trade names, logos, trade secrets or patents, you agree that any dispute, controversy or claim arising out of or in connection with your access and/or interactions within Somm shall be finally settled by the Arbitration Court of the Estonian Chamber of Commerce and Industry in accordance with its rules. The arbitral tribunal shall be composed of a sole arbitrator. The seat of arbitration shall be Tallinn. The language of the arbitral proceedings shall be English. The dispute shall be settled under the substantive law of Estonia."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d0545642189b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "82d4252ae2cb",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    }
+  ]
+}

@@ -284,6 +284,8 @@ export interface CustomFaqSection
 }
 
 export interface PrivacyAndTermsContent {
+  _id: string
+  _type: "privacyPolicy" | "userTerms"
   content: BlockContent
 }
 
