@@ -4,22 +4,13 @@ import { Highlight } from "components/Highlight"
 import { ArrowLeftIcon } from "components/_icons"
 import { Layout } from "components/_layout/Layout"
 import { NextPage } from "next"
-import { CustomFaqSection, HomeWithImages } from "types/sanity"
 import { WalletHealthBanner } from "components/_banners/WalletHealthBanner"
 
 export interface StrategyLandingPageProps {
   id: string
-  faqData: CustomFaqSection
-  sectionCellars: HomeWithImages["sectionCellars"]
-  sectionStrategies: HomeWithImages["sectionStrategies"]
 }
 
-export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
-  id,
-  faqData: _faqData,
-  sectionCellars: _sectionCellars,
-  sectionStrategies: _sectionStrategies,
-}) => {
+export const PageStrategy: NextPage<StrategyLandingPageProps> = ({ id }) => {
   return (
     <Layout>
       <WalletHealthBanner />
@@ -36,9 +27,6 @@ export const PageStrategy: NextPage<StrategyLandingPageProps> = ({
         </Link>
         <HeroStrategy id={id} />
         <Highlight id={id} />
-        {/*<Cellars data={sectionCellars} mt={52} />*/}
-        {/*<Strategy data={sectionStrategies} mt={52} />*/}
-        {/*<FAQStrategy data={faqData} mt={52} />*/}
       </Box>
     </Layout>
   )
