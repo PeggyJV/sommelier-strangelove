@@ -6,19 +6,10 @@ import { NextSeo } from "next-seo"
 import { useRouter } from "next/router"
 import { ParsedUrlQuery } from "querystring"
 import { useEffect } from "react"
-import { sanityClient } from "src/lib/sanity/client"
-import {
-  sanityFaqQuery,
-  sanityHomeQuery,
-} from "src/lib/sanity/queries"
-import { CustomFaqSection, HomeWithImages } from "types/sanity"
 import { origin } from "utils/origin"
 
 export interface StrategyLandingPageProps {
   id: string
-  faqData: CustomFaqSection
-  sectionCellars: HomeWithImages["sectionCellars"]
-  sectionStrategies: HomeWithImages["sectionStrategies"]
 }
 
 export type Params = ParsedUrlQuery & { id: string }
@@ -77,19 +68,15 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
   }
 }
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps<
+  StrategyLandingPageProps,
+  Params
+> = async ({ params }) => {
   const { id } = params || {}
-  const faqData = await sanityClient.fetch(sanityFaqQuery)
-  const home: HomeWithImages = await sanityClient.fetch(
-    sanityHomeQuery
-  )
 
   return {
     props: {
-      id,
-      faqData,
-      sectionCellars: home.sectionCellars,
-      sectionStrategies: home.sectionStrategies,
+      id: id ?? "",
     },
   }
 }

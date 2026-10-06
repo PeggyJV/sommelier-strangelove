@@ -1,0 +1,1255 @@
+{
+  "_createdAt": "2023-02-06T22:57:21Z",
+  "_id": "b51262c2-eb5a-4b78-b480-b0bb642915ac",
+  "_rev": "LTp8UWREeEmw3uzIKToGOk",
+  "_type": "privacyPolicy",
+  "_updatedAt": "2024-10-23T10:43:43Z",
+  "content": [
+    {
+      "_key": "ac12a846df91",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "09aeabe48be00",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm is a decentralized multi-chain execution platform, built on the Cosmos SDK to maximize interoperability with other blockchains, and supported by a network of independent validator nodes. For the purposes of this Privacy Policy, the Somm protocol website, https://www.sommelier.finance/, and the Somm decentralized application access website, https://app.sommelier.finance/, as well the Somm protocol and network generally will be referred to as “"
+        },
+        {
+          "_key": "09aeabe48be01",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Somm"
+        },
+        {
+          "_key": "09aeabe48be02",
+          "_type": "span",
+          "marks": [],
+          "text": "”."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fab703ab2934",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "3691f6cb72200",
+          "_type": "span",
+          "marks": [],
+          "text": "This Privacy Policy has been developed by Bajanss OÜ, Maakri 36-50, Tallinn, Estonia 10145 (“"
+        },
+        {
+          "_key": "3691f6cb72201",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Bajanss"
+        },
+        {
+          "_key": "3691f6cb72202",
+          "_type": "span",
+          "marks": [],
+          "text": "”), which is the controller for your Personal Data within the scope of this Privacy Policy. Bajanss decides “why” and “how” your Personal Data is processed in connection with Somm. If you have additional questions or require more information about this Privacy Policy, do not hesitate to contact privacy@bajanss.com. Bajanss may from time to time update this Privacy Policy to take account of legal and regulatory developments so that the development of Somm may continue in line with such requirements. Decentralized applications such as Somm have been gathering increased attention worldwide and it is possible that Somm will be subject to additional regulatory requirements in the future. Please note that any updates to this Privacy Policy will be immediately applicable. It is your duty to become comfortable with the Terms of Use and the Privacy Policy of Somm, and your continued access to and interaction with Somm constitutes your awareness of and agreement to all amendments made to this Privacy Policy as of the date of your accessing and interacting with Somm. It is your duty to review this Privacy Policy regularly as you shall be bound by it, and Bajanss shall have no obligation to, and no technical means to, inform you of any changes. If, for some reason, you are not satisfied with this Privacy Policy, your immediate recourse is to stop interacting with Somm. You do not have to inform anyone of this decision unless you intend to exercise some of the data protection rights stipulated by GDPR and defined below in this Privacy Policy."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "09fd7ad17694",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a3ac3bf349560",
+          "_type": "span",
+          "marks": [],
+          "text": "This Privacy Policy outlines the types of data that is collected, used, and recorded by Somm and/or Bajanss directly in connection with Somm and is valid for all internet users who interact with Somm with regards to the Personal Data that they share and/or which is collected within Somm. This Privacy Policy is not applicable to any Personal Data collected offline or via channels other than the websites referenced above. Please read this Privacy Policy carefully to understand how your Personal Data is collected and how it will be treated by any participants or third parties involved in the collection, processing and storage of the data."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "b749f6dd5ebc",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "5f8067ca87330",
+          "_type": "span",
+          "marks": [],
+          "text": "IF YOU ARE ACTING FOR A BUSINESS, ORGANIZATION, OR OTHER ENTITY AND HAVE SPECIFIC REQUIREMENTS WITH RESPECT TO PERSONAL DATA PROCESSING PLEASE ENSURE THAT ON ONE HAND YOU HAVE THE RIGHT, POWER AND AUTHORITY TO ACT ON BEHALF OF AND BIND THE ENTITY YOU REPRESENT. PLEASE DO NOT ACCESS OR OTHERWISE USE SOMM."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c22a6c651e5b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "be9e4ba586520",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "1. Your Representations and Warranties"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "a9ac8fabed51",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "5206f94286c30",
+          "_type": "span",
+          "marks": [],
+          "text": "By accessing any of the websites above, and/or interacting with Somm in any manner, you represent and warrant that you:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "1c1130504f73",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "93a4549740c00",
+          "_type": "span",
+          "marks": [],
+          "text": "(a) are at least eighteen (18) years of age. If you are under the age of eighteen (18), you may not, under any circumstances or for any reason, interact with Somm. Please report to privacy@bajanss.com any instances involving interaction with Somm by individuals under the age of 18, should they come to your knowledge;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f70df9ebe1b5",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4585b4a29d250",
+          "_type": "span",
+          "marks": [],
+          "text": "(b) understand that Somm, via third parties, may screen and monitor your wallet address for illicit activities and may record and link your wallet address to an IP address or other Personal Data you may provide as part of the interaction with Somm. Somm may integrate with a third party solution to monitor on-chain data to detect sanctions and AML risks, including whether an addresses are owned or associated with clearly illegal behavior like sanctions, terrorism financing, hacked or stolen funds, ransomware, human trafficking, and child sexual abuse material (CSAM). If Somm then receives a “risk” warning regarding your wallet address, you will automatically be blocked from further interactions with Somm. If you believe your wallet address has been blocked by mistake, you may contact privacy@bajanss.com;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "de6186d81b22",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "347cb7b414580",
+          "_type": "span",
+          "marks": [],
+          "text": "(c) consent to your Personal Data being collected and processed by Somm in accordance with this Privacy Policy, as amended from time to time. Some of the Personal Data collected may be used to improve Somm and/or for marketing purposes, as further detailed below. Because of the public and immutable record of blockchain transactions, you understand that it would be impossible for Somm to erase your public wallet address and recorded interactions and transactions. The Personal Data which would be erased in accordance with GDPR, upon your request, as set forth in this Privacy Policy, would be limited to email addresses, name, IP address, etc. to the exclusion of your public wallet address and recorded interactions and transactions."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "5d2c7511cd44",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e9a214c61d210",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "2. Applicability"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "d0dc7675889d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "52cea6574e550",
+          "_type": "span",
+          "marks": [],
+          "text": "This Privacy Policy applies to all your interactions with Somm, including the email addresses referred to in this Privacy Policy and other interactions in connection therewith."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "8f67b70ffc7d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "7e9396f3a5ec0",
+          "_type": "span",
+          "marks": [],
+          "text": "Several processors may have access to your Personal Data, such as technical maintenance vendors, project and team management vendors, merch products delivery vendors, communication vendors, analytics, statistics, performance, marketing vendors, etc. More details on Personal Data processing are included in the next sections of this Privacy Policy. Please read carefully."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "8a61255d2108",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8a546c4ba1930",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "3. Somm Data Processing"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "62903a173a17",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "42c2cc515fef0",
+          "_type": "span",
+          "marks": [],
+          "text": "As a decentralized platform and application, Somm would collect as little Personal Data from you as possible. However, the following types of data may be collected and processed:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "8bc312bf0915",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6fa0b2ba48bb0",
+          "_type": "span",
+          "marks": [],
+          "text": "● wallet (public) addresses, transactions, assets, and balance information (blockchain data) that is accessible when interacting with Somm."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "30117410c8be",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b7f433e6fc300",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm has a legitimate interest in collecting this data, such as the proper execution of any transactions and interactions within Somm, monitoring and improving Somm, protection against risks, etc. The data is also required for the proper performance of Somm and smart contract interactions. Note that we are not responsible for your use of any of the blockchain and your data processed in these decentralized and permissionless networks."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "e8234dc3938c",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d5823805a5e10",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Personal Data Somm may collect:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ea9a27dc7d1b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "423e89db5f420",
+          "_type": "span",
+          "marks": [],
+          "text": "● email address, your name, and any other Personal Data you provide to us when communicating with us. Such Personal Data is used only for communication with you;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "abbd0c119ad1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "409ed7447c890",
+          "_type": "span",
+          "marks": [],
+          "text": "● Personal Data you are asked to provide, and the reasons why you are asked to provide it, will be made clear to you at the point we ask you to provide your Personal Data;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "b3e6e1a2a4bb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d7da48d191ce0",
+          "_type": "span",
+          "marks": [],
+          "text": "● IP address, MAC address, log files, domain server, data related to usage, performance, website security, traffic patterns, location information, browser and device information – only when you are using Somm;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "963c4e507759",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "dbaece54d30b0",
+          "_type": "span",
+          "marks": [],
+          "text": "● Log Files. Somm follows a standard procedure of using log files. These files log visitors when they visit websites. All hosting companies do this and this kind of Personal Data may also be collected as a part of hosting services' analytics. The data collected by log files may include  internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time  stamp, referring/exit pages, and possibly the number of clicks. These kinds of data may be linked to data that is personally identifiable. The purpose of the data collection and processing is for analyzing trends, administering websites, tracking users' movement on websites, and  gathering demographic information;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "eb347c845972",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e344c18862790",
+          "_type": "span",
+          "marks": [],
+          "text": "● Your name and address you provide to us when ordering our merch products, if applicable."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "da5f2dcb1353",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "27907af069430",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm may engage third-parties advertising platforms, which may collect Personal Data from visitors of the websites only with the purpose to optimize their advertising possibilities through their platforms, target you with their advertisements, and possibly share your data with other advertising platforms and agencies for further use."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "6bba4242cdd3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "07548f19a3e00",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "In no event we are going to ask you to share your private keys or wallet seed. Never trust anyone or any websites or emails asking for your private keys or wallet seeds."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "16f6363bfa9d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8aed384ebb910",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "How Somm uses Personal Data:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "eec0da884123",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "419e34bf14c90",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm will use Personal Data listed above only for:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "edb2a4322457",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "649105a4815b0",
+          "_type": "span",
+          "marks": [],
+          "text": "● operational purposes, such as ensuring security, identifying irregular website behavior, preventing fraudulent activity and improving security at all possible levels;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "c5fef10d78ba",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0fcc674db95b0",
+          "_type": "span",
+          "marks": [],
+          "text": "● assessing and improving the performance of Somm;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "64bdafc2a4e7",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6c9803852a910",
+          "_type": "span",
+          "marks": [],
+          "text": "● analyzing website visitors actions to improve Somm (see also the Section “Cookies and  Automatically Collected Data”);"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "779fc68d1c5d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "37827e9ef8480",
+          "_type": "span",
+          "marks": [],
+          "text": "● analyzing patterns of behavior, including via Google Analytics and other service providers;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "432803477b8c",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2ae1f8f795680",
+          "_type": "span",
+          "marks": [],
+          "text": "● delivering merch products if applicable;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "20c727651c1b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "16f7539dafa50",
+          "_type": "span",
+          "marks": [],
+          "text": "● send you marketing, advertising, informational emails;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "2f2b1f1d80df",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6d695efe78e20",
+          "_type": "span",
+          "marks": [],
+          "text": "● find and prevent fraud."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "d719f5f7dbf6",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "392f8874dbe00",
+          "_type": "span",
+          "marks": [],
+          "text": "For the avoidance of doubt, Somm may use Personal Data described above or any other Personal Data:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "554b28c2bad2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f3cccd4026fb0",
+          "_type": "span",
+          "marks": [],
+          "text": "● where the Personal  Data is required for Somm to operate;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4d8996fc2063",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "2bb262cc47120",
+          "_type": "span",
+          "marks": [],
+          "text": "● on the basis of legitimate interests to protect Somm, prevent any malicious and harmful activities, maintain technical systems healthy and secure, improve Somm operations by using aggregate statistics, etc.;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "80f12504b33b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "54b21d56b34e0",
+          "_type": "span",
+          "marks": [],
+          "text": "● to respond to any legal requests of authorities, provide information upon court orders and  judgments, or if we have a good-faith belief that such disclosure is necessary under the applicable laws to cooperate with official investigations or legal proceedings, including but not limited to in response to subpoenas, search warrants, or court orders, and including other similar statutory obligations Bajanss or any of the data processors may be subjected to;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9dd2180b4ab1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "905fc447add20",
+          "_type": "span",
+          "marks": [],
+          "text": "● on the basis of your consent; and"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "40feaa9b9b1e",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a4d9e59e02700",
+          "_type": "span",
+          "marks": [],
+          "text": "● on other legal bases as applicable under typical data protection laws."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ee33f0aa701c",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0915addd39ec0",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Disclosure of Data:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "04b9d3888d6f",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "f535d2ae25dd0",
+          "_type": "span",
+          "marks": [],
+          "text": "Bajanss may disclose any Personal Data in connection with a merger, division, restructuring, or other association change, or to its subsidiaries and affiliates (if any) only if necessary for operational purposes."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "145d6b57c1f2",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c2ee1f2b11850",
+          "_type": "span",
+          "marks": [],
+          "text": "If Bajanss must disclose any of your Personal Data in order to comply with official investigations or legal proceedings initiated by governmental and/or law enforcement officials, we may not be able to ensure that such recipients of your Personal Data will maintain the privacy or security of your Personal Data."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "dee76deb6e10",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0faff04b9ccb0",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Data Retention Period"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "fbfde3c9c050",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "b71e38c8b0ce0",
+          "_type": "span",
+          "marks": [],
+          "text": "Somm and Bajanss will maintain Personal Data exclusively within the time needed to follow the prescribed herein legal purposes. When we no longer need Personal Data, the limitation period for storage of such Personal Data has expired, you have withdrawn your consent or objected to our or our processors’ legitimate interests, we will securely delete or destroy it unless the statutory requirements we, our processors or other controllers are subjected to stipulate otherwise. Aggregated data, which cannot directly identify a device/browser (or individual) and is used for purposes of reporting and analysis, will be maintained for as long as commercially necessary till you object to processing of such data or withdraw your consent. For the avoidance of doubt, you understand and acknowledge that your public wallet addresses and transactions records, minus any Personal Data, are part of the public blockchain records, visible via public blockchain explorers, and not something that Somm or Bajanss may delete and/or correct."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9350354f6f23",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "0d0e23fe18550",
+          "_type": "span",
+          "marks": [],
+          "text": "Sometimes legal requirements will oblige companies such as Bajanss to retain certain data, for specific purposes, for an extended period of time. Reasons Bajanss might retain some data for longer periods of time include:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "205af85bb1f5",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "59892c5dd78b0",
+          "_type": "span",
+          "marks": [],
+          "text": "● Security, fraud & abuse prevention;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7b50d581395a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c17acab0b17d0",
+          "_type": "span",
+          "marks": [],
+          "text": "● Financial monitoring and record-keeping;"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "b1ff239fb59b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "12803f7fb4140",
+          "_type": "span",
+          "marks": [],
+          "text": "● Complying with legal or regulatory requirements; and"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "4160195ec9fa",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e7fd1fd25e110",
+          "_type": "span",
+          "marks": [],
+          "text": "● Ensuring the continuity of your interaction with Somm, if applicable."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "85c4a2113c8a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "09c7ad48b84a0",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Inquiries"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "526c4c15bdbb",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6dc3a95042140",
+          "_type": "span",
+          "marks": [],
+          "text": "You may contact us by email at privacy@bajanss.com. Any Personal Data that you provide in an email to us, which you may give voluntarily, will only be used in order to answer your question or to reply to your email in the best possible manner, and will not be retained except as needed for compliance purposes, if applicable."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9cef3084437c",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "65c394b793c00",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "4. Cookies and Automatically Collected Data"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "1cfa3c6c59f3",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "14797e4316fd0",
+          "_type": "span",
+          "marks": [],
+          "text": "As you navigate through and interact with the Somm websites, we may ask your consent to use cookies, which are small files placed on the hard drive/browser of your computer or mobile device, and web beacons, which are small electronic files located on pages of the websites, to collect certain information about devices you use, browsing actions, and patterns."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "9b395b6709ed",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8abd1ca9213d0",
+          "_type": "span",
+          "marks": [],
+          "text": "Data automatically collected from cookies and web beacons may include information about your  web browser (such as browser type and browser language) and details of your visits to the Somm websites, including traffic data, location data and logs, page views, length of visit, and website navigation paths, as well as information about your device and internet connection, including your IP address and how you interact with Somm. We collect this data in order to help us improve Somm and your interaction with Somm."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f6e6cb283c30",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8f215a8b9f050",
+          "_type": "span",
+          "marks": [],
+          "text": "The information we collect automatically may also include statistical and performance information arising from your interactions with Somm. This type of data will only be used by us in an aggregated and pseudonymized manner."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "03c551d78a6a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "46c4f4f5e5dc0",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "At any time, you can choose to disable cookies through your individual browser options. To get more detailed information about cookie management with specific web browsers, please find it on the browsers' respective websites."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "f2f49ae497c6",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "a27106712df30",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "5. Your rights under GDPR"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "22a1196f6b47",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4231a08ef23c0",
+          "_type": "span",
+          "marks": [],
+          "text": "Data protection in Estonia is primarily governed by the General Data Protection Regulation (Regulation (EU) 2016/679) (“"
+        },
+        {
+          "_key": "4231a08ef23c1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "GDPR"
+        },
+        {
+          "_key": "4231a08ef23c2",
+          "_type": "span",
+          "marks": [],
+          "text": "”) which has been implemented into Estonian law since 2019. Under GDPR, you have a number of privacy rights concerning the use, storage, and  processing of your Personal Data (e.g., the right to delete your data). Please refer to the following rights as needed:"
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "faf3a4b48c2d",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6650eaff4b2c0",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "6650eaff4b2c1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right to be informed"
+        },
+        {
+          "_key": "6650eaff4b2c2",
+          "_type": "span",
+          "marks": [],
+          "text": " - we are publishing this Privacy Policy to keep you informed as to what we do with your Personal Data. You can ask us for Personal Data regarding you that we keep at any time. This information concerns, among other things, the data categories we process, for what purposes we process them, the origin of the data if we did not acquire them directly from you and, if applicable, the recipients to who we have sent your data."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "eabf2676f9a1",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "1ce5e7503a9e0",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "1ce5e7503a9e1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right of access"
+        },
+        {
+          "_key": "1ce5e7503a9e2",
+          "_type": "span",
+          "marks": [],
+          "text": " – you have the right to request a copy of the data we hold about you."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "58f3069efa1a",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "67dcd0cf390b0",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "67dcd0cf390b1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right of rectification"
+        },
+        {
+          "_key": "67dcd0cf390b2",
+          "_type": "span",
+          "marks": [],
+          "text": " – you have the right to correct inaccurate or incomplete data about you. However, please note that public wallet addresses and transactions recorded on immutable public blockchain records are not within the definition of Personal Data we would be able to correct and/or rectify for you. Your blockchain activity is your responsibility."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "7ace79445101",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "d9a6ebcdd46d0",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "d9a6ebcdd46d1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right to be forgotten"
+        },
+        {
+          "_key": "d9a6ebcdd46d2",
+          "_type": "span",
+          "marks": [],
+          "text": " – you can request that the Personal Data that we hold about you be erased from our system and we will comply with this request unless we have a legitimate reason, legal requirement, and other statutory basis not to do so. Even if we can delete (erase) the Personal Data subjected to our active (ongoing) processing activities and cease its processing, we will nevertheless retain this particular Personal Data in our backup and archive storages to fulfill our statutory and other requirements. In addition, please note that public wallet addresses and transactions recorded on immutable public blockchain records are not within the definition of Personal Data we would be able to delete. Your blockchain activity is your responsibility."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ddf996218efe",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "ee59d0244f680",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "ee59d0244f681",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right to restriction of processing"
+        },
+        {
+          "_key": "ee59d0244f682",
+          "_type": "span",
+          "marks": [],
+          "text": " – where certain conditions apply, you can ask us to ‘block’ the processing of your Personal Data."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "46ef3c7e9685",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "be149c649b8e0",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "be149c649b8e1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right to data portability"
+        },
+        {
+          "_key": "be149c649b8e2",
+          "_type": "span",
+          "marks": [],
+          "text": " – you have the right to have the data we hold about you transferred to another organization and to receive Personal Data in a structured, commonly used format.  Please contact privacy@bajanss.com to find out whether we currently support the provision of  the portable file containing Personal Data we process about you."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "16097e425407",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "77b5f27587b10",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "77b5f27587b11",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right to object"
+        },
+        {
+          "_key": "77b5f27587b12",
+          "_type": "span",
+          "marks": [],
+          "text": " - you can object to the processing of your data by writing to privacy@bajanss.com at any time for reasons that arise from your special situation provided the  data processing is based on our legitimate interest or that of a third party, or where we carry out profiling, use machine learning or automated decision-making algorithms. In this case, we will no longer process your Personal Data. The latter does not apply if we are able to prove there  are compelling, defensible reasons for the processing that outweigh your interests or we require  your data to assert, exercise or defend legal claims. It also doesn’t apply to data which is on the public blockchain records which anyone can access and use for any purpose at any time."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "65298452f8f0",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "4679d40a6abc0",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "4679d40a6abc1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right to withdraw consent "
+        },
+        {
+          "_key": "4679d40a6abc2",
+          "_type": "span",
+          "marks": [],
+          "text": "- you have the right to withdraw the consent you gave us with regard to the processing of  your Personal Data for certain purposes."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "a70a6dc41360",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "c3c151c0614b0",
+          "_type": "span",
+          "marks": [],
+          "text": "● "
+        },
+        {
+          "_key": "c3c151c0614b1",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "Right to complain"
+        },
+        {
+          "_key": "c3c151c0614b2",
+          "_type": "span",
+          "marks": [],
+          "text": " - you have the right to submit a complaint to the data privacy protection authorities responsible. You can send your complaints to the supervisory authority of your country of residence."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "2260af7dcbe9",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "8b25ac550f390",
+          "_type": "span",
+          "marks": [],
+          "text": "Please contact privacy@bajanss.com with any questions about exercising any of the above rights. To learn more about GDPR generally, please access the website of the Estonian Data Protection Inspectorate here https://www.aki.ee/en/inspectorate/legislation."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "276355e452d9",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "85ade0e795160",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "6. Transfer of Personal Data"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "c2f597496409",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "be1f9ec9c99f0",
+          "_type": "span",
+          "marks": [],
+          "text": "Transfers to third countries are subject to appropriate safeguards,"
+        },
+        {
+          "_key": "be1f9ec9c99f1",
+          "_type": "span",
+          "marks": [
+            "em"
+          ],
+          "text": " i.e., "
+        },
+        {
+          "_key": "be1f9ec9c99f2",
+          "_type": "span",
+          "marks": [],
+          "text": "Standard Contractual Clauses. More information on such safeguards may be obtained by you upon a prior written request sent to us, subject to your agreement to maintain confidentiality."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "e9ede22f4847",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "7d7aa1b73b890",
+          "_type": "span",
+          "marks": [
+            "strong"
+          ],
+          "text": "7. Data Integrity & Security of Processing"
+        }
+      ],
+      "markDefs": [],
+      "style": "h3"
+    },
+    {
+      "_key": "6b0617736292",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "e2c2239727040",
+          "_type": "span",
+          "marks": [],
+          "text": "We take data security very seriously. The Personal Data you provide us will be protected from loss, misuse, or unauthorized access, via a variety of safeguards such as encryption, digital and  physical access controls, non-disclosure agreements (NDAs), and other technical and organizational measures. However, no electronic transmission, storage, or processing of Personal Data cannot be entirely secure. We cannot guarantee that the security measures we have in place to safeguard Personal Data, or the security measures taken by data processors or third party service providers, will never be defeated or fail, or that those measures will always be sufficient or effective. Therefore, although we are committed to protecting your privacy, you should not expect that your Personal Data will always remain private or secure."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "ea1bea759b24",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "6cf8395411c60",
+          "_type": "span",
+          "marks": [],
+          "text": "Most importantly, Somm is based on public blockchains intended to immutably record transactions across wide networks of computer systems located in many jurisdictions, and which are open to forensic analysis. This can lead to deanonymization and the unintentional revelation of Personal Data. Because blockchains are decentralized or third-party networks which are not controlled or operated by us, we are not able to erase, modify, or alter Personal Data from such networks."
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    },
+    {
+      "_key": "cd0eb1a9729b",
+      "_type": "block",
+      "children": [
+        {
+          "_key": "79422cc2be53",
+          "_type": "span",
+          "marks": [],
+          "text": ""
+        }
+      ],
+      "markDefs": [],
+      "style": "normal"
+    }
+  ]
+}
