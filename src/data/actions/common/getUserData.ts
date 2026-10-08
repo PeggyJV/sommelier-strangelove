@@ -1,6 +1,9 @@
 import { usePublicClient } from "wagmi"
 import { useQuery } from "@tanstack/react-query"
 import { StrategyData } from "data/actions/types"
+import { cellarDataMap } from "data/cellarDataMap"
+import { formatUSD } from "utils/formatCurrency"
+import { formatUnits } from "viem"
 
 type LegacyUserDataFallback = {
   shares: bigint
@@ -59,13 +62,13 @@ export const getUserData = async (
 }
 
 export const getUserDataWithContracts = async ({
-  contracts: _contracts,
-  address: _address,
+  contracts,
+  address,
   strategyData,
-  userAddress: _userAddress,
+  userAddress,
   sommPrice: _sommPrice,
   baseAssetPrice: _baseAssetPrice,
-  chain: _chain,
+  chain,
 }: {
   contracts: unknown
   address: string
@@ -85,16 +88,77 @@ export const getUserDataWithContracts = async ({
   baseAssetPrice: string
   chain: string
 }): Promise<UserDataWithContractsFallback> => {
+  const fallback = (): UserDataWithContractsFallback => ({
+    userStrategyData: {
+      userData: {
+        netValue: { formatted: "0", value: 0 },
+        shares: { formatted: "0", value: 0n },
+        stakedShares: { formatted: "0", value: 0n },
+      },
+      strategyData,
+    },
+    userStakes: null,
+  })
+
   try {
-    // For now, return a safe default since the contract approach is problematic
-    // The actual user data should come from useUserBalance hook which is already
-    // being used in useUserStrategyData
+    const strategy = Object.values(cellarDataMap).find(
+      ({ config }) =>
+        config.cellar.address.toLowerCase() === address.toLowerCase() &&
+        config.chain.id === chain
+    )
+    const balanceContracts = contracts as {
+      cellarContract?: {
+        read?: {
+          balanceOf?: (args: [`0x${string}`]) => Promise<bigint>
+        }
+      }
+      stakerContract?: {
+        read?: {
+          balanceOf?: (args: [`0x${string}`]) => Promise<bigint>
+        }
+      }
+    }
+    const cellarBalanceOf =
+      balanceContracts.cellarContract?.read?.balanceOf
+
+    if (!strategy || !cellarBalanceOf) return fallback()
+
+    const shares = await cellarBalanceOf([
+      userAddress as `0x${string}`,
+    ])
+    const stakedShares = balanceContracts.stakerContract?.read
+      ?.balanceOf
+      ? await balanceContracts.stakerContract.read.balanceOf([
+          userAddress as `0x${string}`,
+        ])
+      : 0n
+    const decimals = strategy.config.cellar.decimals
+    const sharesFormatted = formatUnits(shares, decimals)
+    const stakedSharesFormatted = formatUnits(
+      stakedShares,
+      decimals
+    )
+    const totalShares = Number(
+      formatUnits(shares + stakedShares, decimals)
+    )
+    const tokenPrice =
+      parseFloat(
+        String(strategyData?.tokenPrice ?? "0").replace(/[$,]/g, "")
+      ) || 0
+    const netValue = totalShares * tokenPrice
+
     return {
       userStrategyData: {
         userData: {
-          netValue: { formatted: "0", value: 0 },
-          shares: { formatted: "0", value: 0n },
-          stakedShares: { formatted: "0", value: 0n },
+          netValue: {
+            formatted: formatUSD(netValue.toString(), 2) ?? "$0.00",
+            value: netValue,
+          },
+          shares: { formatted: sharesFormatted, value: shares },
+          stakedShares: {
+            formatted: stakedSharesFormatted,
+            value: stakedShares,
+          },
         },
         strategyData,
       },
@@ -102,17 +166,7 @@ export const getUserDataWithContracts = async ({
     }
   } catch (error) {
     console.error("Error in getUserData:", error)
-    return {
-      userStrategyData: {
-        userData: {
-          netValue: { formatted: "0", value: 0 },
-          shares: { formatted: "0", value: 0n },
-          stakedShares: { formatted: "0", value: 0n },
-        },
-        strategyData,
-      },
-      userStakes: null,
-    }
+    return fallback()
   }
 }
 
