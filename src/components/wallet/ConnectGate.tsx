@@ -8,6 +8,8 @@ type ConnectGateProps = {
   fallbackLabel?: string
   fullWidth?: boolean
   overrideChainId?: string
+  /** Smaller button for dense list rows */
+  compact?: boolean
 }
 
 export default function ConnectGate({
@@ -15,6 +17,7 @@ export default function ConnectGate({
   fallbackLabel,
   fullWidth,
   overrideChainId,
+  compact,
 }: ConnectGateProps) {
   const { isConnected } = useAccount()
 
@@ -42,11 +45,24 @@ export default function ConnectGate({
         overridechainid={overrideChainId}
         // Use default styled variant to match app header theme
         // size and width align with primary CTAs
-        size="md"
-        height="44px"
-        minW="148px"
+        size={compact ? "sm" : "md"}
+        height={compact ? "34px" : "44px"}
+        minW={compact ? undefined : "148px"}
+        minH={compact ? "34px" : undefined}
+        px={compact ? 4 : undefined}
+        fontSize={compact ? "sm" : undefined}
         w={fullWidth ? "100%" : undefined}
-        variant="sommOutline"
+        variant={compact ? "outline" : "sommOutline"}
+        {...(compact && {
+          w: "100%",
+          color: "neutral.200",
+          fontWeight: 600,
+          borderWidth: "1px",
+          borderColor: "surface.quartnerary",
+          rounded: "lg",
+          bg: "transparent",
+          _hover: { borderColor: "purple.base", color: "neutral.100" },
+        })}
       >
         {fallbackLabel || "Connect wallet to continue"}
       </ConnectButton>
