@@ -141,7 +141,7 @@ export default function LegacyVaultCard({
     <Grid
       templateColumns={{
         base: "minmax(0,1fr) auto",
-        md: "minmax(0,260px) 140px 100px minmax(0,1fr)",
+        md: "minmax(0,1fr) 150px 110px 96px",
       }}
       columnGap={{ base: 3, md: 4 }}
       alignItems="center"
@@ -251,6 +251,7 @@ export default function LegacyVaultCard({
         <ConnectGate
           fallbackLabel="Connect"
           compact
+          fullWidth
           overrideChainId={cellarConfig?.chain?.id}
         >
           {needsSwitch ? (
@@ -260,6 +261,7 @@ export default function LegacyVaultCard({
                   variantStyle="primary"
                   size="sm"
                   h="34px"
+                  fullWidth
                   onMouseDown={(e) => e.stopPropagation()}
                   onClick={(e) => e.stopPropagation()}
                   onKeyDown={(e) => {
@@ -319,6 +321,7 @@ export default function LegacyVaultCard({
                 }
                 size="sm"
                 h="34px"
+                fullWidth
                 isDisabled={
                   !canWithdraw || withdrawalsPaused || !vault?.slug
                 }

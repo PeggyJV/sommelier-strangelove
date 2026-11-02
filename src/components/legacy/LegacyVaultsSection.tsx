@@ -57,7 +57,7 @@ export default function LegacyVaultsSection({
       >
         <Grid
           display={{ base: "none", md: "grid" }}
-          templateColumns="minmax(0,260px) 140px 100px minmax(0,1fr)"
+          templateColumns="minmax(0,1fr) 150px 110px 96px"
           columnGap={4}
           px={5}
           py={2}

@@ -52,7 +52,17 @@ export default function ConnectGate({
         px={compact ? 4 : undefined}
         fontSize={compact ? "sm" : undefined}
         w={fullWidth ? "100%" : undefined}
-        variant="sommOutline"
+        variant={compact ? "outline" : "sommOutline"}
+        {...(compact && {
+          w: "100%",
+          color: "neutral.200",
+          fontWeight: 600,
+          borderWidth: "1px",
+          borderColor: "surface.quartnerary",
+          rounded: "lg",
+          bg: "transparent",
+          _hover: { borderColor: "purple.base", color: "neutral.100" },
+        })}
       >
         {fallbackLabel || "Connect wallet to continue"}
       </ConnectButton>
