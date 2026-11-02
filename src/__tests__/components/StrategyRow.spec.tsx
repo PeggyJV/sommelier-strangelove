@@ -104,21 +104,22 @@ describe("StrategyRow", () => {
       expect(screen.getByText("Ethereum")).toBeInTheDocument()
     })
 
-    it("should render TVL value correctly", () => {
+    it("should not render TVL", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
-      expect(screen.getByText("231.86")).toBeInTheDocument()
+      expect(screen.queryByText("TVL")).not.toBeInTheDocument()
+      expect(screen.queryByText("231.86")).not.toBeInTheDocument()
     })
 
-    it("should render Net Value correctly", () => {
+    it("should not render Net Value", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
-      expect(screen.getByText("1000.00")).toBeInTheDocument()
+      expect(screen.queryByText("Net Value")).not.toBeInTheDocument()
+      expect(screen.queryByText("1000.00")).not.toBeInTheDocument()
     })
 
-    it("should render Net APY correctly", () => {
-      // Alpha vaults render the third KPI as "Net APY" formatted to one
-      // decimal via formatAlphaStethNetApyNoApprox ("0.00%" -> "0.0%").
+    it("should not render Net APY for Alpha stETH", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
-      expect(screen.getByText("0.0%")).toBeInTheDocument()
+      expect(screen.queryByText("Net APY")).not.toBeInTheDocument()
+      expect(screen.queryByText("0.0%")).not.toBeInTheDocument()
     })
 
     it("should render description correctly", () => {
@@ -164,24 +165,26 @@ describe("StrategyRow", () => {
     })
   })
 
-  describe("KPI Grid Layout", () => {
-    it("should render KPI grid with three columns", () => {
+  describe("KPIs", () => {
+    it("shows no KPIs for Alpha stETH", () => {
       renderWithTheme(<StrategyRow vault={mockVault} />)
-
-      // Check that all three KPI labels are present (Alpha vaults label the
-      // third KPI "Net APY"; non-Alpha vaults use "Net Rewards").
-      expect(screen.getByText("TVL")).toBeInTheDocument()
-      expect(screen.getByText("Net Value")).toBeInTheDocument()
-      expect(screen.getByText("Net APY")).toBeInTheDocument()
+      expect(screen.queryByText("Net Rewards")).not.toBeInTheDocument()
     })
 
-    it("should have horizontal KPI layout on mobile", () => {
-      renderWithTheme(<StrategyRow vault={mockVault} />)
-
-      const kpiGrid = screen
-        .getByText("TVL")
-        .closest('[class*="css-"]')
-      expect(kpiGrid).toBeInTheDocument()
+    it("shows only Net Rewards for non-Alpha vaults", () => {
+      renderWithTheme(
+        <StrategyRow
+          vault={{
+            ...mockVault,
+            slug: "real-yield-usd-arb",
+            baseApySumRewards: { formatted: "4.40%" },
+          }}
+        />
+      )
+      expect(screen.getByText("Net Rewards")).toBeInTheDocument()
+      expect(screen.getByText("4.40%")).toBeInTheDocument()
+      expect(screen.queryByText("TVL")).not.toBeInTheDocument()
+      expect(screen.queryByText("Net Value")).not.toBeInTheDocument()
     })
   })
 
@@ -298,33 +301,19 @@ describe("StrategyRow", () => {
   })
 
   describe("Data Display", () => {
-    it("should display fallback values when data is missing", () => {
+    it("should display a fallback when non-Alpha rewards are missing", () => {
       const vaultWithMissingData = {
         ...mockVault,
-        tvm: undefined,
+        slug: "real-yield-usd-arb",
         baseApySumRewards: undefined,
       }
 
       renderWithTheme(<StrategyRow vault={vaultWithMissingData} />)
 
-      // Should show fallback values (first "–" occurrence)
       expect(screen.getAllByText("–")[0]).toBeInTheDocument()
     })
 
-    it("should handle zero values correctly", () => {
-      const vaultWithZeroValues = {
-        ...mockVault,
-        tvm: { formatted: "0" },
-        baseApySumRewards: { formatted: "0.00%" },
-      }
-
-      renderWithTheme(<StrategyRow vault={vaultWithZeroValues} />)
-
-      // Zero APY renders as "0.0%" without crashing.
-      expect(screen.getByText("0.0%")).toBeInTheDocument()
-    })
-
-    it("should handle large numbers correctly", () => {
+    it("should never show TVL even with large values", () => {
       const vaultWithLargeNumbers = {
         ...mockVault,
         tvm: { formatted: "1234567.89" },
@@ -333,8 +322,8 @@ describe("StrategyRow", () => {
       renderWithTheme(<StrategyRow vault={vaultWithLargeNumbers} />)
 
       expect(
-        screen.getByText((t) => t.includes("1234567.89"))
-      ).toBeInTheDocument()
+        screen.queryByText((t) => t.includes("1234567.89"))
+      ).not.toBeInTheDocument()
     })
   })
 
