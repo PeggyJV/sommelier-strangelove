@@ -1,11 +1,11 @@
 import {
   Avatar,
   Box,
+  Flex,
   HStack,
   Image,
   Text,
   Tooltip,
-  VStack,
   Grid,
   Popover,
   PopoverTrigger,
@@ -69,7 +69,6 @@ export default function LegacyVaultCard({
     typeof vault?.provider === "string"
       ? vault.provider
       : vault?.provider?.title || ""
-  const tvl = vault?.tvm?.formatted ?? "–"
   const netValueNum =
     typeof vault?.baseApySumRewards?.value === "string"
       ? parseFloat(vault?.baseApySumRewards?.value as string)
@@ -114,44 +113,16 @@ export default function LegacyVaultCard({
     !lpTokenData ||
     Number(toEther(lpTokenData?.formatted, lpTokenData?.decimals)) <=
       0
-  const userNetValueFmt =
-    userStratDataView?.userStrategyData?.userData?.netValue
-      ?.formatted
-
-  // Combine free LP net value + bonded LP value for legacy vaults
-  const bondedAmtStr =
-    userStratDataView?.userStakes?.totalBondedAmount?.formatted
-  const bondedAmt = bondedAmtStr ? parseFloat(bondedAmtStr) : 0
-  const tokenPriceStr =
-    userStratDataView?.userStrategyData?.strategyData?.tokenPrice ||
-    "0"
-  const tokenPrice = parseFloat(tokenPriceStr.replace("$", "")) || 0
-  const bondedValue = bondedAmt * tokenPrice
-  const combinedNetValue =
-    (Number.isFinite(nv) ? nv : 0) + bondedValue
-  const combinedNetValueFmt =
-    combinedNetValue > 0
-      ? `$${combinedNetValue
-          .toFixed(2)
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`
-      : userNetValueFmt
-
   const safeVal = (v?: string | number | null) =>
     v == null || v === "" || v === 0 || v === "0" ? "–" : v
 
-  // Rewards tone and arrow
-  const rewardsArrow =
-    typeof netValueNum === "number"
-      ? netValueNum >= 0
-        ? "↑"
-        : "↓"
-      : ""
+  // Rewards tone
   const rewardsColor =
     typeof netValueNum === "number"
       ? netValueNum >= 0
-        ? "green.300"
+        ? "neutral.100"
         : "red.300"
-      : "neutral.300"
+      : "neutral.400"
 
   const href = vault?.slug
     ? `/strategies/${vault.slug}/manage`
@@ -167,25 +138,27 @@ export default function LegacyVaultCard({
   else if (lpTokenDisabled) tooltipLabel = "No funds to withdraw"
 
   return (
-    <Box
-      borderWidth="1px"
-      borderColor="surface.secondary"
-      bg="surface.primary"
-      rounded="xl"
-      p={{ base: 4, md: 5 }}
+    <Grid
+      templateColumns={{
+        base: "minmax(0,1fr) auto",
+        md: "minmax(0,260px) 140px 100px minmax(0,1fr)",
+      }}
+      columnGap={{ base: 3, md: 4 }}
+      alignItems="center"
+      px={{ base: 4, md: 5 }}
+      py={2}
       w="full"
-      overflow="hidden"
       cursor={href ? "pointer" : "default"}
       role={href ? "link" : undefined}
       tabIndex={href ? 0 : undefined}
       aria-label={href ? `Open ${vault?.name ?? "vault"}` : undefined}
-      _hover={{ bg: "surface.secondary", borderColor: "purple.base" }}
+      _hover={{ bg: "whiteAlpha.50" }}
       _focusVisible={{
         outline: "2px solid",
         outlineColor: "purple.base",
-        outlineOffset: "2px",
+        outlineOffset: "-2px",
       }}
-      transition="background-color .2s ease, border-color .2s ease, box-shadow .2s ease"
+      transition="background-color .15s ease"
       onClick={() => {
         if (href) router.push(href)
       }}
@@ -197,225 +170,173 @@ export default function LegacyVaultCard({
         }
       }}
     >
-      {/* 3-column layout: identity | KPIs | action */}
-      <Grid
-        templateColumns={{ base: "1fr", md: "1.2fr 1.2fr 0.9fr" }}
-        gap={{ base: 3, md: 6 }}
-        alignItems="center"
-        overflow="visible"
+      {/* Vault */}
+      <HStack spacing={2.5} minW={0}>
+        <Avatar
+          size="sm"
+          name={vault?.name}
+          src={vault?.logo || undefined}
+          bg="purple.dark"
+          color="purple.light"
+          boxSize="28px"
+          fontSize="xs"
+          flexShrink={0}
+        />
+        <Box minW={0}>
+          <Text
+            fontWeight={600}
+            fontSize="sm"
+            lineHeight="1.2"
+            noOfLines={1}
+          >
+            {vault?.name}
+          </Text>
+          <Text
+            fontSize="xs"
+            color="neutral.400"
+            lineHeight="1.2"
+            noOfLines={1}
+          >
+            {providerText}
+            <Box as="span" display={{ base: "inline", md: "none" }}>
+              {" · "}
+              {chainName}
+            </Box>
+          </Text>
+        </Box>
+      </HStack>
+
+      {/* Network */}
+      <HStack
+        spacing={2}
+        minW={0}
+        display={{ base: "none", md: "flex" }}
       >
-        {/* Identity */}
-        <HStack spacing={3} align="center" minW={0}>
-          {vault?.logo && (
-            <Image
-              src={vault.logo}
-              alt={vault.name || "Vault"}
-              boxSize="44px"
-              rounded="full"
-            />
-          )}
-          <VStack spacing={1} align="flex-start" minW={0}>
-            <Text
-              fontWeight={800}
-              fontSize={{ base: "lg", md: "xl" }}
-              noOfLines={1}
-            >
-              {vault?.name}
-            </Text>
-            <HStack spacing={2} flexWrap="wrap">
-              <Text
-                fontSize="sm"
-                color="whiteAlpha.800"
-                noOfLines={1}
-              >
-                {providerText}
-              </Text>
-              {chainLogo && (
-                <HStack
-                  spacing={1}
-                  px={2}
-                  py={0.5}
-                  rounded="full"
-                  bg="whiteAlpha.100"
-                >
-                  <Avatar
-                    name={chainName}
-                    src={chainLogo}
-                    background="transparent"
-                    border="none"
-                    sx={{ width: "18px", height: "18px" }}
-                  />
-                  <Text fontSize="xs" color="whiteAlpha.800">
-                    {chainName}
-                  </Text>
-                </HStack>
-              )}
-            </HStack>
-          </VStack>
-        </HStack>
-
-        {/* KPIs */}
-        <Grid
-          templateColumns={{
-            base: "repeat(3, 1fr)",
-            md: "repeat(3, 1fr)",
-          }}
-          gap={{ base: 2, md: 4 }}
-          alignItems="center"
-        >
-          <VStack spacing={1} align="flex-start" minW={0}>
-            <Text
-              fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight={800}
-              lineHeight={1}
-            >
-              {safeVal(tvl)}
-            </Text>
-            <Text fontSize="xs" color="neutral.400">
-              TVL
-            </Text>
-          </VStack>
-          <VStack spacing={1} align="center" minW={0}>
-            <Text
-              fontSize={{ base: "xl", md: "2xl" }}
-              fontWeight={800}
-              lineHeight={1}
-            >
-              {safeVal(combinedNetValueFmt)}
-            </Text>
-            <Text fontSize="xs" color="neutral.400">
-              Net Value
-            </Text>
-          </VStack>
-          <VStack spacing={1} align="flex-end" minW={0}>
-            <HStack spacing={1}>
-              <Text
-                fontSize={{ base: "xl", md: "2xl" }}
-                fontWeight={800}
-                lineHeight={1}
-                color={rewardsColor}
-              >
-                {safeVal(netFormatted)}
-              </Text>
-              <Text fontSize="sm" color={rewardsColor} aria-hidden>
-                {rewardsArrow}
-              </Text>
-            </HStack>
-            <Text fontSize="xs" color="neutral.400">
-              Net Rewards
-            </Text>
-          </VStack>
-        </Grid>
-
-        {/* Debug Info */}
-        {process.env.NEXT_PUBLIC_DEBUG_SORT === "1" && (
-          <div className="text-xs opacity-60">
-            nv={coerceNetValue(userNetValue)} tvl=
-            {parseMoneyString(vault?.tvm?.formatted)} connected=
-            {String(Boolean(isConnected))}
-          </div>
+        {chainLogo && (
+          <Image
+            src={chainLogo}
+            alt=""
+            boxSize="16px"
+            rounded="full"
+            flexShrink={0}
+          />
         )}
+        <Text fontSize="sm" color="neutral.300" noOfLines={1}>
+          {chainName}
+        </Text>
+      </HStack>
 
-        {/* Action */}
-        <VStack
-          spacing={2}
-          align={{ base: "stretch", md: "end" }}
-          w="100%"
-          minW={0}
-          sx={{ "@media (max-width: 768px)": { minHeight: "56px" } }}
+      {/* Net Rewards */}
+      <Text
+        display={{ base: "none", md: "block" }}
+        textAlign="right"
+        fontSize="sm"
+        fontWeight={600}
+        color={rewardsColor}
+      >
+        {safeVal(netFormatted)}
+      </Text>
+
+      {/* Debug Info */}
+      {process.env.NEXT_PUBLIC_DEBUG_SORT === "1" && (
+        <div className="text-xs opacity-60">
+          nv={coerceNetValue(userNetValue)} tvl=
+          {parseMoneyString(vault?.tvm?.formatted)} connected=
+          {String(Boolean(isConnected))}
+        </div>
+      )}
+
+      {/* Action */}
+      <Flex justify="flex-end" minW={0}>
+        <ConnectGate
+          fallbackLabel="Connect"
+          compact
+          overrideChainId={cellarConfig?.chain?.id}
         >
-          <Box px={{ base: 3, md: 0 }} w="100%">
-            <ConnectGate
-              fallbackLabel="Connect wallet to withdraw"
-              fullWidth
-              overrideChainId={cellarConfig?.chain?.id}
-            >
-              {needsSwitch ? (
-                <Popover placement="bottom" isLazy>
-                  <PopoverTrigger>
-                    <ActionButton
-                      variantStyle="primary"
-                      size="md"
-                      fullWidth
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onClick={(e) => e.stopPropagation()}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === " ") {
-                          e.stopPropagation()
-                        }
-                      }}
-                    >
-                      Switch network to proceed
-                    </ActionButton>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    p={2}
-                    borderWidth={1}
-                    borderColor="purple.dark"
-                    borderRadius={12}
-                    bg="surface.bg"
-                    _focus={{ outline: "unset", boxShadow: "unset" }}
-                    onMouseDown={(e) => e.stopPropagation()}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <PopoverBody>
-                      <ChainSwitcherInline
-                        requiredChainId={desiredChainId}
-                        fullWidth
-                        onSwitched={async () => {
-                          // after successful switch, open withdraw flow
-                          try {
-                            await switchChainAsync?.({
-                              chainId: desiredChainId!,
-                            })
-                          } catch {}
-                          if (vault?.slug) {
-                            setIsOpen({
-                              id: vault.slug,
-                              type: "withdraw" as DepositModalType,
-                            })
-                          }
-                        }}
-                      />
-                    </PopoverBody>
-                  </PopoverContent>
-                </Popover>
-              ) : (
-                <Tooltip
-                  label={tooltipLabel}
-                  isDisabled={!tooltipLabel}
-                  bg="surface.bg"
-                  color="neutral.300"
-                  placement="top"
-                >
-                  <ActionButton
-                    variantStyle={
-                      !canWithdraw || withdrawalsPaused || !vault?.slug
-                        ? "ghost"
-                        : "primary"
-                    }
-                    size="md"
-                    fullWidth
-                    isDisabled={
-                      !canWithdraw || withdrawalsPaused || !vault?.slug
-                    }
-                    onClick={async (e) => {
+          {needsSwitch ? (
+            <Popover placement="bottom" isLazy>
+              <PopoverTrigger>
+                <ActionButton
+                  variantStyle="primary"
+                  size="sm"
+                  h="34px"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={(e) => e.stopPropagation()}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
                       e.stopPropagation()
-                      if (!vault?.slug) return
-                      setIsOpen({
-                        id: vault.slug,
-                        type: "withdraw" as DepositModalType,
-                      })
+                    }
+                  }}
+                >
+                  Switch network
+                </ActionButton>
+              </PopoverTrigger>
+              <PopoverContent
+                p={2}
+                borderWidth={1}
+                borderColor="purple.dark"
+                borderRadius={12}
+                bg="surface.bg"
+                _focus={{ outline: "unset", boxShadow: "unset" }}
+                onMouseDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <PopoverBody>
+                  <ChainSwitcherInline
+                    requiredChainId={desiredChainId}
+                    fullWidth
+                    onSwitched={async () => {
+                      // after successful switch, open withdraw flow
+                      try {
+                        await switchChainAsync?.({
+                          chainId: desiredChainId!,
+                        })
+                      } catch {}
+                      if (vault?.slug) {
+                        setIsOpen({
+                          id: vault.slug,
+                          type: "withdraw" as DepositModalType,
+                        })
+                      }
                     }}
-                  >
-                    Enter Withdrawal
-                  </ActionButton>
-                </Tooltip>
-              )}
-            </ConnectGate>
-          </Box>
-        </VStack>
-      </Grid>
-    </Box>
+                  />
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Tooltip
+              label={tooltipLabel}
+              isDisabled={!tooltipLabel}
+              bg="surface.bg"
+              color="neutral.300"
+              placement="top"
+            >
+              <ActionButton
+                variantStyle={
+                  !canWithdraw || withdrawalsPaused || !vault?.slug
+                    ? "ghost"
+                    : "primary"
+                }
+                size="sm"
+                h="34px"
+                isDisabled={
+                  !canWithdraw || withdrawalsPaused || !vault?.slug
+                }
+                onClick={async (e) => {
+                  e.stopPropagation()
+                  if (!vault?.slug) return
+                  setIsOpen({
+                    id: vault.slug,
+                    type: "withdraw" as DepositModalType,
+                  })
+                }}
+              >
+                Withdraw
+              </ActionButton>
+            </Tooltip>
+          )}
+        </ConnectGate>
+      </Flex>
+    </Grid>
   )
 }

@@ -4,9 +4,7 @@ import {
   Text,
   Button,
   Link,
-  HStack,
-  Grid,
-  GridItem,
+  Flex,
 } from "@chakra-ui/react"
 import NextLink from "next/link"
 import * as React from "react"
@@ -21,226 +19,140 @@ export default function TopLaunchBanner({
   targetDate: _targetDate,
   blogHref = "https://somm.finance/blog/putting-steth-to-work-where-it-matters-most",
 }: Props) {
-  const lidoSrc = "/assets/images/eth-lido-uni.svg"
-
-  // Static body text (no "Read more" control)
-  function ExpandableBody({ text }: { text: string }) {
-    return (
-      <Box mt={{ base: 3, md: 4 }}>
-        <Text textStyle="bodyMd">{text}</Text>
-      </Box>
-    )
-  }
-
   return (
     <Box
-      p="2px"
+      as="section"
+      position="relative"
+      overflow="hidden"
       rounded="2xl"
-      bgGradient="linear(to-r, #6a0dad, #9b4dff)"
+      borderWidth="1px"
+      borderColor="surface.tertiary"
+      bg="surface.primary"
+      // Soft brand glow instead of a full-bleed gradient
+      bgImage="radial-gradient(ellipse 60% 120% at 100% 0%, rgba(108,78,217,0.28) 0%, rgba(108,78,217,0) 70%)"
+      px={{ base: 5, md: 8 }}
+      py={{ base: 6, md: 8 }}
       mb={{ base: 6, md: 8 }}
     >
-      <Box
-        as="section"
-        bgGradient="linear(to-r, banner.bg.start 0%, banner.bg.mid 45%, banner.bg.end 100%)"
-        rounded="2xl"
-        px={{ base: 4, md: 6 }}
-        py={{ base: 4, md: 6, lg: 7 }}
-        position="relative"
-        overflow="hidden"
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        align={{ base: "flex-start", md: "center" }}
+        justify="space-between"
+        gap={{ base: 6, md: 10 }}
       >
-        {/* GG icon bottom-right, non-blocking, hidden < md */}
+        <Stack spacing={4} maxW="640px">
+          <Link
+            href="https://lido.fi"
+            isExternal
+            _hover={{ textDecoration: "none", borderColor: "neutral.500" }}
+            aria-label="Lido official website"
+            display="inline-flex"
+            alignItems="center"
+            gap={2}
+            w="fit-content"
+            px={3}
+            py={1}
+            rounded="full"
+            borderWidth="1px"
+            borderColor="surface.tertiary"
+            bg="blackAlpha.300"
+          >
+            <NextImage
+              src="/assets/icons/lido.png"
+              alt=""
+              width={18}
+              height={18}
+            />
+            <Text fontSize="xs" fontWeight={600} color="neutral.300">
+              Powered by Lido
+            </Text>
+          </Link>
+
+          <Stack spacing={2}>
+            <Text
+              as="h1"
+              fontSize={{ base: "3xl", md: "4xl" }}
+              fontWeight={700}
+              lineHeight={1.1}
+              letterSpacing="-0.02em"
+              color="neutral.100"
+            >
+              Alpha stETH Vault
+            </Text>
+            <Text fontSize={{ base: "sm", md: "md" }} color="neutral.400">
+              Alpha stETH is in migration-only mode. Eligible Real Yield
+              ETH and Turbo stETH holders can move their positions with
+              the guided migration flow. Ordinary deposits and
+              withdrawals are unavailable.
+            </Text>
+          </Stack>
+
+          <Stack
+            spacing={3}
+            direction={{ base: "column", sm: "row" }}
+            pt={2}
+          >
+            <Button
+              as={NextLink}
+              href="/strategies/Alpha-stETH/manage"
+              size="md"
+              h="40px"
+              px={5}
+              fontSize="sm"
+              fontWeight={600}
+              bg="purple.base"
+              color="white"
+              _hover={{ bg: "#7B60E0" }}
+              _active={{ bg: "#5E42C7" }}
+              _focusVisible={{
+                boxShadow: "0 0 0 3px var(--chakra-colors-purple-dark)",
+              }}
+            >
+              Open Migration
+            </Button>
+            <Button
+              as={Link}
+              href={blogHref}
+              isExternal
+              size="md"
+              h="40px"
+              px={5}
+              fontSize="sm"
+              fontWeight={600}
+              variant="outline"
+              bg="transparent"
+              color="neutral.200"
+              borderWidth="1px"
+              borderColor="surface.quartnerary"
+              _hover={{
+                textDecoration: "none",
+                bg: "whiteAlpha.50",
+                borderColor: "neutral.500",
+              }}
+            >
+              Read the strategy
+            </Button>
+          </Stack>
+        </Stack>
+
         <Box
           aria-hidden
-          position="absolute"
-          right={{ base: 6, md: 6 }}
-          bottom={{ base: 6, md: 6 }}
-          pointerEvents="none"
+          flexShrink={0}
           display={{ base: "none", md: "block" }}
+          p={4}
+          rounded="full"
+          bg="whiteAlpha.50"
+          borderWidth="1px"
+          borderColor="surface.tertiary"
         >
           <NextImage
             src="/assets/icons/GG.png"
             alt=""
-            width={96}
-            height={96}
-            priority={false}
+            width={72}
+            height={72}
           />
         </Box>
-
-        {/* Use Grid (not SimpleGrid) so templateColumns is respected */}
-        <Grid
-          templateColumns={{
-            base: "1fr",
-            lg: "minmax(0,1fr) minmax(260px,340px)",
-          }}
-          gap={{ base: 5, lg: 8 }}
-          alignItems="start"
-        >
-          {/* LEFT COLUMN */}
-          <GridItem>
-            <Stack spacing={4} maxW="860px">
-              {/* Single pill header (Launching + Lido) */}
-              <HStack
-                spacing={3}
-                bg="chip.bg"
-                px={3}
-                py={1}
-                rounded="full"
-                w="fit-content"
-              >
-                <NextImage
-                  src="/assets/icons/lido.png"
-                  alt="Lido"
-                  width={32}
-                  height={32}
-                  priority={false}
-                />
-                {/* Launch date removed */}
-
-                {/* keep as Link (your current file links to lido.fi); remove Link wrapper if you want non-interactive */}
-                <Link
-                  href="https://lido.fi"
-                  isExternal
-                  _hover={{ textDecoration: "none" }}
-                  aria-label="Lido official website"
-                >
-                  <HStack spacing={1.5} whiteSpace="nowrap">
-                    <NextImage
-                      src={lidoSrc}
-                      alt="Lido"
-                      width={20}
-                      height={20}
-                      priority={false}
-                    />
-                    <Text
-                      fontSize={{ base: "xs", md: "sm" }}
-                      fontWeight={600}
-                      color="chip.fg"
-                    >
-                      Powered by Lido
-                    </Text>
-                  </HStack>
-                </Link>
-              </HStack>
-
-              {/* Heading */}
-              <Text
-                as="h2"
-                textStyle="heroTitle"
-                fontSize={{ base: "3xl", md: "5xl" }}
-                color="text.primary"
-                mb={{ base: 2, md: 3 }}
-              >
-                Alpha stETH Vault
-              </Text>
-
-              {/* One-line value proposition under title (clamped to 1 line) */}
-              <Text
-                fontSize={{ base: "sm", md: "md" }}
-                color="text.secondary"
-                noOfLines={1}
-              >
-                Migration access for eligible legacy stETH vault
-                positions.
-              </Text>
-
-              {/* Countdown disabled */}
-
-              {/* Paragraph with clamp + Read more disclosure */}
-              <ExpandableBody
-                text={
-                  "Alpha stETH is in migration-only mode. Eligible Real Yield ETH and Turbo stETH holders can use the guided migration flow; ordinary deposits and withdrawals are unavailable."
-                }
-              />
-
-              {/* Key-point pills (non-interactive) */}
-              <HStack wrap="wrap" spacing={2} mb={5}>
-                {[
-                  "Blue-chip DeFi exposure",
-                  "stETH rewards made simple",
-                  "No legacy vault dependency",
-                ].map((k) => (
-                  <Text
-                    key={k}
-                    as="span"
-                    bg="chip.bg"
-                    color="chip.fg"
-                    rounded="full"
-                    px={3}
-                    py={1}
-                    fontSize="sm"
-                    cursor="default"
-                  >
-                    {k}
-                  </Text>
-                ))}
-              </HStack>
-
-              {/* CTAs */}
-              <Stack
-                spacing={{ base: 2, md: 4 }}
-                direction={{ base: "column", md: "row" }}
-                w="full"
-                overflow="visible"
-              >
-                <Button
-                  as={NextLink}
-                  href="/strategies/Alpha-stETH/manage"
-                  size="md"
-                  height={{ base: "44px", md: "40px" }}
-                  px={{ base: 4, md: "20px" }}
-                  w={{ base: "100%", md: "auto" }}
-                  fontWeight={600}
-                  fontSize="sm"
-                  bg="cta.filled.bg"
-                  color="cta.filled.fg"
-                  _hover={{ bg: "whiteAlpha.800" }}
-                  _active={{ bg: "whiteAlpha.900" }}
-                  _focusVisible={{
-                    boxShadow:
-                      "0 0 0 3px var(--chakra-colors-purple-base)",
-                  }}
-                >
-                  Open Migration
-                </Button>
-
-                <Link
-                  href={blogHref}
-                  isExternal
-                  _hover={{ textDecoration: "none" }}
-                  w={{ base: "100%", md: "auto" }}
-                >
-                  <Button
-                    size="md"
-                    height={{ base: "44px", md: "40px" }}
-                    px={{ base: 4, md: "20px" }}
-                    w={{ base: "100%", md: "auto" }}
-                    fontWeight={600}
-                    fontSize="sm"
-                    variant="outline"
-                    bg="transparent"
-                    color="cta.outline.fg"
-                    borderColor="cta.outline.br"
-                    borderWidth="2px"
-                    _focusVisible={{
-                      boxShadow:
-                        "0 0 0 3px var(--chakra-colors-purple-base)",
-                    }}
-                  >
-                    View Strategy Blog
-                  </Button>
-                </Link>
-              </Stack>
-            </Stack>
-          </GridItem>
-
-          {/* RIGHT COLUMN — countdown disabled */}
-          <GridItem
-            display={{ base: "none", lg: "block" }}
-          ></GridItem>
-        </Grid>
-
-        {/* Scroll cue arrow removed per request */}
-      </Box>
+      </Flex>
     </Box>
   )
 }
