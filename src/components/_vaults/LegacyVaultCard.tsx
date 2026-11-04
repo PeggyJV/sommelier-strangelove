@@ -203,6 +203,18 @@ export default function LegacyVaultCard({
               {chainName}
             </Box>
           </Text>
+          <Text
+            display={{ base: "block", md: "none" }}
+            fontSize="xs"
+            color="neutral.400"
+            lineHeight="1.2"
+            mt={0.5}
+          >
+            Net rewards{" "}
+            <Box as="span" fontWeight={600} color={rewardsColor}>
+              {safeVal(netFormatted)}
+            </Box>
+          </Text>
         </Box>
       </HStack>
 
