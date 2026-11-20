@@ -124,6 +124,8 @@ export const stakerAbi = parseAbi([
   "function unbondAll()",
   "function unstakeAll() returns (uint256[])",
   "function emergencyUnstake()",
+  "function claimable() view returns (bool)",
+  "function emergencyClaim()",
 ])
 
 export const withdrawQueueAbi = parseAbi([
@@ -134,6 +136,18 @@ export const withdrawQueueAbi = parseAbi([
 ])
 
 export const boringQueueAbi = parseAbi([
+  "error BoringOnChainQueue__BadDeadline()",
+  "error BoringOnChainQueue__BadDiscount()",
+  "error BoringOnChainQueue__BadInput()",
+  "error BoringOnChainQueue__BadShareAmount()",
+  "error BoringOnChainQueue__BadUser()",
+  "error BoringOnChainQueue__DeadlinePassed()",
+  "error BoringOnChainQueue__NotMatured()",
+  "error BoringOnChainQueue__Overflow()",
+  "error BoringOnChainQueue__Paused()",
+  "error BoringOnChainQueue__PermitFailedAndAllowanceTooLow()",
+  "error BoringOnChainQueue__RequestNotFound()",
+  "error BoringOnChainQueue__WithdrawsNotAllowedForAsset()",
   "struct OnChainWithdraw { uint96 nonce; address user; address assetOut; uint128 amountOfShares; uint128 amountOfAssets; uint40 creationTime; uint24 secondsToMaturity; uint24 secondsToDeadline; }",
   "function withdrawAssets(address) view returns (bool allowWithdraws, uint24 secondsToMaturity, uint24 minimumSecondsToDeadline, uint16 minDiscount, uint16 maxDiscount, uint96 minimumShares)",
   "function isPaused() view returns (bool)",

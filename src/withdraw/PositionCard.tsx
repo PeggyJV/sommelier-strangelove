@@ -4,8 +4,8 @@ import { useConfig, usePublicClient } from "wagmi"
 import { formatUnits, type Abi, type Address } from "viem"
 import { boringQueueAbi, cellarAbi, stakerAbi, withdrawQueueAbi } from "./abis"
 import { ALPHA_STETH_QUEUE, CHAINS, WITHDRAW_QUEUE } from "./vaults"
-import { loadBoringRequests, type Position } from "./positions"
-import { errorText, send } from "./tx"
+import { loadBoringRequests, strip, type Position } from "./positions"
+import { errorText, SafeSubmitted, send } from "./tx"
 
 const fmt = (v: bigint | undefined, decimals: number) => {
   if (v === undefined) return "?"
@@ -28,6 +28,7 @@ function Action({ step, disabled, onDone }: { step: Step; disabled?: boolean; on
   const [busy, setBusy] = useState(false)
   const [err, setErr] = useState<string>()
   const [hash, setHash] = useState<string>()
+  const [note, setNote] = useState<string>()
   return (
     <div className="action">
       <button
@@ -36,12 +37,14 @@ function Action({ step, disabled, onDone }: { step: Step; disabled?: boolean; on
         onClick={async () => {
           setBusy(true)
           setErr(undefined)
+          setNote(undefined)
           try {
             const h = await step.run()
             if (typeof h === "string") setHash(h)
             onDone()
           } catch (e) {
-            setErr(errorText(e))
+            if (e instanceof SafeSubmitted) setNote(e.message)
+            else setErr(errorText(e))
           } finally {
             setBusy(false)
           }
@@ -50,6 +53,7 @@ function Action({ step, disabled, onDone }: { step: Step; disabled?: boolean; on
         {busy ? "Waiting for wallet / confirmation..." : step.label}
       </button>
       {hash && <span className="ok">Confirmed</span>}
+      {note && <span className="warn">{note}</span>}
       {err && <span className="error">{err}</span>}
     </div>
   )
@@ -83,6 +87,11 @@ function Card({ pos, user, onDone }: { pos: Position; user: Address; onDone: () 
           {vault.address.slice(0, 6)}...{vault.address.slice(-4)}
         </a>
       </header>
+      {pos.readWarnings.map((w) => (
+        <p key={w} className="warn">
+          {w}
+        </p>
+      ))}
       {totalShares > 0n && (
         <p className="value">
           {shares(totalShares)}{" "}
@@ -152,6 +161,20 @@ function Card({ pos, user, onDone }: { pos: Position; user: Address; onDone: () 
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {pos.stake?.ended && pos.stake.claimable && (pos.stake.hasRewards || pos.stakedShares > 0n) && (
+        <div className="step">
+          <h4>SOMM staking rewards</h4>
+          <p className="muted">This rewards program has ended; rewards you earned before it ended can be claimed.</p>
+          <Action
+            step={{
+              label: "Claim earned SOMM",
+              run: () => send(config, { chainId, address: vault.staker!, abi: stakerAbi as Abi, functionName: "emergencyClaim" }),
+            }}
+            onDone={onDone}
+          />
         </div>
       )}
 
@@ -328,7 +351,14 @@ function BoringWithdraw({
             {fmt(r.amountOfShares, 18)} shares for about {fmt(r.amountOfAssets, 18)}, created {when(r.creationTime)}, expires{" "}
             {when(r.creationTime + r.secondsToMaturity + r.secondsToDeadline)}.
           </p>
+          {!r.verified && (
+            <p className="warn">
+              This request could not be matched exactly on-chain (it may already be filled or cancelled), so it
+              cannot be cancelled from here.
+            </p>
+          )}
           <Action
+            disabled={!r.verified}
             step={{
               label: "Cancel request",
               run: () =>
@@ -337,7 +367,7 @@ function BoringWithdraw({
                   address: ALPHA_STETH_QUEUE,
                   abi: boringQueueAbi as Abi,
                   functionName: "cancelOnChainWithdraw",
-                  args: [r],
+                  args: [strip(r)],
                 }),
             }}
             onDone={() => {

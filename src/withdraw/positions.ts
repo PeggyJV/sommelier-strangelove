@@ -12,7 +12,9 @@ export type Stake = {
 export type StakeState = {
   stakes: Stake[]
   ended: boolean // owner called emergencyStop: emergencyUnstake works immediately
+  claimable: boolean // ended with rewards claimable: emergencyClaim pays earned SOMM
   paused: boolean
+  hasRewards: boolean // any stake record (even fully unstaked) with recorded rewards
 }
 
 export type QueueAsset = {
@@ -39,6 +41,7 @@ export type Position = {
   stakedShares: bigint
   queueRequestShares: bigint // open request in the old v0.8.21 withdraw queue
   boring?: { paused: boolean; assets: QueueAsset[] }
+  readWarnings: string[] // reads that failed, so the user is not shown a falsely empty state
 }
 
 // Reads every vault on one chain for one user. Two multicall rounds plus one eth_call per
@@ -61,10 +64,13 @@ export async function loadChainPositions(client: PublicClient, chainId: ChainId,
       v.staker
         ? { address: v.staker, abi: stakerAbi, functionName: "paused" }
         : { address: v.address, abi: cellarAbi, functionName: "decimals" },
+      v.staker
+        ? { address: v.staker, abi: stakerAbi, functionName: "claimable" }
+        : { address: v.address, abi: cellarAbi, functionName: "decimals" },
       { address: WITHDRAW_QUEUE[chainId], abi: withdrawQueueAbi, functionName: "getUserWithdrawRequest", args: [user, v.address] },
     ]),
   })
-  const N = 7
+  const N = 8
 
   const rows = vaults.map((vault, i) => {
     const r = first.slice(i * N, i * N + N)
@@ -73,22 +79,43 @@ export async function loadChainPositions(client: PublicClient, chainId: ChainId,
     const asset = r[2].result as Address | undefined
     let stake: StakeState | undefined
     let stakedShares = 0n
-    if (vault.staker && r[3].status === "success") {
-      const raw = r[3].result as unknown as readonly { amount: bigint; unbondTimestamp: number }[]
-      const stakes = raw
-        .map((s, id) => ({ id, amount: BigInt(s.amount), unbondTimestamp: Number(s.unbondTimestamp) }))
-        .filter((s) => s.amount > 0n)
-      stakedShares = stakes.reduce((a, s) => a + s.amount, 0n)
-      stake = { stakes, ended: Boolean(r[4].result), paused: Boolean(r[5].result) }
+    const readWarnings: string[] = []
+    if (r[0].status !== "success") readWarnings.push("Could not read your share balance.")
+    if (vault.staker) {
+      if (r[3].status === "success" && r[4].status === "success" && r[5].status === "success") {
+        const raw = r[3].result as unknown as readonly { amount: bigint; unbondTimestamp: number; rewards: bigint }[]
+        const stakes = raw
+          .map((s, id) => ({ id, amount: BigInt(s.amount), unbondTimestamp: Number(s.unbondTimestamp) }))
+          .filter((s) => s.amount > 0n)
+        stakedShares = stakes.reduce((a, s) => a + s.amount, 0n)
+        stake = {
+          stakes,
+          ended: Boolean(r[4].result),
+          paused: Boolean(r[5].result),
+          claimable: r[6].status === "success" && Boolean(r[6].result),
+          hasRewards: raw.some((s) => BigInt(s.rewards) > 0n),
+        }
+      } else {
+        readWarnings.push("Could not read your staked position. Refresh to try again.")
+      }
     }
-    const req = r[6].result as { sharesToWithdraw: bigint } | undefined
-    return { vault, walletShares, shareDecimals, asset, stake, stakedShares, queueRequestShares: req ? BigInt(req.sharesToWithdraw) : 0n }
+    const req = r[7].result as { sharesToWithdraw: bigint } | undefined
+    return {
+      vault, walletShares, shareDecimals, asset, stake, stakedShares, readWarnings,
+      queueRequestShares: req ? BigInt(req.sharesToWithdraw) : 0n,
+    }
   })
 
   // The Alpha stETH row is always kept: shares sitting in a pending queue request have left the
   // wallet, and the card still has to show that request so it can be cancelled.
   const held = rows.filter(
-    (r) => r.walletShares > 0n || r.stakedShares > 0n || r.queueRequestShares > 0n || r.vault.kind === "boring"
+    (r) =>
+      r.walletShares > 0n ||
+      r.stakedShares > 0n ||
+      r.queueRequestShares > 0n ||
+      r.readWarnings.length > 0 ||
+      (r.stake?.ended && r.stake.claimable && r.stake.hasRewards) ||
+      r.vault.kind === "boring"
   )
   if (held.length === 0) return []
 
@@ -120,10 +147,17 @@ export async function loadChainPositions(client: PublicClient, chainId: ChainId,
       stakedShares: r.stakedShares,
       queueRequestShares: r.queueRequestShares,
       redeemShares: 0n,
+      readWarnings: r.readWarnings,
     }
 
     if (r.vault.kind === "boring") {
-      pos.boring = await loadBoring(client, r.walletShares)
+      try {
+        pos.boring = await loadBoring(client, r.walletShares)
+      } catch (e) {
+        // Never let an Alpha stETH read failure hide the user's other Ethereum positions.
+        pos.boring = { paused: true, assets: [] }
+        pos.readWarnings.push(`Could not read the Alpha stETH queue: ${errorText(e)}`)
+      }
       pos.assetSymbol = "stETH"
       pos.assetDecimals = 18
       pos.walletValue = pos.boring.assets.find((a) => a.symbol === "stETH")?.previewOut
@@ -132,21 +166,29 @@ export async function loadChainPositions(client: PublicClient, chainId: ChainId,
       // maxRedeem can round a few wei under the balance; within 0.1% we redeem everything so no
       // dust is left behind, and the simulation below decides whether that goes through.
       const nearFull = pos.maxRedeem === undefined || pos.maxRedeem * 1000n >= r.walletShares * 999n
-      const shares = nearFull ? r.walletShares : pos.maxRedeem!
-      pos.redeemShares = shares
-      if (shares === 0n) {
+      const candidates = nearFull ? [r.walletShares] : [pos.maxRedeem!]
+      // If the full balance fails but maxRedeem is a little lower, fall back to maxRedeem.
+      if (nearFull && pos.maxRedeem !== undefined && pos.maxRedeem > 0n && pos.maxRedeem < r.walletShares) {
+        candidates.push(pos.maxRedeem)
+      }
+      if (candidates[0] === 0n) {
         pos.redeemError = "No liquidity available to redeem right now"
       } else {
-        try {
-          await client.simulateContract({
-            account: user,
-            address: r.vault.address,
-            abi: cellarAbi,
-            functionName: "redeem",
-            args: [shares, user, user],
-          })
-        } catch (e) {
-          pos.redeemError = errorText(e)
+        for (const shares of candidates) {
+          try {
+            await client.simulateContract({
+              account: user,
+              address: r.vault.address,
+              abi: cellarAbi,
+              functionName: "redeem",
+              args: [shares, user, user],
+            })
+            pos.redeemShares = shares
+            pos.redeemError = undefined
+            break
+          } catch (e) {
+            pos.redeemError ??= errorText(e)
+          }
         }
       }
     }
@@ -199,6 +241,7 @@ async function loadBoring(client: PublicClient, shares: bigint): Promise<{ pause
 // Each one is checked against the queue's on-chain request ids, so only a request that will
 // actually cancel is offered.
 export type BoringRequest = {
+  verified: boolean // rebuilt struct hashes to a live on-chain request id, so cancel will work
   nonce: bigint
   user: Address
   assetOut: Address
@@ -211,7 +254,20 @@ export type BoringRequest = {
 
 // The indexer returns uint128 amounts as bare JSON numbers; quote long integers before
 // parsing so they survive as exact strings instead of lossy doubles.
+// Exact for integers; an exponent-form value (already rounded upstream) still parses, but its
+// rebuilt request will not match on-chain and is shown as unverified.
+const toBig = (x: unknown): bigint => {
+  try {
+    return BigInt(String(x))
+  } catch {
+    return BigInt(Math.round(Number(x)))
+  }
+}
+
 const parseExact = (text: string) => JSON.parse(text.replace(/([:\[,]\s*)(-?\d{15,})(?=\s*[,}\]])/g, '$1"$2"'))
+
+// The on-chain OnChainWithdraw struct, without our UI-only fields.
+export const strip = ({ verified: _v, ...q }: BoringRequest) => q
 
 export async function loadBoringRequests(client: PublicClient, vault: Address, user: Address): Promise<BoringRequest[]> {
   const r = await fetch(`/api/users-boringqueue-withdrawals?vaultAddress=${vault}&userAddress=${user}`)
@@ -219,11 +275,12 @@ export async function loadBoringRequests(client: PublicClient, vault: Address, u
   const j = parseExact(await r.text())
   const open = (j?.Response?.open_requests ?? []) as { metadata: Record<string, unknown> }[]
   const reqs: BoringRequest[] = open.map(({ metadata: m }) => ({
-    nonce: BigInt(String(m.nonce)),
+    verified: false,
+    nonce: toBig(m.nonce),
     user: m.user as Address,
     assetOut: m.assetOut as Address,
-    amountOfShares: BigInt(String(m.amountOfShares)),
-    amountOfAssets: BigInt(String(m.amountOfAssets)),
+    amountOfShares: toBig(m.amountOfShares),
+    amountOfAssets: toBig(m.amountOfAssets),
     creationTime: Number(m.creationTime),
     secondsToMaturity: Number(m.secondsToMaturity),
     secondsToDeadline: Number(m.secondsToDeadline),
@@ -232,8 +289,9 @@ export async function loadBoringRequests(client: PublicClient, vault: Address, u
   const ids = await client.readContract({ address: ALPHA_STETH_QUEUE, abi: boringQueueAbi, functionName: "getRequestIds" })
   const mine = await client.multicall({
     allowFailure: false,
-    contracts: reqs.map((q) => ({ address: ALPHA_STETH_QUEUE, abi: boringQueueAbi, functionName: "getRequestId" as const, args: [q] as const })),
+    contracts: reqs.map((q) => ({ address: ALPHA_STETH_QUEUE, abi: boringQueueAbi, functionName: "getRequestId" as const, args: [strip(q)] as const })),
   })
   const live = new Set(ids.map((x) => x.toLowerCase()))
-  return reqs.filter((_, i) => live.has(String(mine[i]).toLowerCase()))
+  // Unverified requests are still shown (with a warning) so queued shares never vanish from view.
+  return reqs.map((q, i) => ({ ...q, verified: live.has(String(mine[i]).toLowerCase()) }))
 }

@@ -20,9 +20,18 @@ export async function send(config: Config, call: Call): Promise<`0x${string}`> {
   const { request } = await simulateContract(config, { ...(call as any), account: account.address })
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const hash = await writeContract(config, request as any)
+  // A Safe returns a safeTxHash, which never gets a receipt on the public RPC; the transaction
+  // still needs the other owners and execution in the Safe UI.
+  if (account.connector?.id === "safe") throw new SafeSubmitted(hash)
   const receipt = await waitForTransactionReceipt(config, { hash, chainId: call.chainId })
   if (receipt.status !== "success") throw new Error(`Transaction ${hash} reverted`)
   return hash
+}
+
+export class SafeSubmitted extends Error {
+  constructor(public safeTxHash: string) {
+    super("Submitted to your Safe. Collect the remaining signatures and execute it there, then refresh this page.")
+  }
 }
 
 const FRIENDLY: Record<string, string> = {
@@ -38,10 +47,15 @@ const FRIENDLY: Record<string, string> = {
   CellarStaking__ContractKilled: "The rewards program has been shut down; use the emergency unstake instead.",
   USR_StakeLocked: "That stake is still unbonding.",
   CellarStaking__StakeLocked: "That stake is still unbonding.",
+  BoringOnChainQueue__Paused: "The Alpha stETH withdraw queue is paused.",
+  BoringOnChainQueue__WithdrawsNotAllowedForAsset: "Withdrawals in that asset are switched off right now.",
+  BoringOnChainQueue__BadShareAmount: "That share amount is below the queue's minimum.",
+  BoringOnChainQueue__RequestNotFound: "That request no longer exists on-chain (already filled or cancelled).",
 }
 
 // Turn a viem error into one readable line, naming the contract's custom error when it has one.
 export function errorText(e: unknown): string {
+  if (e instanceof SafeSubmitted) return e.message
   const err = e as BaseError
   const reverted = typeof err?.walk === "function" ? err.walk((x) => x instanceof ContractFunctionRevertedError) : null
   if (reverted instanceof ContractFunctionRevertedError) {
