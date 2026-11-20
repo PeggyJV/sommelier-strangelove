@@ -7,6 +7,7 @@ import { useRouter } from "next/router"
 import { CHAINS, VAULTS, type ChainId } from "../withdraw/vaults"
 import { loadChainPositions } from "../withdraw/positions"
 import { PositionCard } from "../withdraw/PositionCard"
+import { Logo } from "../withdraw/Logo"
 
 const CHAIN_IDS = [1, 42161, 10] as ChainId[]
 
@@ -53,9 +54,16 @@ export default function Home() {
   return (
     <main className="page">
       <header className="top">
-        <h1>Somm withdrawals</h1>
+        <div className="brand">
+          <Logo height={26} />
+          <span className="brand-tag">Withdrawals</span>
+        </div>
         <ConnectButton showBalance={false} chainStatus="icon" />
       </header>
+
+      <h1>
+        Get your funds out of <span className="gradient-text">Somm vaults</span>
+      </h1>
 
       <section className="notice">
         <p>
