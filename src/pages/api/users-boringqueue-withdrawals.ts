@@ -1,49 +1,24 @@
-import { NextApiRequest, NextApiResponse } from "next"
+import type { NextApiRequest, NextApiResponse } from "next"
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+// Proxies the Seven Seas BoringQueue indexer for Alpha stETH. The body is passed through as
+// text so uint128 amounts are not rounded by a JSON round-trip.
+const ADDR = /^0x[0-9a-fA-F]{40}$/
 
-const usersBoringQueueWithdrawals = async (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { vaultAddress, userAddress } = req.query
+  if (typeof vaultAddress !== "string" || !ADDR.test(vaultAddress) || typeof userAddress !== "string" || !ADDR.test(userAddress)) {
+    res.status(400).json({ error: "vaultAddress and userAddress must be addresses" })
+    return
+  }
   try {
-    let { vaultAddress, userAddress, chain } = req.query
-    const data = await fetch(
-        `https://api.sevenseas.capital/boringQueue/${chain}/${vaultAddress}/${userAddress}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          signal: AbortSignal.timeout(5000),
-        }
-      )
-
-    if (data.status !== 200) {
-      throw new Error("failed to fetch data")
-    }
-
-    const fetchedData = await data.json()
-
-    const formattedResult = {
-      result: { data: fetchedData.Response },
-    }
-
-    res.setHeader(
-      "Cache-Control",
-      "public, maxage=60, s-maxage=60, stale-while-revalidate=7200"
-    )
-    res.setHeader("Access-Control-Allow-Origin", baseUrl)
-    res.status(200).json(formattedResult)
-  } catch (error) {
-    console.error(error)
-    res.status(500).send({
-      error: "failed to fetch data",
-      message:
-        (error as Error).message || "An unknown error occurred",
+    const upstream = await fetch(`https://api.sevenseas.capital/boringQueue/ethereum/${vaultAddress}/${userAddress}`, {
+      signal: AbortSignal.timeout(8000),
     })
+    if (!upstream.ok) throw new Error(`upstream ${upstream.status}`)
+    res.setHeader("Cache-Control", "public, s-maxage=30, stale-while-revalidate=300")
+    res.setHeader("Content-Type", "application/json")
+    res.status(200).send(await upstream.text())
+  } catch (e) {
+    res.status(502).json({ error: "queue indexer unavailable", message: (e as Error).message })
   }
 }
-
-export default usersBoringQueueWithdrawals

@@ -1,178 +1,22 @@
-import React from "react"
-import { ChakraProvider, DarkMode } from "@chakra-ui/react"
-import { DialogProvider } from "context/dialogContext"
 import type { AppProps } from "next/app"
-import theme from "theme/index"
-
 import dynamic from "next/dynamic"
+import Head from "next/head"
+import "../withdraw/withdraw.css"
 
-const WagmiClientProvider = dynamic(
-  () => import("providers/WagmiClientProvider"),
-  {
-    ssr: false,
-    loading: () => null, // Prevent layout shift during loading
-  }
-)
-import { AlertDialog } from "components/AlertDialog"
-import "utils/analytics"
-import { GlobalFonts } from "theme/GlobalFonts"
-import { GeoProvider } from "context/geoContext"
-import { DefaultSeo } from "next-seo"
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query"
-import { HomeProvider } from "data/context/homeContext"
-import { reportWebVitals } from "utils/webVitals"
-import { Analytics } from "@vercel/analytics/react"
+// Wallet providers touch window, so the whole app renders client-side only.
+const Providers = dynamic(() => import("../withdraw/Providers"), { ssr: false })
 
-const ReactQueryDevtools = dynamic(
-  () =>
-    import("@tanstack/react-query-devtools").then(
-      (mod) => mod.ReactQueryDevtools
-    ),
-  {
-    ssr: false,
-    loading: () => null,
-  }
-)
-
-type WalletErrorLike = {
-  message?: string
-  shortMessage?: string
-}
-
-type SommWindow = Window & {
-  __somm_unhandledrejection_handler__?: (
-    event: PromiseRejectionEvent
-  ) => void
-  __somm_error_handler__?: (event: ErrorEvent) => void
-  __somm_console_error__?: typeof console.error
-}
-
-const App = ({ Component, pageProps }: AppProps) => {
-  // Create QueryClient inside component to avoid SSR issues
-  const [queryClient] = React.useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            refetchOnWindowFocus: false,
-            staleTime: 5 * 60 * 1000,
-            refetchOnMount: false,
-          },
-        },
-      })
-  )
-
-  // Suppress unhandled promise rejections for user-rejected wallet actions to avoid dev overlay
-  if (typeof window !== "undefined") {
-    const sommWindow = window as SommWindow
-    const handler = (event: PromiseRejectionEvent) => {
-      try {
-        const reason = event?.reason as WalletErrorLike | string | undefined
-        const msg =
-          typeof reason === "string"
-            ? reason
-            : String(reason?.message || reason?.shortMessage || "")
-        if (
-          msg.includes("User rejected") ||
-          msg.includes("User denied") ||
-          msg.includes("MetaMask Tx Signature: User denied")
-        ) {
-          event.preventDefault()
-        }
-      } catch {}
-    }
-    const errorHandler = (event: ErrorEvent) => {
-      try {
-        const err = event?.error as WalletErrorLike | undefined
-        const msg = String(err?.message || event?.message || "")
-        if (
-          msg.includes("ContractFunctionExecutionError") &&
-          (msg.includes("User rejected") ||
-            msg.includes("User denied") ||
-            msg.includes("MetaMask Tx Signature: User denied"))
-        ) {
-          event.preventDefault()
-        }
-      } catch {}
-    }
-    // Ensure we don't add multiple listeners on HMR
-    sommWindow.__somm_unhandledrejection_handler__ &&
-      window.removeEventListener(
-        "unhandledrejection",
-        sommWindow.__somm_unhandledrejection_handler__
-      )
-    window.addEventListener("unhandledrejection", handler)
-    sommWindow.__somm_unhandledrejection_handler__ = handler
-    sommWindow.__somm_error_handler__ &&
-      window.removeEventListener(
-        "error",
-        sommWindow.__somm_error_handler__
-      )
-    window.addEventListener("error", errorHandler)
-    sommWindow.__somm_error_handler__ = errorHandler
-
-    // Patch console.error to suppress known benign user-rejected messages in dev
-    const originalConsoleError = console.error.bind(console)
-    const patched: typeof console.error = (...args: unknown[]) => {
-      try {
-        const text = args
-          .map((a) => (a instanceof Error ? a.message : String(a)))
-          .join(" ")
-        if (
-          text.includes("ContractFunctionExecutionError") &&
-          (text.includes("User rejected") ||
-            text.includes("User denied") ||
-            text.includes("MetaMask Tx Signature: User denied"))
-        ) {
-          return
-        }
-      } catch {}
-      originalConsoleError(...args)
-    }
-    sommWindow.__somm_console_error__ &&
-      (console.error = sommWindow.__somm_console_error__)
-    sommWindow.__somm_console_error__ = patched
-    console.error = patched
-  }
-
+export default function App({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <PlausibleProvider
-        domain={process.env.NEXT_PUBLIC_PLAUSIBLE_URL!}
-      > */}
-      <ChakraProvider theme={theme}>
-        <GeoProvider>
-          <GlobalFonts />
-          <DialogProvider>
-            <WagmiClientProvider>
-              <HomeProvider>
-                <DefaultSeo
-                  title="Somm Finance"
-                  description="Access to risk-managed, multi chain vaults powered by off-chain computation"
-                  // SEO configuration omitted for brevity
-                />
-                <DarkMode>
-                  <Component {...pageProps} />
-                  <Analytics />
-                </DarkMode>
-                <AlertDialog />
-              </HomeProvider>
-            </WagmiClientProvider>
-          </DialogProvider>
-        </GeoProvider>
-      </ChakraProvider>
-      {/* </PlausibleProvider> */}
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    <>
+      <Head>
+        <title>Somm Withdrawals</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Withdraw your funds from Somm vaults." />
+      </Head>
+      <Providers>
+        <Component {...pageProps} />
+      </Providers>
+    </>
   )
 }
-
-// Report Web Vitals
-if (typeof window !== "undefined") {
-  reportWebVitals()
-}
-
-export default App
